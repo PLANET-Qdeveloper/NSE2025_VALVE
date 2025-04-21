@@ -1,0 +1,20 @@
+{
+  "configurations": [
+    {
+      "name": "Mac",
+      "includePath": [
+        "${default}",
+        "${workspaceFolder}/Core/Inc",
+        "${workspaceFolder}/Drivers/STM32F3xx_HAL_Driver/Inc",
+        "${workspaceFolder}/Drivers/CMSIS/Device/ST/STM32F3xx/Include",
+        "${workspaceFolder}/Drivers/CMSIS/Include"
+      ],
+      "defines": ["STM32F303x8", "USE_HAL_DRIVER", "ARM_MATH_CM4"],
+      "intelliSenseMode": "gcc-arm",
+      "macFrameworkPath": [
+        "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks"
+      ]
+    }
+  ],
+  "version": 4
+}

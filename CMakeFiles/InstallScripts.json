@@ -1,0 +1,7 @@
+{
+  "InstallScripts": [
+    "/Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/cmake_install.cmake",
+    "/Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/cmake/stm32cubemx/cmake_install.cmake"
+  ],
+  "Parallel": false
+}

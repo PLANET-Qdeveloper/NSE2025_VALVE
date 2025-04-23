@@ -842,8 +842,6 @@ Discarded input sections
                 0x00000000       0x50 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal.c.obj
  .text.HAL_GetTickFreq
                 0x00000000       0x18 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal.c.obj
- .text.HAL_Delay
-                0x00000000       0x48 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal.c.obj
  .text.HAL_SuspendTick
                 0x00000000       0x20 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal.c.obj
  .text.HAL_ResumeTick
@@ -3534,7 +3532,7 @@ LOAD /Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin/../lib/gcc/arm-no
                 0x08000000                g_pfnVectors
                 0x08000188                        . = ALIGN (0x4)
 
-.text           0x08000188     0x3044
+.text           0x08000188     0x3100
                 0x08000188                        . = ALIGN (0x4)
  *(.text)
  *(.text*)
@@ -3592,256 +3590,264 @@ LOAD /Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin/../lib/gcc/arm-no
  .text.HAL_GetTick
                 0x08000d4c       0x18 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal.c.obj
                 0x08000d4c                HAL_GetTick
+ .text.HAL_Delay
+                0x08000d64       0x48 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal.c.obj
+                0x08000d64                HAL_Delay
  .text.HAL_RCC_OscConfig
-                0x08000d64     0x101c cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc.c.obj
-                0x08000d64                HAL_RCC_OscConfig
+                0x08000dac     0x101c cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc.c.obj
+                0x08000dac                HAL_RCC_OscConfig
  .text.HAL_RCC_ClockConfig
-                0x08001d80      0x2dc cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc.c.obj
-                0x08001d80                HAL_RCC_ClockConfig
+                0x08001dc8      0x2dc cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc.c.obj
+                0x08001dc8                HAL_RCC_ClockConfig
  .text.HAL_RCC_GetSysClockFreq
-                0x0800205c       0xa8 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc.c.obj
-                0x0800205c                HAL_RCC_GetSysClockFreq
+                0x080020a4       0xa8 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc.c.obj
+                0x080020a4                HAL_RCC_GetSysClockFreq
  .text.HAL_RCC_GetHCLKFreq
-                0x08002104       0x18 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc.c.obj
-                0x08002104                HAL_RCC_GetHCLKFreq
+                0x0800214c       0x18 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc.c.obj
+                0x0800214c                HAL_RCC_GetHCLKFreq
  .text.HAL_RCC_GetPCLK1Freq
-                0x0800211c       0x44 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc.c.obj
-                0x0800211c                HAL_RCC_GetPCLK1Freq
+                0x08002164       0x44 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc.c.obj
+                0x08002164                HAL_RCC_GetPCLK1Freq
  .text.HAL_RCC_GetPCLK2Freq
-                0x08002160       0x44 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc.c.obj
-                0x08002160                HAL_RCC_GetPCLK2Freq
+                0x080021a8       0x44 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc.c.obj
+                0x080021a8                HAL_RCC_GetPCLK2Freq
  .text.HAL_GPIO_Init
-                0x080021a4      0x2e4 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_gpio.c.obj
-                0x080021a4                HAL_GPIO_Init
+                0x080021ec      0x2e4 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_gpio.c.obj
+                0x080021ec                HAL_GPIO_Init
  .text.__NVIC_SetPriorityGrouping
-                0x08002488       0x48 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_cortex.c.obj
+                0x080024d0       0x48 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_cortex.c.obj
  .text.__NVIC_GetPriorityGrouping
-                0x080024d0       0x1c cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_cortex.c.obj
+                0x08002518       0x1c cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_cortex.c.obj
  .text.__NVIC_SetPriority
-                0x080024ec       0x54 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_cortex.c.obj
+                0x08002534       0x54 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_cortex.c.obj
  .text.NVIC_EncodePriority
-                0x08002540       0x66 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_cortex.c.obj
- *fill*         0x080025a6        0x2 
+                0x08002588       0x66 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_cortex.c.obj
+ *fill*         0x080025ee        0x2 
  .text.SysTick_Config
-                0x080025a8       0x44 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_cortex.c.obj
+                0x080025f0       0x44 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_cortex.c.obj
  .text.HAL_NVIC_SetPriorityGrouping
-                0x080025ec       0x16 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_cortex.c.obj
-                0x080025ec                HAL_NVIC_SetPriorityGrouping
+                0x08002634       0x16 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_cortex.c.obj
+                0x08002634                HAL_NVIC_SetPriorityGrouping
  .text.HAL_NVIC_SetPriority
-                0x08002602       0x38 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_cortex.c.obj
-                0x08002602                HAL_NVIC_SetPriority
+                0x0800264a       0x38 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_cortex.c.obj
+                0x0800264a                HAL_NVIC_SetPriority
  .text.HAL_SYSTICK_Config
-                0x0800263a       0x18 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_cortex.c.obj
-                0x0800263a                HAL_SYSTICK_Config
+                0x08002682       0x18 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_cortex.c.obj
+                0x08002682                HAL_SYSTICK_Config
  .text.HAL_UART_Init
-                0x08002652       0x9c cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.c.obj
-                0x08002652                HAL_UART_Init
- *fill*         0x080026ee        0x2 
+                0x0800269a       0x9c cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.c.obj
+                0x0800269a                HAL_UART_Init
+ *fill*         0x08002736        0x2 
  .text.UART_SetConfig
-                0x080026f0      0x26c cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.c.obj
-                0x080026f0                UART_SetConfig
+                0x08002738      0x26c cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.c.obj
+                0x08002738                UART_SetConfig
  .text.UART_AdvFeatureConfig
-                0x0800295c      0x144 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.c.obj
-                0x0800295c                UART_AdvFeatureConfig
+                0x080029a4      0x144 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.c.obj
+                0x080029a4                UART_AdvFeatureConfig
  .text.UART_CheckIdleState
-                0x08002aa0      0x150 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.c.obj
-                0x08002aa0                UART_CheckIdleState
+                0x08002ae8      0x150 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.c.obj
+                0x08002ae8                UART_CheckIdleState
  .text.UART_WaitOnFlagUntilTimeout
-                0x08002bf0       0xda cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.c.obj
-                0x08002bf0                UART_WaitOnFlagUntilTimeout
+                0x08002c38       0xda cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.c.obj
+                0x08002c38                UART_WaitOnFlagUntilTimeout
  .text.UART_EndRxTransfer
-                0x08002cca       0xc8 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.c.obj
- .text.main     0x08002d92       0x1c CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj
-                0x08002d92                main
+                0x08002d12       0xc8 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.c.obj
+ *fill*         0x08002dda        0x2 
+ .text.compute_pwm_from_angle
+                0x08002ddc       0x38 CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj
+                0x08002ddc                compute_pwm_from_angle
+ .text.main     0x08002e14       0x54 CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj
+                0x08002e14                main
  .text.SystemClock_Config
-                0x08002dae       0x76 CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj
-                0x08002dae                SystemClock_Config
+                0x08002e68       0x76 CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj
+                0x08002e68                SystemClock_Config
  .text.Error_Handler
-                0x08002e24        0xc CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj
-                0x08002e24                Error_Handler
+                0x08002ede        0xc CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj
+                0x08002ede                Error_Handler
+ *fill*         0x08002eea        0x2 
  .text.MX_GPIO_Init
-                0x08002e30       0x48 CMakeFiles/NSE2025_VALVE.dir/Core/Src/gpio.c.obj
-                0x08002e30                MX_GPIO_Init
+                0x08002eec       0x48 CMakeFiles/NSE2025_VALVE.dir/Core/Src/gpio.c.obj
+                0x08002eec                MX_GPIO_Init
  .text.MX_TIM2_Init
-                0x08002e78       0xb4 CMakeFiles/NSE2025_VALVE.dir/Core/Src/tim.c.obj
-                0x08002e78                MX_TIM2_Init
+                0x08002f34       0xb4 CMakeFiles/NSE2025_VALVE.dir/Core/Src/tim.c.obj
+                0x08002f34                MX_TIM2_Init
  .text.HAL_TIM_PWM_MspInit
-                0x08002f2c       0x3c CMakeFiles/NSE2025_VALVE.dir/Core/Src/tim.c.obj
-                0x08002f2c                HAL_TIM_PWM_MspInit
+                0x08002fe8       0x3c CMakeFiles/NSE2025_VALVE.dir/Core/Src/tim.c.obj
+                0x08002fe8                HAL_TIM_PWM_MspInit
  .text.HAL_TIM_MspPostInit
-                0x08002f68       0x68 CMakeFiles/NSE2025_VALVE.dir/Core/Src/tim.c.obj
-                0x08002f68                HAL_TIM_MspPostInit
+                0x08003024       0x68 CMakeFiles/NSE2025_VALVE.dir/Core/Src/tim.c.obj
+                0x08003024                HAL_TIM_MspPostInit
  .text.MX_USART2_UART_Init
-                0x08002fd0       0x60 CMakeFiles/NSE2025_VALVE.dir/Core/Src/usart.c.obj
-                0x08002fd0                MX_USART2_UART_Init
+                0x0800308c       0x60 CMakeFiles/NSE2025_VALVE.dir/Core/Src/usart.c.obj
+                0x0800308c                MX_USART2_UART_Init
  .text.HAL_UART_MspInit
-                0x08003030       0x88 CMakeFiles/NSE2025_VALVE.dir/Core/Src/usart.c.obj
-                0x08003030                HAL_UART_MspInit
+                0x080030ec       0x88 CMakeFiles/NSE2025_VALVE.dir/Core/Src/usart.c.obj
+                0x080030ec                HAL_UART_MspInit
  .text.NMI_Handler
-                0x080030b8        0x8 CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_it.c.obj
-                0x080030b8                NMI_Handler
+                0x08003174        0x8 CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_it.c.obj
+                0x08003174                NMI_Handler
  .text.HardFault_Handler
-                0x080030c0        0x8 CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_it.c.obj
-                0x080030c0                HardFault_Handler
+                0x0800317c        0x8 CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_it.c.obj
+                0x0800317c                HardFault_Handler
  .text.MemManage_Handler
-                0x080030c8        0x8 CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_it.c.obj
-                0x080030c8                MemManage_Handler
+                0x08003184        0x8 CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_it.c.obj
+                0x08003184                MemManage_Handler
  .text.BusFault_Handler
-                0x080030d0        0x8 CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_it.c.obj
-                0x080030d0                BusFault_Handler
+                0x0800318c        0x8 CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_it.c.obj
+                0x0800318c                BusFault_Handler
  .text.UsageFault_Handler
-                0x080030d8        0x8 CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_it.c.obj
-                0x080030d8                UsageFault_Handler
+                0x08003194        0x8 CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_it.c.obj
+                0x08003194                UsageFault_Handler
  .text.SVC_Handler
-                0x080030e0        0xe CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_it.c.obj
-                0x080030e0                SVC_Handler
+                0x0800319c        0xe CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_it.c.obj
+                0x0800319c                SVC_Handler
  .text.DebugMon_Handler
-                0x080030ee        0xe CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_it.c.obj
-                0x080030ee                DebugMon_Handler
+                0x080031aa        0xe CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_it.c.obj
+                0x080031aa                DebugMon_Handler
  .text.PendSV_Handler
-                0x080030fc        0xe CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_it.c.obj
-                0x080030fc                PendSV_Handler
+                0x080031b8        0xe CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_it.c.obj
+                0x080031b8                PendSV_Handler
  .text.SysTick_Handler
-                0x0800310a        0xc CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_it.c.obj
-                0x0800310a                SysTick_Handler
- *fill*         0x08003116        0x2 
+                0x080031c6        0xc CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_it.c.obj
+                0x080031c6                SysTick_Handler
+ *fill*         0x080031d2        0x2 
  .text.HAL_MspInit
-                0x08003118       0x48 CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_hal_msp.c.obj
-                0x08003118                HAL_MspInit
+                0x080031d4       0x48 CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_hal_msp.c.obj
+                0x080031d4                HAL_MspInit
  .text.Reset_Handler
-                0x08003160       0x50 CMakeFiles/NSE2025_VALVE.dir/startup_stm32f303x8.s.obj
-                0x08003160                Reset_Handler
+                0x0800321c       0x50 CMakeFiles/NSE2025_VALVE.dir/startup_stm32f303x8.s.obj
+                0x0800321c                Reset_Handler
  .text.Default_Handler
-                0x080031b0        0x2 CMakeFiles/NSE2025_VALVE.dir/startup_stm32f303x8.s.obj
-                0x080031b0                TIM1_BRK_TIM15_IRQHandler
-                0x080031b0                TIM1_CC_IRQHandler
-                0x080031b0                PVD_IRQHandler
-                0x080031b0                TAMP_STAMP_IRQHandler
-                0x080031b0                EXTI3_IRQHandler
-                0x080031b0                EXTI0_IRQHandler
-                0x080031b0                FPU_IRQHandler
-                0x080031b0                CAN_TX_IRQHandler
-                0x080031b0                TIM1_UP_TIM16_IRQHandler
-                0x080031b0                ADC1_2_IRQHandler
-                0x080031b0                SPI1_IRQHandler
-                0x080031b0                CAN_SCE_IRQHandler
-                0x080031b0                DMA1_Channel4_IRQHandler
-                0x080031b0                USART3_IRQHandler
-                0x080031b0                DMA1_Channel7_IRQHandler
-                0x080031b0                TIM7_DAC2_IRQHandler
-                0x080031b0                CAN_RX1_IRQHandler
-                0x080031b0                I2C1_EV_IRQHandler
-                0x080031b0                DMA1_Channel6_IRQHandler
-                0x080031b0                TIM3_IRQHandler
-                0x080031b0                RCC_IRQHandler
-                0x080031b0                DMA1_Channel1_IRQHandler
-                0x080031b0                Default_Handler
-                0x080031b0                EXTI15_10_IRQHandler
-                0x080031b0                COMP2_IRQHandler
-                0x080031b0                TIM6_DAC1_IRQHandler
-                0x080031b0                EXTI9_5_IRQHandler
-                0x080031b0                RTC_WKUP_IRQHandler
-                0x080031b0                DMA1_Channel5_IRQHandler
-                0x080031b0                EXTI4_IRQHandler
-                0x080031b0                TIM1_TRG_COM_TIM17_IRQHandler
-                0x080031b0                DMA1_Channel3_IRQHandler
-                0x080031b0                WWDG_IRQHandler
-                0x080031b0                TIM2_IRQHandler
-                0x080031b0                EXTI1_IRQHandler
-                0x080031b0                COMP4_6_IRQHandler
-                0x080031b0                USART2_IRQHandler
-                0x080031b0                DMA1_Channel2_IRQHandler
-                0x080031b0                FLASH_IRQHandler
-                0x080031b0                USART1_IRQHandler
-                0x080031b0                CAN_RX0_IRQHandler
-                0x080031b0                I2C1_ER_IRQHandler
-                0x080031b0                EXTI2_TSC_IRQHandler
-                0x080031b0                RTC_Alarm_IRQHandler
+                0x0800326c        0x2 CMakeFiles/NSE2025_VALVE.dir/startup_stm32f303x8.s.obj
+                0x0800326c                TIM1_BRK_TIM15_IRQHandler
+                0x0800326c                TIM1_CC_IRQHandler
+                0x0800326c                PVD_IRQHandler
+                0x0800326c                TAMP_STAMP_IRQHandler
+                0x0800326c                EXTI3_IRQHandler
+                0x0800326c                EXTI0_IRQHandler
+                0x0800326c                FPU_IRQHandler
+                0x0800326c                CAN_TX_IRQHandler
+                0x0800326c                TIM1_UP_TIM16_IRQHandler
+                0x0800326c                ADC1_2_IRQHandler
+                0x0800326c                SPI1_IRQHandler
+                0x0800326c                CAN_SCE_IRQHandler
+                0x0800326c                DMA1_Channel4_IRQHandler
+                0x0800326c                USART3_IRQHandler
+                0x0800326c                DMA1_Channel7_IRQHandler
+                0x0800326c                TIM7_DAC2_IRQHandler
+                0x0800326c                CAN_RX1_IRQHandler
+                0x0800326c                I2C1_EV_IRQHandler
+                0x0800326c                DMA1_Channel6_IRQHandler
+                0x0800326c                TIM3_IRQHandler
+                0x0800326c                RCC_IRQHandler
+                0x0800326c                DMA1_Channel1_IRQHandler
+                0x0800326c                Default_Handler
+                0x0800326c                EXTI15_10_IRQHandler
+                0x0800326c                COMP2_IRQHandler
+                0x0800326c                TIM6_DAC1_IRQHandler
+                0x0800326c                EXTI9_5_IRQHandler
+                0x0800326c                RTC_WKUP_IRQHandler
+                0x0800326c                DMA1_Channel5_IRQHandler
+                0x0800326c                EXTI4_IRQHandler
+                0x0800326c                TIM1_TRG_COM_TIM17_IRQHandler
+                0x0800326c                DMA1_Channel3_IRQHandler
+                0x0800326c                WWDG_IRQHandler
+                0x0800326c                TIM2_IRQHandler
+                0x0800326c                EXTI1_IRQHandler
+                0x0800326c                COMP4_6_IRQHandler
+                0x0800326c                USART2_IRQHandler
+                0x0800326c                DMA1_Channel2_IRQHandler
+                0x0800326c                FLASH_IRQHandler
+                0x0800326c                USART1_IRQHandler
+                0x0800326c                CAN_RX0_IRQHandler
+                0x0800326c                I2C1_ER_IRQHandler
+                0x0800326c                EXTI2_TSC_IRQHandler
+                0x0800326c                RTC_Alarm_IRQHandler
  *(.glue_7)
- .glue_7        0x080031b2        0x0 linker stubs
+ .glue_7        0x0800326e        0x0 linker stubs
  *(.glue_7t)
- .glue_7t       0x080031b2        0x0 linker stubs
+ .glue_7t       0x0800326e        0x0 linker stubs
  *(.eh_frame)
- *fill*         0x080031b2        0x2 
- .eh_frame      0x080031b4        0x0 /Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v7e-m+fp/hard/crtbegin.o
+ *fill*         0x0800326e        0x2 
+ .eh_frame      0x08003270        0x0 /Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v7e-m+fp/hard/crtbegin.o
  *(.init)
- .init          0x080031b4        0x4 /Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v7e-m+fp/hard/crti.o
-                0x080031b4                _init
- .init          0x080031b8        0x8 /Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v7e-m+fp/hard/crtn.o
+ .init          0x08003270        0x4 /Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v7e-m+fp/hard/crti.o
+                0x08003270                _init
+ .init          0x08003274        0x8 /Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v7e-m+fp/hard/crtn.o
  *(.fini)
- .fini          0x080031c0        0x4 /Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v7e-m+fp/hard/crti.o
-                0x080031c0                _fini
- .fini          0x080031c4        0x8 /Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v7e-m+fp/hard/crtn.o
-                0x080031cc                        . = ALIGN (0x4)
-                0x080031cc                        _etext = .
+ .fini          0x0800327c        0x4 /Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v7e-m+fp/hard/crti.o
+                0x0800327c                _fini
+ .fini          0x08003280        0x8 /Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v7e-m+fp/hard/crtn.o
+                0x08003288                        . = ALIGN (0x4)
+                0x08003288                        _etext = .
 
-.vfp11_veneer   0x080031cc        0x0
- .vfp11_veneer  0x080031cc        0x0 linker stubs
+.vfp11_veneer   0x08003288        0x0
+ .vfp11_veneer  0x08003288        0x0 linker stubs
 
-.v4_bx          0x080031cc        0x0
- .v4_bx         0x080031cc        0x0 linker stubs
+.v4_bx          0x08003288        0x0
+ .v4_bx         0x08003288        0x0 linker stubs
 
-.iplt           0x080031cc        0x0
- .iplt          0x080031cc        0x0 /Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v7e-m+fp/hard/crtbegin.o
+.iplt           0x08003288        0x0
+ .iplt          0x08003288        0x0 /Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v7e-m+fp/hard/crtbegin.o
 
-.rodata         0x080031cc       0x38
-                0x080031cc                        . = ALIGN (0x4)
+.rodata         0x08003288       0x38
+                0x08003288                        . = ALIGN (0x4)
  *(.rodata)
  *(.rodata*)
  .rodata.AHBPrescTable
-                0x080031cc       0x10 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Core/Src/system_stm32f3xx.c.obj
-                0x080031cc                AHBPrescTable
+                0x08003288       0x10 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Core/Src/system_stm32f3xx.c.obj
+                0x08003288                AHBPrescTable
  .rodata.APBPrescTable
-                0x080031dc        0x8 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Core/Src/system_stm32f3xx.c.obj
-                0x080031dc                APBPrescTable
+                0x08003298        0x8 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Core/Src/system_stm32f3xx.c.obj
+                0x08003298                APBPrescTable
  .rodata.aPLLMULFactorTable
-                0x080031e4       0x10 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc.c.obj
+                0x080032a0       0x10 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc.c.obj
  .rodata.aPredivFactorTable
-                0x080031f4       0x10 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc.c.obj
-                0x08003204                        . = ALIGN (0x4)
+                0x080032b0       0x10 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc.c.obj
+                0x080032c0                        . = ALIGN (0x4)
 
-.ARM.extab      0x08003204        0x0
-                0x08003204                        . = ALIGN (0x4)
+.ARM.extab      0x080032c0        0x0
+                0x080032c0                        . = ALIGN (0x4)
  *(.ARM.extab* .gnu.linkonce.armextab.*)
-                0x08003204                        . = ALIGN (0x4)
+                0x080032c0                        . = ALIGN (0x4)
 
-.ARM            0x08003204        0x0
-                0x08003204                        . = ALIGN (0x4)
-                0x08003204                        __exidx_start = .
+.ARM            0x080032c0        0x0
+                0x080032c0                        . = ALIGN (0x4)
+                0x080032c0                        __exidx_start = .
  *(.ARM.exidx*)
-                0x08003204                        __exidx_end = .
-                0x08003204                        . = ALIGN (0x4)
+                0x080032c0                        __exidx_end = .
+                0x080032c0                        . = ALIGN (0x4)
 
-.preinit_array  0x08003204        0x0
-                0x08003204                        . = ALIGN (0x4)
-                0x08003204                        PROVIDE (__preinit_array_start = .)
+.preinit_array  0x080032c0        0x0
+                0x080032c0                        . = ALIGN (0x4)
+                0x080032c0                        PROVIDE (__preinit_array_start = .)
  *(.preinit_array*)
-                0x08003204                        PROVIDE (__preinit_array_end = .)
-                0x08003204                        . = ALIGN (0x4)
+                0x080032c0                        PROVIDE (__preinit_array_end = .)
+                0x080032c0                        . = ALIGN (0x4)
 
-.init_array     0x08003204        0x4
-                0x08003204                        . = ALIGN (0x4)
-                0x08003204                        PROVIDE (__init_array_start = .)
+.init_array     0x080032c0        0x4
+                0x080032c0                        . = ALIGN (0x4)
+                0x080032c0                        PROVIDE (__init_array_start = .)
  *(SORT_BY_NAME(.init_array.*))
  *(.init_array*)
- .init_array    0x08003204        0x4 /Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v7e-m+fp/hard/crtbegin.o
-                0x08003208                        PROVIDE (__init_array_end = .)
-                0x08003208                        . = ALIGN (0x4)
+ .init_array    0x080032c0        0x4 /Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v7e-m+fp/hard/crtbegin.o
+                0x080032c4                        PROVIDE (__init_array_end = .)
+                0x080032c4                        . = ALIGN (0x4)
 
-.fini_array     0x08003208        0x4
-                0x08003208                        . = ALIGN (0x4)
+.fini_array     0x080032c4        0x4
+                0x080032c4                        . = ALIGN (0x4)
                 [!provide]                        PROVIDE (__fini_array_start = .)
  *(SORT_BY_NAME(.fini_array.*))
  *(.fini_array*)
- .fini_array    0x08003208        0x4 /Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v7e-m+fp/hard/crtbegin.o
+ .fini_array    0x080032c4        0x4 /Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v7e-m+fp/hard/crtbegin.o
                 [!provide]                        PROVIDE (__fini_array_end = .)
-                0x0800320c                        . = ALIGN (0x4)
-                0x0800320c                        _sidata = LOADADDR (.data)
+                0x080032c8                        . = ALIGN (0x4)
+                0x080032c8                        _sidata = LOADADDR (.data)
 
-.rel.dyn        0x0800320c        0x0
- .rel.iplt      0x0800320c        0x0 /Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v7e-m+fp/hard/crtbegin.o
+.rel.dyn        0x080032c8        0x0
+ .rel.iplt      0x080032c8        0x0 /Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v7e-m+fp/hard/crtbegin.o
 
-.data           0x20000000        0xc load address 0x0800320c
+.data           0x20000000        0xc load address 0x080032c8
                 0x20000000                        . = ALIGN (0x4)
                 0x20000000                        _sdata = .
  *(.data)
@@ -3860,19 +3866,19 @@ LOAD /Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin/../lib/gcc/arm-no
                 0x2000000c                        . = ALIGN (0x4)
  *fill*         0x20000009        0x3 
                 0x2000000c                        _edata = .
-                0x08003218                        _siccmram = LOADADDR (.ccmram)
+                0x080032d4                        _siccmram = LOADADDR (.ccmram)
 
 .tm_clone_table
-                0x2000000c        0x0 load address 0x08003218
+                0x2000000c        0x0 load address 0x080032d4
  .tm_clone_table
                 0x2000000c        0x0 /Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v7e-m+fp/hard/crtbegin.o
  .tm_clone_table
                 0x2000000c        0x0 /Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v7e-m+fp/hard/crtend.o
 
-.igot.plt       0x2000000c        0x0 load address 0x08003218
+.igot.plt       0x2000000c        0x0 load address 0x080032d4
  .igot.plt      0x2000000c        0x0 /Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v7e-m+fp/hard/crtbegin.o
 
-.ccmram         0x10000000        0x0 load address 0x08003218
+.ccmram         0x10000000        0x0 load address 0x080032d4
                 0x10000000                        . = ALIGN (0x4)
                 0x10000000                        _sccmram = .
  *(.ccmram)
@@ -3984,7 +3990,7 @@ LOAD /Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin/../lib/gcc/arm-no
  .comment       0x00000045       0x46 CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_it.c.obj
  .comment       0x00000045       0x46 CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_hal_msp.c.obj
 
-.debug_frame    0x00000000     0x30e0
+.debug_frame    0x00000000     0x310c
  .debug_frame   0x00000000       0x20 /Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-memset.o)
  .debug_frame   0x00000020       0x2c /Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc_nano.a(libc_a-init.o)
  .debug_frame   0x0000004c       0x58 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Core/Src/system_stm32f3xx.c.obj
@@ -3995,14 +4001,14 @@ LOAD /Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin/../lib/gcc/arm-no
  .debug_frame   0x00001e8c      0x14c cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_gpio.c.obj
  .debug_frame   0x00001fd8      0x428 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_cortex.c.obj
  .debug_frame   0x00002400      0x9e8 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.c.obj
- .debug_frame   0x00002de8       0x68 CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj
- .debug_frame   0x00002e50       0x38 CMakeFiles/NSE2025_VALVE.dir/Core/Src/gpio.c.obj
- .debug_frame   0x00002e88       0xa8 CMakeFiles/NSE2025_VALVE.dir/Core/Src/tim.c.obj
- .debug_frame   0x00002f30       0x74 CMakeFiles/NSE2025_VALVE.dir/Core/Src/usart.c.obj
- .debug_frame   0x00002fa4      0x104 CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_it.c.obj
- .debug_frame   0x000030a8       0x38 CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_hal_msp.c.obj
+ .debug_frame   0x00002de8       0x94 CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj
+ .debug_frame   0x00002e7c       0x38 CMakeFiles/NSE2025_VALVE.dir/Core/Src/gpio.c.obj
+ .debug_frame   0x00002eb4       0xa8 CMakeFiles/NSE2025_VALVE.dir/Core/Src/tim.c.obj
+ .debug_frame   0x00002f5c       0x74 CMakeFiles/NSE2025_VALVE.dir/Core/Src/usart.c.obj
+ .debug_frame   0x00002fd0      0x104 CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_it.c.obj
+ .debug_frame   0x000030d4       0x38 CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_hal_msp.c.obj
 
-.debug_info     0x00000000     0xc55e
+.debug_info     0x00000000     0xcc76
  .debug_info    0x00000000      0x407 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Core/Src/system_stm32f3xx.c.obj
  .debug_info    0x00000407     0x2a82 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim.c.obj
  .debug_info    0x00002e89     0x1580 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim_ex.c.obj
@@ -4011,15 +4017,15 @@ LOAD /Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin/../lib/gcc/arm-no
  .debug_info    0x00005fe5      0x6a8 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_gpio.c.obj
  .debug_info    0x0000668d      0xa87 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_cortex.c.obj
  .debug_info    0x00007114     0x39b7 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.c.obj
- .debug_info    0x0000aacb      0x293 CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj
- .debug_info    0x0000ad5e      0x18d CMakeFiles/NSE2025_VALVE.dir/Core/Src/gpio.c.obj
- .debug_info    0x0000aeeb      0xa80 CMakeFiles/NSE2025_VALVE.dir/Core/Src/tim.c.obj
- .debug_info    0x0000b96b      0x923 CMakeFiles/NSE2025_VALVE.dir/Core/Src/usart.c.obj
- .debug_info    0x0000c28e      0x113 CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_it.c.obj
- .debug_info    0x0000c3a1      0x18d CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_hal_msp.c.obj
- .debug_info    0x0000c52e       0x30 CMakeFiles/NSE2025_VALVE.dir/startup_stm32f303x8.s.obj
+ .debug_info    0x0000aacb      0x9ab CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj
+ .debug_info    0x0000b476      0x18d CMakeFiles/NSE2025_VALVE.dir/Core/Src/gpio.c.obj
+ .debug_info    0x0000b603      0xa80 CMakeFiles/NSE2025_VALVE.dir/Core/Src/tim.c.obj
+ .debug_info    0x0000c083      0x923 CMakeFiles/NSE2025_VALVE.dir/Core/Src/usart.c.obj
+ .debug_info    0x0000c9a6      0x113 CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_it.c.obj
+ .debug_info    0x0000cab9      0x18d CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_hal_msp.c.obj
+ .debug_info    0x0000cc46       0x30 CMakeFiles/NSE2025_VALVE.dir/startup_stm32f303x8.s.obj
 
-.debug_abbrev   0x00000000     0x1a75
+.debug_abbrev   0x00000000     0x1b33
  .debug_abbrev  0x00000000      0x11a cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Core/Src/system_stm32f3xx.c.obj
  .debug_abbrev  0x0000011a      0x276 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim.c.obj
  .debug_abbrev  0x00000390      0x280 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim_ex.c.obj
@@ -4028,15 +4034,15 @@ LOAD /Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin/../lib/gcc/arm-no
  .debug_abbrev  0x00000b23      0x1c9 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_gpio.c.obj
  .debug_abbrev  0x00000cec      0x2f8 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_cortex.c.obj
  .debug_abbrev  0x00000fe4      0x2cd cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.c.obj
- .debug_abbrev  0x000012b1      0x198 CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj
- .debug_abbrev  0x00001449       0xc6 CMakeFiles/NSE2025_VALVE.dir/Core/Src/gpio.c.obj
- .debug_abbrev  0x0000150f      0x216 CMakeFiles/NSE2025_VALVE.dir/Core/Src/tim.c.obj
- .debug_abbrev  0x00001725      0x1f3 CMakeFiles/NSE2025_VALVE.dir/Core/Src/usart.c.obj
- .debug_abbrev  0x00001918       0x73 CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_it.c.obj
- .debug_abbrev  0x0000198b       0xc6 CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_hal_msp.c.obj
- .debug_abbrev  0x00001a51       0x24 CMakeFiles/NSE2025_VALVE.dir/startup_stm32f303x8.s.obj
+ .debug_abbrev  0x000012b1      0x256 CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj
+ .debug_abbrev  0x00001507       0xc6 CMakeFiles/NSE2025_VALVE.dir/Core/Src/gpio.c.obj
+ .debug_abbrev  0x000015cd      0x216 CMakeFiles/NSE2025_VALVE.dir/Core/Src/tim.c.obj
+ .debug_abbrev  0x000017e3      0x1f3 CMakeFiles/NSE2025_VALVE.dir/Core/Src/usart.c.obj
+ .debug_abbrev  0x000019d6       0x73 CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_it.c.obj
+ .debug_abbrev  0x00001a49       0xc6 CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_hal_msp.c.obj
+ .debug_abbrev  0x00001b0f       0x24 CMakeFiles/NSE2025_VALVE.dir/startup_stm32f303x8.s.obj
 
-.debug_aranges  0x00000000      0xbc8
+.debug_aranges  0x00000000      0xbd0
  .debug_aranges
                 0x00000000       0x28 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Core/Src/system_stm32f3xx.c.obj
  .debug_aranges
@@ -4054,22 +4060,22 @@ LOAD /Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin/../lib/gcc/arm-no
  .debug_aranges
                 0x00000840      0x228 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.c.obj
  .debug_aranges
-                0x00000a68       0x30 CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj
+                0x00000a68       0x38 CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj
  .debug_aranges
-                0x00000a98       0x20 CMakeFiles/NSE2025_VALVE.dir/Core/Src/gpio.c.obj
+                0x00000aa0       0x20 CMakeFiles/NSE2025_VALVE.dir/Core/Src/gpio.c.obj
  .debug_aranges
-                0x00000ab8       0x38 CMakeFiles/NSE2025_VALVE.dir/Core/Src/tim.c.obj
+                0x00000ac0       0x38 CMakeFiles/NSE2025_VALVE.dir/Core/Src/tim.c.obj
  .debug_aranges
-                0x00000af0       0x30 CMakeFiles/NSE2025_VALVE.dir/Core/Src/usart.c.obj
+                0x00000af8       0x30 CMakeFiles/NSE2025_VALVE.dir/Core/Src/usart.c.obj
  .debug_aranges
-                0x00000b20       0x60 CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_it.c.obj
+                0x00000b28       0x60 CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_it.c.obj
  .debug_aranges
-                0x00000b80       0x20 CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_hal_msp.c.obj
+                0x00000b88       0x20 CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_hal_msp.c.obj
  .debug_aranges
-                0x00000ba0       0x28 CMakeFiles/NSE2025_VALVE.dir/startup_stm32f303x8.s.obj
+                0x00000ba8       0x28 CMakeFiles/NSE2025_VALVE.dir/startup_stm32f303x8.s.obj
 
 .debug_rnglists
-                0x00000000      0x937
+                0x00000000      0x93d
  .debug_rnglists
                 0x00000000       0x1a cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Core/Src/system_stm32f3xx.c.obj
  .debug_rnglists
@@ -4087,21 +4093,21 @@ LOAD /Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin/../lib/gcc/arm-no
  .debug_rnglists
                 0x00000676      0x1da cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.c.obj
  .debug_rnglists
-                0x00000850       0x1f CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj
+                0x00000850       0x25 CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj
  .debug_rnglists
-                0x0000086f       0x13 CMakeFiles/NSE2025_VALVE.dir/Core/Src/gpio.c.obj
+                0x00000875       0x13 CMakeFiles/NSE2025_VALVE.dir/Core/Src/gpio.c.obj
  .debug_rnglists
-                0x00000882       0x26 CMakeFiles/NSE2025_VALVE.dir/Core/Src/tim.c.obj
+                0x00000888       0x26 CMakeFiles/NSE2025_VALVE.dir/Core/Src/tim.c.obj
  .debug_rnglists
-                0x000008a8       0x20 CMakeFiles/NSE2025_VALVE.dir/Core/Src/usart.c.obj
+                0x000008ae       0x20 CMakeFiles/NSE2025_VALVE.dir/Core/Src/usart.c.obj
  .debug_rnglists
-                0x000008c8       0x43 CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_it.c.obj
+                0x000008ce       0x43 CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_it.c.obj
  .debug_rnglists
-                0x0000090b       0x13 CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_hal_msp.c.obj
+                0x00000911       0x13 CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_hal_msp.c.obj
  .debug_rnglists
-                0x0000091e       0x19 CMakeFiles/NSE2025_VALVE.dir/startup_stm32f303x8.s.obj
+                0x00000924       0x19 CMakeFiles/NSE2025_VALVE.dir/startup_stm32f303x8.s.obj
 
-.debug_macro    0x00000000    0x1abf9
+.debug_macro    0x00000000    0x1acc1
  .debug_macro   0x00000000      0x1c5 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Core/Src/system_stm32f3xx.c.obj
  .debug_macro   0x000001c5      0xad8 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Core/Src/system_stm32f3xx.c.obj
  .debug_macro   0x00000c9d       0x2e cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Core/Src/system_stm32f3xx.c.obj
@@ -4150,15 +4156,15 @@ LOAD /Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin/../lib/gcc/arm-no
  .debug_macro   0x00019b04      0x1cc cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_gpio.c.obj
  .debug_macro   0x00019cd0      0x1c5 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_cortex.c.obj
  .debug_macro   0x00019e95      0x1e2 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.c.obj
- .debug_macro   0x0001a077      0x1f6 CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj
- .debug_macro   0x0001a26d       0x40 CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj
- .debug_macro   0x0001a2ad      0x1de CMakeFiles/NSE2025_VALVE.dir/Core/Src/gpio.c.obj
- .debug_macro   0x0001a48b      0x1de CMakeFiles/NSE2025_VALVE.dir/Core/Src/tim.c.obj
- .debug_macro   0x0001a669      0x1de CMakeFiles/NSE2025_VALVE.dir/Core/Src/usart.c.obj
- .debug_macro   0x0001a847      0x1de CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_it.c.obj
- .debug_macro   0x0001aa25      0x1d4 CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_hal_msp.c.obj
+ .debug_macro   0x0001a077      0x226 CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj
+ .debug_macro   0x0001a29d       0x40 CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj
+ .debug_macro   0x0001a2dd      0x1fa CMakeFiles/NSE2025_VALVE.dir/Core/Src/gpio.c.obj
+ .debug_macro   0x0001a4d7      0x1fa CMakeFiles/NSE2025_VALVE.dir/Core/Src/tim.c.obj
+ .debug_macro   0x0001a6d1      0x1fa CMakeFiles/NSE2025_VALVE.dir/Core/Src/usart.c.obj
+ .debug_macro   0x0001a8cb      0x200 CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_it.c.obj
+ .debug_macro   0x0001aacb      0x1f6 CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_hal_msp.c.obj
 
-.debug_line     0x00000000     0xe8d4
+.debug_line     0x00000000     0xe979
  .debug_line    0x00000000      0x751 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Core/Src/system_stm32f3xx.c.obj
  .debug_line    0x00000751     0x3c58 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim.c.obj
  .debug_line    0x000043a9     0x194c cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim_ex.c.obj
@@ -4167,31 +4173,31 @@ LOAD /Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin/../lib/gcc/arm-no
  .debug_line    0x00007b6e      0xac4 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_gpio.c.obj
  .debug_line    0x00008632      0xb51 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_cortex.c.obj
  .debug_line    0x00009183     0x2b77 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.c.obj
- .debug_line    0x0000bcfa      0x75d CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj
- .debug_line    0x0000c457      0x6d4 CMakeFiles/NSE2025_VALVE.dir/Core/Src/gpio.c.obj
- .debug_line    0x0000cb2b      0x787 CMakeFiles/NSE2025_VALVE.dir/Core/Src/tim.c.obj
- .debug_line    0x0000d2b2      0x74b CMakeFiles/NSE2025_VALVE.dir/Core/Src/usart.c.obj
- .debug_line    0x0000d9fd      0x786 CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_it.c.obj
- .debug_line    0x0000e183      0x6d7 CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_hal_msp.c.obj
- .debug_line    0x0000e85a       0x7a CMakeFiles/NSE2025_VALVE.dir/startup_stm32f303x8.s.obj
+ .debug_line    0x0000bcfa      0x78a CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj
+ .debug_line    0x0000c484      0x6e8 CMakeFiles/NSE2025_VALVE.dir/Core/Src/gpio.c.obj
+ .debug_line    0x0000cb6c      0x79c CMakeFiles/NSE2025_VALVE.dir/Core/Src/tim.c.obj
+ .debug_line    0x0000d308      0x75e CMakeFiles/NSE2025_VALVE.dir/Core/Src/usart.c.obj
+ .debug_line    0x0000da66      0x7a4 CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_it.c.obj
+ .debug_line    0x0000e20a      0x6f5 CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_hal_msp.c.obj
+ .debug_line    0x0000e8ff       0x7a CMakeFiles/NSE2025_VALVE.dir/startup_stm32f303x8.s.obj
 
-.debug_str      0x00000000    0xa0f25
- .debug_str     0x00000000    0xa0f25 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Core/Src/system_stm32f3xx.c.obj
+.debug_str      0x00000000    0xa0fe6
+ .debug_str     0x00000000    0xa0fe6 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Core/Src/system_stm32f3xx.c.obj
                               0x9d82d (size before relaxing)
- .debug_str     0x000a0f25    0x9ec7f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim.c.obj
- .debug_str     0x000a0f25    0x9e4aa cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim_ex.c.obj
- .debug_str     0x000a0f25    0x9df1d cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal.c.obj
- .debug_str     0x000a0f25    0x9dccd cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc.c.obj
- .debug_str     0x000a0f25    0x9da0c cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_gpio.c.obj
- .debug_str     0x000a0f25    0x9de42 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_cortex.c.obj
- .debug_str     0x000a0f25    0x9e550 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.c.obj
- .debug_str     0x000a0f25    0x9d9d3 CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj
- .debug_str     0x000a0f25    0x9d849 CMakeFiles/NSE2025_VALVE.dir/Core/Src/gpio.c.obj
- .debug_str     0x000a0f25    0x9df90 CMakeFiles/NSE2025_VALVE.dir/Core/Src/tim.c.obj
- .debug_str     0x000a0f25    0x9dd9c CMakeFiles/NSE2025_VALVE.dir/Core/Src/usart.c.obj
- .debug_str     0x000a0f25    0x9d878 CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_it.c.obj
- .debug_str     0x000a0f25    0x9d849 CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_hal_msp.c.obj
- .debug_str     0x000a0f25       0xc4 CMakeFiles/NSE2025_VALVE.dir/startup_stm32f303x8.s.obj
+ .debug_str     0x000a0fe6    0x9ec7f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim.c.obj
+ .debug_str     0x000a0fe6    0x9e4aa cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim_ex.c.obj
+ .debug_str     0x000a0fe6    0x9df1d cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal.c.obj
+ .debug_str     0x000a0fe6    0x9dccd cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc.c.obj
+ .debug_str     0x000a0fe6    0x9da0c cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_gpio.c.obj
+ .debug_str     0x000a0fe6    0x9de42 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_cortex.c.obj
+ .debug_str     0x000a0fe6    0x9e550 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.c.obj
+ .debug_str     0x000a0fe6    0x9dffa CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj
+ .debug_str     0x000a0fe6    0x9d861 CMakeFiles/NSE2025_VALVE.dir/Core/Src/gpio.c.obj
+ .debug_str     0x000a0fe6    0x9dfa9 CMakeFiles/NSE2025_VALVE.dir/Core/Src/tim.c.obj
+ .debug_str     0x000a0fe6    0x9ddb3 CMakeFiles/NSE2025_VALVE.dir/Core/Src/usart.c.obj
+ .debug_str     0x000a0fe6    0x9d89c CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_it.c.obj
+ .debug_str     0x000a0fe6    0x9d86d CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_hal_msp.c.obj
+ .debug_str     0x000a0fe6       0xc4 CMakeFiles/NSE2025_VALVE.dir/startup_stm32f303x8.s.obj
 
 .debug_line_str
                 0x00000000       0xa8

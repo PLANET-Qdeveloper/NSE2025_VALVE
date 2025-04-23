@@ -37,4 +37,8 @@ CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_hal_msp.c.obj: \
  /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_tim.h \
  /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_tim_ex.h \
  /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_uart.h \
- /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_uart_ex.h
+ /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_hal_uart_ex.h \
+ /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Core/Inc/tim.h \
+ /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Core/Inc/main.h \
+ /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Core/Inc/usart.h \
+ /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Core/Inc/gpio.h

@@ -18,9 +18,6 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "tim.h"
-#include "usart.h"
-#include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -34,7 +31,21 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+//モータによって変更する箇所
+#define  peri_pwm 20       //PWMの周期 [ms]
 
+#define  deg_min 0      //制御角の最小値 [°]
+#define  deg_max 270       //制御角の最大値 [°]
+
+#define  width_min 500     //パルス幅の最小値 [us]
+#define  width_max 2500    //パルス幅の最大値 [us]
+
+//変えなくていい箇所
+#define  freq_pwm 1/ peri_pwm * 1000                   //PWMの周波数 [Hz]
+
+#define  deg_range deg_max - deg_min                   //制御角の範囲 [°]
+
+#define  width_range (width_max - width_min) / 1000    //パルス幅の範囲 [ms]  ＊us->msに変換している
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -56,6 +67,12 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+  int compute_pwm_from_angle(int angle){
+    int pwm;
+    int deg_con = angle - deg_min;
+    pwm = ((deg_con * width_range / deg_range + width_min / 1000) / peri_pwm * 65535);
+    return pwm;
+  }
 
 /* USER CODE END 0 */
 
@@ -91,7 +108,7 @@ int main(void)
   MX_USART2_UART_Init();
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
-
+  __HAL_RCC_TIM2_CLK_ENABLE();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -99,7 +116,8 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-
+  __HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_1, compute_pwm_from_angle(30));
+  HAL_Delay(1000);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */

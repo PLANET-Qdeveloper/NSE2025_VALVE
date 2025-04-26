@@ -6,6 +6,8 @@ CMakeFiles/NSE2025_VALVE.dir/Core/Src/gpio.c.obj
  /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Core/Inc/gpio.h
  /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Core/Inc/main.h
  /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Core/Inc/stm32f3xx_hal_conf.h
+ /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Core/Inc/tim.h
+ /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Core/Inc/usart.h
  /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/CMSIS/Device/ST/STM32F3xx/Include/stm32f303x8.h
  /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/CMSIS/Device/ST/STM32F3xx/Include/stm32f3xx.h
  /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/CMSIS/Device/ST/STM32F3xx/Include/system_stm32f3xx.h
@@ -89,8 +91,11 @@ CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj
 
 CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_hal_msp.c.obj
  /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Core/Src/stm32f3xx_hal_msp.c
+ /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Core/Inc/gpio.h
  /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Core/Inc/main.h
  /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Core/Inc/stm32f3xx_hal_conf.h
+ /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Core/Inc/tim.h
+ /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Core/Inc/usart.h
  /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/CMSIS/Device/ST/STM32F3xx/Include/stm32f303x8.h
  /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/CMSIS/Device/ST/STM32F3xx/Include/stm32f3xx.h
  /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/CMSIS/Device/ST/STM32F3xx/Include/system_stm32f3xx.h
@@ -130,9 +135,12 @@ CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_hal_msp.c.obj
 
 CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f3xx_it.c.obj
  /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Core/Src/stm32f3xx_it.c
+ /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Core/Inc/gpio.h
  /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Core/Inc/main.h
  /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Core/Inc/stm32f3xx_hal_conf.h
  /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Core/Inc/stm32f3xx_it.h
+ /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Core/Inc/tim.h
+ /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Core/Inc/usart.h
  /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/CMSIS/Device/ST/STM32F3xx/Include/stm32f303x8.h
  /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/CMSIS/Device/ST/STM32F3xx/Include/stm32f3xx.h
  /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/CMSIS/Device/ST/STM32F3xx/Include/system_stm32f3xx.h
@@ -242,9 +250,11 @@ CMakeFiles/NSE2025_VALVE.dir/Core/Src/sysmem.c.obj
 
 CMakeFiles/NSE2025_VALVE.dir/Core/Src/tim.c.obj
  /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Core/Src/tim.c
+ /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Core/Inc/gpio.h
  /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Core/Inc/main.h
  /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Core/Inc/stm32f3xx_hal_conf.h
  /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Core/Inc/tim.h
+ /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Core/Inc/usart.h
  /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/CMSIS/Device/ST/STM32F3xx/Include/stm32f303x8.h
  /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/CMSIS/Device/ST/STM32F3xx/Include/stm32f3xx.h
  /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/CMSIS/Device/ST/STM32F3xx/Include/system_stm32f3xx.h
@@ -284,8 +294,10 @@ CMakeFiles/NSE2025_VALVE.dir/Core/Src/tim.c.obj
 
 CMakeFiles/NSE2025_VALVE.dir/Core/Src/usart.c.obj
  /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Core/Src/usart.c
+ /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Core/Inc/gpio.h
  /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Core/Inc/main.h
  /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Core/Inc/stm32f3xx_hal_conf.h
+ /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Core/Inc/tim.h
  /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Core/Inc/usart.h
  /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/CMSIS/Device/ST/STM32F3xx/Include/stm32f303x8.h
  /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/CMSIS/Device/ST/STM32F3xx/Include/stm32f3xx.h

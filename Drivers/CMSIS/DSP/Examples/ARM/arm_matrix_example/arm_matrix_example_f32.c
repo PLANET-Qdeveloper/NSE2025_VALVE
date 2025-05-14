@@ -96,7 +96,7 @@
 #define SNR_THRESHOLD   90
 
 /* --------------------------------------------------------------------------------
-* NSE2025_VALVE input data(Cycles) taken from FIR Q15 module for differant cases of blockSize
+* Test input data(Cycles) taken from FIR Q15 module for differant cases of blockSize
 * and tapSize
 * --------------------------------------------------------------------------------- */
 
@@ -128,7 +128,7 @@ float32_t AT_f32[16];
 float32_t ATMA_f32[16];
 /* Inverse(Transpose of A * A)  Buffer */
 float32_t ATMAI_f32[16];
-/* NSE2025_VALVE Output Buffer */
+/* Test Output Buffer */
 float32_t X_f32[4];
 
 /* ----------------------------------------------------------------------
@@ -140,7 +140,7 @@ float32_t snr;
 
 
 /* ----------------------------------------------------------------------
-* Max magnitude FFT Bin NSE2025_VALVE
+* Max magnitude FFT Bin test
 * ------------------------------------------------------------------- */
 
 int32_t main(void)
@@ -202,7 +202,7 @@ int32_t main(void)
   /* calculation ((Inverse((Transpose(A) * A)) *  Transpose(A)) * B) */
   status = arm_mat_mult_f32(&ATMA, &B, &X);
 
-  /* Comparison of reference with NSE2025_VALVE output */
+  /* Comparison of reference with test output */
   snr = arm_snr_f32((float32_t *)xRef_f32, X_f32, 4);
 
   /*------------------------------------------------------------------------------
@@ -214,13 +214,13 @@ int32_t main(void)
   }
   else
   {
-    status = ARM_MATH_NSE2025_VALVE_FAILURE;
+    status = ARM_MATH_TEST_FAILURE;
   }
 
 
   /* ----------------------------------------------------------------------
   ** Loop here if the signals fail the PASS check.
-  ** This denotes a NSE2025_VALVE failure
+  ** This denotes a test failure
   ** ------------------------------------------------------------------- */
   if ( status != ARM_MATH_SUCCESS)
   {

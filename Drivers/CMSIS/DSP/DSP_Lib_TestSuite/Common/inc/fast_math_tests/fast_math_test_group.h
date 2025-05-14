@@ -1,9 +1,9 @@
-#ifndef _FAST_MATH_NSE2025_VALVE_GROUP_H_
-#define _FAST_MATH_NSE2025_VALVE_GROUP_H_
+#ifndef _FAST_MATH_TEST_GROUP_H_
+#define _FAST_MATH_TEST_GROUP_H_
 
 /*--------------------------------------------------------------------------------*/
-/* Declare NSE2025_VALVE Groups */
+/* Declare Test Groups */
 /*--------------------------------------------------------------------------------*/
-JNSE2025_VALVE_DECLARE_GROUP(fast_math_NSE2025_VALVEs);
+JTEST_DECLARE_GROUP(fast_math_tests);
 
-#endif /* _FAST_MATH_NSE2025_VALVE_GROUP_H_ */
+#endif /* _FAST_MATH_TEST_GROUP_H_ */

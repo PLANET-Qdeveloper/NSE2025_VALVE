@@ -1,17 +1,17 @@
 #include "arm_math.h"
-#include "matrix_NSE2025_VALVE_data.h"
+#include "matrix_test_data.h"
 #include "type_abbrev.h"
 
 /*--------------------------------------------------------------------------------*/
 /* Input/Output Buffers */
 /*--------------------------------------------------------------------------------*/
 
-MATRIX_NSE2025_VALVE_BIGGEST_INPUT_TYPE matrix_output_fut_data[2*MATRIX_NSE2025_VALVE_MAX_ELTS] = {0};
-MATRIX_NSE2025_VALVE_BIGGEST_INPUT_TYPE matrix_output_ref_data[2*MATRIX_NSE2025_VALVE_MAX_ELTS] = {0};
-MATRIX_NSE2025_VALVE_BIGGEST_INPUT_TYPE matrix_output_scratch[MATRIX_NSE2025_VALVE_MAX_ELTS] = {0};
+MATRIX_TEST_BIGGEST_INPUT_TYPE matrix_output_fut_data[2*MATRIX_TEST_MAX_ELTS] = {0};
+MATRIX_TEST_BIGGEST_INPUT_TYPE matrix_output_ref_data[2*MATRIX_TEST_MAX_ELTS] = {0};
+MATRIX_TEST_BIGGEST_INPUT_TYPE matrix_output_scratch[MATRIX_TEST_MAX_ELTS] = {0};
 
-MATRIX_NSE2025_VALVE_BIGGEST_INPUT_TYPE matrix_output_f32_fut[MATRIX_NSE2025_VALVE_MAX_ELTS];
-MATRIX_NSE2025_VALVE_BIGGEST_INPUT_TYPE matrix_output_f32_ref[MATRIX_NSE2025_VALVE_MAX_ELTS];
+MATRIX_TEST_BIGGEST_INPUT_TYPE matrix_output_f32_fut[MATRIX_TEST_MAX_ELTS];
+MATRIX_TEST_BIGGEST_INPUT_TYPE matrix_output_f32_ref[MATRIX_TEST_MAX_ELTS];
 
 arm_matrix_instance_f32 matrix_output_fut = {
     0,
@@ -118,7 +118,7 @@ float64_t matrix_f64_100_rand[100] = {
     46.3088539286913
 };
 
-MATRIX_NSE2025_VALVE_BIGGEST_INPUT_TYPE matrix_zeros[MATRIX_NSE2025_VALVE_MAX_ELTS] = {0};
+MATRIX_TEST_BIGGEST_INPUT_TYPE matrix_zeros[MATRIX_TEST_MAX_ELTS] = {0};
 
 const float32_t matrix_f32_scale_values[MATRIX_MAX_COEFFS_LEN] =
 {
@@ -154,7 +154,7 @@ const int32_t matrix_shift_values[MATRIX_MAX_SHIFTS_LEN] =
 /*--------------------------------------------------------------------------------*/
 
 /**
- *  Define matrices by suffix (f32, q31, q15) for use in NSE2025_VALVE cases.
+ *  Define matrices by suffix (f32, q31, q15) for use in test cases.
  *
  *  The rand1 and rand2 suffixes get their data from the same pool of random
  *  data, but their starting points differ by 1 element.
@@ -206,7 +206,7 @@ MATRIX_DEFINE_MATRICES(q15);
 /* Define Input #ARR_DESC_t by suffix.
  *
  * Taking inputs in parallel from the 'a' and 'b' arrays yields the following
- * NSE2025_VALVE cases:
+ * test cases:
  * - 1x1 multiplication by zero
  * - 1x1 multiplication between random numbers
  * - 1x1 * 1x4 valid dimension interaction

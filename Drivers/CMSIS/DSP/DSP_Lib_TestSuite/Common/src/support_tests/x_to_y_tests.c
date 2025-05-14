@@ -1,9 +1,9 @@
-#include "jNSE2025_VALVE.h"
-#include "support_NSE2025_VALVE_data.h"
+#include "jtest.h"
+#include "support_test_data.h"
 #include "arr_desc.h"
 #include "arm_math.h"           /* FUTs */
 #include "ref.h"                /* Reference Functions */
-#include "NSE2025_VALVE_templates.h"
+#include "test_templates.h"
 #include "support_templates.h"
 #include "type_abbrev.h"
 
@@ -21,11 +21,11 @@
 #define ref_q15_to_f32 ref_q15_to_float
 #define ref_q7_to_f32  ref_q7_to_float
 
-#define JNSE2025_VALVE_ARM_X_TO_Y_NSE2025_VALVE(prefix, suffix)               \
-    JNSE2025_VALVE_DEFINE_NSE2025_VALVE(arm_##prefix##_to_##suffix##_NSE2025_VALVE,    \
+#define JTEST_ARM_X_TO_Y_TEST(prefix, suffix)               \
+    JTEST_DEFINE_TEST(arm_##prefix##_to_##suffix##_test,    \
                       arm_##prefix##_to_##suffix)           \
     {                                                       \
-        NSE2025_VALVE_TEMPLATE_BUF1_BLK(                             \
+        TEST_TEMPLATE_BUF1_BLK(                             \
             support_f_all,                                  \
             support_block_sizes,                            \
             TYPE_FROM_ABBREV(prefix),                       \
@@ -37,44 +37,44 @@
             SUPPORT_COMPARE_INTERFACE);                     \
     }
 
-JNSE2025_VALVE_ARM_X_TO_Y_NSE2025_VALVE(f32, q31);
-JNSE2025_VALVE_ARM_X_TO_Y_NSE2025_VALVE(f32, q15);
-JNSE2025_VALVE_ARM_X_TO_Y_NSE2025_VALVE(f32, q7);
+JTEST_ARM_X_TO_Y_TEST(f32, q31);
+JTEST_ARM_X_TO_Y_TEST(f32, q15);
+JTEST_ARM_X_TO_Y_TEST(f32, q7);
 
-JNSE2025_VALVE_ARM_X_TO_Y_NSE2025_VALVE(q31, f32);
-JNSE2025_VALVE_ARM_X_TO_Y_NSE2025_VALVE(q31, q15);
-JNSE2025_VALVE_ARM_X_TO_Y_NSE2025_VALVE(q31, q7);
+JTEST_ARM_X_TO_Y_TEST(q31, f32);
+JTEST_ARM_X_TO_Y_TEST(q31, q15);
+JTEST_ARM_X_TO_Y_TEST(q31, q7);
 
-JNSE2025_VALVE_ARM_X_TO_Y_NSE2025_VALVE(q15, f32);
-JNSE2025_VALVE_ARM_X_TO_Y_NSE2025_VALVE(q15, q31);
-JNSE2025_VALVE_ARM_X_TO_Y_NSE2025_VALVE(q15, q7);
+JTEST_ARM_X_TO_Y_TEST(q15, f32);
+JTEST_ARM_X_TO_Y_TEST(q15, q31);
+JTEST_ARM_X_TO_Y_TEST(q15, q7);
 
-JNSE2025_VALVE_ARM_X_TO_Y_NSE2025_VALVE(q7, f32);
-JNSE2025_VALVE_ARM_X_TO_Y_NSE2025_VALVE(q7, q31);
-JNSE2025_VALVE_ARM_X_TO_Y_NSE2025_VALVE(q7, q15);
+JTEST_ARM_X_TO_Y_TEST(q7, f32);
+JTEST_ARM_X_TO_Y_TEST(q7, q31);
+JTEST_ARM_X_TO_Y_TEST(q7, q15);
 
 /*--------------------------------------------------------------------------------*/
-/* Collect all NSE2025_VALVEs in a group. */
+/* Collect all tests in a group. */
 /*--------------------------------------------------------------------------------*/
 
-JNSE2025_VALVE_DEFINE_GROUP(x_to_y_NSE2025_VALVEs)
+JTEST_DEFINE_GROUP(x_to_y_tests)
 {
     /*
-      To skip a NSE2025_VALVE, comment it out.
+      To skip a test, comment it out.
     */
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_f32_to_q31_NSE2025_VALVE);
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_f32_to_q15_NSE2025_VALVE);
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_f32_to_q7_NSE2025_VALVE);
+    JTEST_TEST_CALL(arm_f32_to_q31_test);
+    JTEST_TEST_CALL(arm_f32_to_q15_test);
+    JTEST_TEST_CALL(arm_f32_to_q7_test);
 
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_q31_to_f32_NSE2025_VALVE);
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_q31_to_q15_NSE2025_VALVE);
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_q31_to_q7_NSE2025_VALVE);
+    JTEST_TEST_CALL(arm_q31_to_f32_test);
+    JTEST_TEST_CALL(arm_q31_to_q15_test);
+    JTEST_TEST_CALL(arm_q31_to_q7_test);
 
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_q15_to_f32_NSE2025_VALVE);
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_q15_to_q31_NSE2025_VALVE);
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_q15_to_q7_NSE2025_VALVE);
+    JTEST_TEST_CALL(arm_q15_to_f32_test);
+    JTEST_TEST_CALL(arm_q15_to_q31_test);
+    JTEST_TEST_CALL(arm_q15_to_q7_test);
 
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_q7_to_f32_NSE2025_VALVE);
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_q7_to_q31_NSE2025_VALVE);
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_q7_to_q15_NSE2025_VALVE);
+    JTEST_TEST_CALL(arm_q7_to_f32_test);
+    JTEST_TEST_CALL(arm_q7_to_q31_test);
+    JTEST_TEST_CALL(arm_q7_to_q15_test);
 }

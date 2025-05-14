@@ -1,9 +1,9 @@
-#ifndef _STATISTICS_NSE2025_VALVE_GROUP_H_
-#define _STATISTICS_NSE2025_VALVE_GROUP_H_
+#ifndef _STATISTICS_TEST_GROUP_H_
+#define _STATISTICS_TEST_GROUP_H_
 
 /*--------------------------------------------------------------------------------*/
-/* Declare NSE2025_VALVE Groups */
+/* Declare Test Groups */
 /*--------------------------------------------------------------------------------*/
-JNSE2025_VALVE_DECLARE_GROUP(statistics_NSE2025_VALVEs);
+JTEST_DECLARE_GROUP(statistics_tests);
 
-#endif /* _STATISTICS_NSE2025_VALVE_GROUP_H_ */
+#endif /* _STATISTICS_TEST_GROUP_H_ */

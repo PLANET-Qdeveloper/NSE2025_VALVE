@@ -96,9 +96,9 @@
  *
  * \par Variables Description:
  * \par
- * \li \c NSE2025_VALVEInput_f32_1kHz_15kHz points to the input data
+ * \li \c testInput_f32_1kHz_15kHz points to the input data
  * \li \c refOutput points to the reference output data
- * \li \c NSE2025_VALVEOutput points to the NSE2025_VALVE output data
+ * \li \c testOutput points to the test output data
  * \li \c firStateF32 points to state buffer
  * \li \c firCoeffs32 points to coefficient buffer
  * \li \c blockSize number of samples processed at a time
@@ -129,7 +129,7 @@
 ** Macro Defines
 ** ------------------------------------------------------------------- */
 
-#define NSE2025_VALVE_LENGTH_SAMPLES  320
+#define TEST_LENGTH_SAMPLES  320
 #define SNR_THRESHOLD_F32    140.0f
 #define BLOCK_SIZE            32
 #define NUM_TAPS              29
@@ -139,14 +139,14 @@
  * are defined externally in arm_fir_lpf_data.c.
  * ------------------------------------------------------------------- */
 
-extern float32_t NSE2025_VALVEInput_f32_1kHz_15kHz[NSE2025_VALVE_LENGTH_SAMPLES];
-extern float32_t refOutput[NSE2025_VALVE_LENGTH_SAMPLES];
+extern float32_t testInput_f32_1kHz_15kHz[TEST_LENGTH_SAMPLES];
+extern float32_t refOutput[TEST_LENGTH_SAMPLES];
 
 /* -------------------------------------------------------------------
- * Declare NSE2025_VALVE output buffer
+ * Declare Test output buffer
  * ------------------------------------------------------------------- */
 
-static float32_t NSE2025_VALVEOutput[NSE2025_VALVE_LENGTH_SAMPLES];
+static float32_t testOutput[TEST_LENGTH_SAMPLES];
 
 /* -------------------------------------------------------------------
  * Declare State buffer of size (numTaps + blockSize - 1)
@@ -171,7 +171,7 @@ const float32_t firCoeffs32[NUM_TAPS] = {
  * ------------------------------------------------------------------- */
 
 uint32_t blockSize = BLOCK_SIZE;
-uint32_t numBlocks = NSE2025_VALVE_LENGTH_SAMPLES/BLOCK_SIZE;
+uint32_t numBlocks = TEST_LENGTH_SAMPLES/BLOCK_SIZE;
 
 float32_t  snr;
 
@@ -187,8 +187,8 @@ int32_t main(void)
   float32_t  *inputF32, *outputF32;
 
   /* Initialize input and output buffer pointers */
-  inputF32 = &NSE2025_VALVEInput_f32_1kHz_15kHz[0];
-  outputF32 = &NSE2025_VALVEOutput[0];
+  inputF32 = &testInput_f32_1kHz_15kHz[0];
+  outputF32 = &testOutput[0];
 
   /* Call FIR init function to initialize the instance structure. */
   arm_fir_init_f32(&S, NUM_TAPS, (float32_t *)&firCoeffs32[0], &firStateF32[0], blockSize);
@@ -207,11 +207,11 @@ int32_t main(void)
   ** in MATLAB.
   ** ------------------------------------------------------------------- */
 
-  snr = arm_snr_f32(&refOutput[0], &NSE2025_VALVEOutput[0], NSE2025_VALVE_LENGTH_SAMPLES);
+  snr = arm_snr_f32(&refOutput[0], &testOutput[0], TEST_LENGTH_SAMPLES);
 
   if (snr < SNR_THRESHOLD_F32)
   {
-    status = ARM_MATH_NSE2025_VALVE_FAILURE;
+    status = ARM_MATH_TEST_FAILURE;
   }
   else
   {

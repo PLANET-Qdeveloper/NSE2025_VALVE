@@ -1,9 +1,9 @@
-#ifndef _ALL_NSE2025_VALVES_H_
-#define _ALL_NSE2025_VALVES_H_
+#ifndef _ALL_TESTS_H_
+#define _ALL_TESTS_H_
 
 /*--------------------------------------------------------------------------------*/
-/* Declare NSE2025_VALVE Groups */
+/* Declare Test Groups */
 /*--------------------------------------------------------------------------------*/
-JNSE2025_VALVE_DECLARE_GROUP(all_NSE2025_VALVEs);
+JTEST_DECLARE_GROUP(all_tests);
 
-#endif /* _ALL_NSE2025_VALVES_H_ */
+#endif /* _ALL_TESTS_H_ */

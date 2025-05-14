@@ -1,15 +1,15 @@
-#ifndef _FILTERING_NSE2025_VALVES_H_
-#define _FILTERING_NSE2025_VALVES_H_
+#ifndef _FILTERING_TESTS_H_
+#define _FILTERING_TESTS_H_
 
 /*--------------------------------------------------------------------------------*/
-/* NSE2025_VALVE/Group Declarations */
+/* Test/Group Declarations */
 /*--------------------------------------------------------------------------------*/
 
-JNSE2025_VALVE_DECLARE_GROUP(biquad_NSE2025_VALVEs);
-JNSE2025_VALVE_DECLARE_GROUP(conv_NSE2025_VALVEs);
-JNSE2025_VALVE_DECLARE_GROUP(correlate_NSE2025_VALVEs);
-JNSE2025_VALVE_DECLARE_GROUP(fir_NSE2025_VALVEs);
-JNSE2025_VALVE_DECLARE_GROUP(iir_NSE2025_VALVEs);
-JNSE2025_VALVE_DECLARE_GROUP(lms_NSE2025_VALVEs);
+JTEST_DECLARE_GROUP(biquad_tests);
+JTEST_DECLARE_GROUP(conv_tests);
+JTEST_DECLARE_GROUP(correlate_tests);
+JTEST_DECLARE_GROUP(fir_tests);
+JTEST_DECLARE_GROUP(iir_tests);
+JTEST_DECLARE_GROUP(lms_tests);
 
-#endif /* _FILTERING_NSE2025_VALVES_H_ */
+#endif /* _FILTERING_TESTS_H_ */

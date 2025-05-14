@@ -1,9 +1,9 @@
-#include "../inc/jNSE2025_VALVE.h"
+#include "../inc/jtest.h"
 
 /*--------------------------------------------------------------------------------*/
 /* Define Global Variables */
 /*--------------------------------------------------------------------------------*/
 
-char JNSE2025_VALVE_FW_STR_BUFFER[JNSE2025_VALVE_BUF_SIZE] = {0};
+char JTEST_FW_STR_BUFFER[JTEST_BUF_SIZE] = {0};
 
-volatile JNSE2025_VALVE_FW_t JNSE2025_VALVE_FW = {0};
+volatile JTEST_FW_t JTEST_FW = {0};

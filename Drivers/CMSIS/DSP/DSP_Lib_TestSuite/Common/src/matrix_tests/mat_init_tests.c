@@ -1,14 +1,14 @@
-#include "jNSE2025_VALVE.h"
-#include "matrix_NSE2025_VALVE_data.h"
+#include "jtest.h"
+#include "matrix_test_data.h"
 #include "arr_desc.h"
 #include "arm_math.h"           /* FUTs */
 #include "ref.h"                /* Reference Functions */
-#include "NSE2025_VALVE_templates.h"
+#include "test_templates.h"
 #include "matrix_templates.h"
 #include "type_abbrev.h"
 
-#define JNSE2025_VALVE_ARM_MAT_INIT_NSE2025_VALVE(suffix)                     \
-    JNSE2025_VALVE_DEFINE_NSE2025_VALVE(arm_mat_init_##suffix##_NSE2025_VALVE,         \
+#define JTEST_ARM_MAT_INIT_TEST(suffix)                     \
+    JTEST_DEFINE_TEST(arm_mat_init_##suffix##_test,         \
                       arm_mat_init_##suffix)                \
     {                                                       \
         const uint16_t rows = 4;                            \
@@ -22,7 +22,7 @@
                                   cols,                     \
                                   data);                    \
                                                             \
-                JNSE2025_VALVE_DUMP_STRF("Matrix Dimensions: %dx%d\n", \
+                JTEST_DUMP_STRF("Matrix Dimensions: %dx%d\n", \
                      (int)matrix.numRows,                   \
                      (int)matrix.numCols);                  \
                                                             \
@@ -30,29 +30,29 @@
                     (matrix.numCols == cols) &&             \
                     (matrix.pData == data))                 \
                 {                                           \
-                    return JNSE2025_VALVE_NSE2025_VALVE_PASSED;               \
+                    return JTEST_TEST_PASSED;               \
                 }                                           \
                 else                                        \
                 {                                           \
-                    return JNSE2025_VALVE_NSE2025_VALVE_FAILED;               \
+                    return JTEST_TEST_FAILED;               \
                 }                                           \
                                                             \
     }
 
-JNSE2025_VALVE_ARM_MAT_INIT_NSE2025_VALVE(f32);
-JNSE2025_VALVE_ARM_MAT_INIT_NSE2025_VALVE(q31);
-JNSE2025_VALVE_ARM_MAT_INIT_NSE2025_VALVE(q15);
+JTEST_ARM_MAT_INIT_TEST(f32);
+JTEST_ARM_MAT_INIT_TEST(q31);
+JTEST_ARM_MAT_INIT_TEST(q15);
 
 /*--------------------------------------------------------------------------------*/
-/* Collect all NSE2025_VALVEs in a group. */
+/* Collect all tests in a group. */
 /*--------------------------------------------------------------------------------*/
 
-JNSE2025_VALVE_DEFINE_GROUP(mat_init_NSE2025_VALVEs)
+JTEST_DEFINE_GROUP(mat_init_tests)
 {
     /*
-      To skip a NSE2025_VALVE, comment it out.
+      To skip a test, comment it out.
     */
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_mat_init_f32_NSE2025_VALVE);
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_mat_init_q31_NSE2025_VALVE);
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_mat_init_q15_NSE2025_VALVE);
+    JTEST_TEST_CALL(arm_mat_init_f32_test);
+    JTEST_TEST_CALL(arm_mat_init_q31_test);
+    JTEST_TEST_CALL(arm_mat_init_q15_test);
 }

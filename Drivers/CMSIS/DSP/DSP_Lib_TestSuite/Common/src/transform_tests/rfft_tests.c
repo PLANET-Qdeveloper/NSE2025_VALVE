@@ -1,18 +1,18 @@
-#include "jNSE2025_VALVE.h"
+#include "jtest.h"
 #include "ref.h"
 #include "arr_desc.h"
 #include "transform_templates.h"
-#include "transform_NSE2025_VALVE_data.h"
+#include "transform_test_data.h"
 #include "type_abbrev.h"
 
 /*
-  FFT function NSE2025_VALVE template. Arguments are: function suffix (q7/q15/q31/f32)
+  FFT function test template. Arguments are: function suffix (q7/q15/q31/f32)
   function configuration suffix (same as function suffix), inverse-transform flag,
   input and output type (both q7_t/q15_t/q31_t/float32_t)
 */
-#define RFFT_DEFINE_NSE2025_VALVE(suffix, config_suffix,                         \
+#define RFFT_DEFINE_TEST(suffix, config_suffix,                         \
                          ifft_flag, input_type, output_type)            \
-    JNSE2025_VALVE_DEFINE_NSE2025_VALVE(arm_rfft_##suffix##_##config_suffix##_NSE2025_VALVE,       \
+    JTEST_DEFINE_TEST(arm_rfft_##suffix##_##config_suffix##_test,       \
                       arm_rfft_##suffix)                                \
     {                                                                   \
         CONCAT(arm_rfft_instance_, suffix) rfft_inst_fut = {0};         \
@@ -49,13 +49,13 @@
             }                                                           \
                                                                         \
             /* Display parameter values */                              \
-            JNSE2025_VALVE_DUMP_STRF("Block Size: %d\n"                          \
+            JTEST_DUMP_STRF("Block Size: %d\n"                          \
                             "Inverse-transform flag: %d\n",             \
                          (int)fftlen,                                   \
                          (int)ifft_flag);                               \
                                                                         \
-            /* Display cycle count and run NSE2025_VALVE */                      \
-            JNSE2025_VALVE_COUNT_CYCLES(                                         \
+            /* Display cycle count and run test */                      \
+            JTEST_COUNT_CYCLES(                                         \
                 arm_rfft_##suffix(                                      \
                     &rfft_inst_fut,                                     \
                     (void *) transform_fft_input_fut,                   \
@@ -66,29 +66,29 @@
                 (void *) transform_fft_input_ref,                       \
                 (void *) transform_fft_output_ref);                     \
                                                                         \
-            /* NSE2025_VALVE correctness */                                      \
+            /* Test correctness */                                      \
             TRANSFORM_SNR_COMPARE_INTERFACE(                            \
                 fftlen,                                                 \
                 output_type));                                          \
                                                                         \
-            return JNSE2025_VALVE_NSE2025_VALVE_PASSED;                                   \
+            return JTEST_TEST_PASSED;                                   \
     }
 
-RFFT_DEFINE_NSE2025_VALVE(q31, forward, 0U, TYPE_FROM_ABBREV(q31), TYPE_FROM_ABBREV(q31));
-RFFT_DEFINE_NSE2025_VALVE(q15, forward, 0U, TYPE_FROM_ABBREV(q15), TYPE_FROM_ABBREV(q15));
-//RFFT_DEFINE_NSE2025_VALVE(f32, inverse, 1U, TYPE_FROM_ABBREV(f32), TYPE_FROM_ABBREV(f32));
-RFFT_DEFINE_NSE2025_VALVE(q31, inverse, 1U, TYPE_FROM_ABBREV(q31), TYPE_FROM_ABBREV(q31));
-RFFT_DEFINE_NSE2025_VALVE(q15, inverse, 1U, TYPE_FROM_ABBREV(q15), TYPE_FROM_ABBREV(q15));
+RFFT_DEFINE_TEST(q31, forward, 0U, TYPE_FROM_ABBREV(q31), TYPE_FROM_ABBREV(q31));
+RFFT_DEFINE_TEST(q15, forward, 0U, TYPE_FROM_ABBREV(q15), TYPE_FROM_ABBREV(q15));
+//RFFT_DEFINE_TEST(f32, inverse, 1U, TYPE_FROM_ABBREV(f32), TYPE_FROM_ABBREV(f32));
+RFFT_DEFINE_TEST(q31, inverse, 1U, TYPE_FROM_ABBREV(q31), TYPE_FROM_ABBREV(q31));
+RFFT_DEFINE_TEST(q15, inverse, 1U, TYPE_FROM_ABBREV(q15), TYPE_FROM_ABBREV(q15));
 
 /*--------------------------------------------------------------------------------*/
-/* Collect all NSE2025_VALVEs in a group */
+/* Collect all tests in a group */
 /*--------------------------------------------------------------------------------*/
 
-JNSE2025_VALVE_DEFINE_GROUP(rfft_NSE2025_VALVEs)
+JTEST_DEFINE_GROUP(rfft_tests)
 {
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_rfft_q31_forward_NSE2025_VALVE);
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_rfft_q15_forward_NSE2025_VALVE);
-    //JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_rfft_f32_inverse_NSE2025_VALVE);
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_rfft_q31_inverse_NSE2025_VALVE);
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_rfft_q15_inverse_NSE2025_VALVE);
+    JTEST_TEST_CALL(arm_rfft_q31_forward_test);
+    JTEST_TEST_CALL(arm_rfft_q15_forward_test);
+    //JTEST_TEST_CALL(arm_rfft_f32_inverse_test);
+    JTEST_TEST_CALL(arm_rfft_q31_inverse_test);
+    JTEST_TEST_CALL(arm_rfft_q15_inverse_test);
 }

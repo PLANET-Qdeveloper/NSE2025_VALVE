@@ -1,9 +1,9 @@
-#include "jNSE2025_VALVE.h"
-#include "filtering_NSE2025_VALVE_data.h"
+#include "jtest.h"
+#include "filtering_test_data.h"
 #include "arr_desc.h"
 #include "arm_math.h"           /* FUTs */
 #include "ref.h"                /* Reference Functions */
-#include "NSE2025_VALVE_templates.h"
+#include "test_templates.h"
 #include "filtering_templates.h"
 #include "type_abbrev.h"
 
@@ -14,7 +14,7 @@
 #define CONV_MAX_INPUT_ELTS  32
 #define CONV_MAX_OUTPUT_ELTS (CONV_MAX_INPUT_ELTS * 2)
 
-#define CONV_NSE2025_VALVE_VALID_PARTIAL_PARAMS(input_a_len, input_b_len,           \
+#define CONV_TEST_VALID_PARTIAL_PARAMS(input_a_len, input_b_len,           \
                                        first_index, num_points)            \
     (((((input_a_len) + (input_b_len) - 1)) >= num_points + first_index )  \
     && (num_points > 0))
@@ -24,7 +24,7 @@
 /*--------------------------------------------------------------------------------*/
 /*
  *  General:
- *  Input interfaces provide inputs to functions inside NSE2025_VALVE templates.  They
+ *  Input interfaces provide inputs to functions inside test templates.  They
  *  ONLY provide the inputs.  The output variables should be hard coded.
  *
  *  The input interfaces must have the following format:
@@ -189,7 +189,7 @@ ARR_DESC_DEFINE(float32_t, conv_input_zeros, CONV_MAX_INPUT_ELTS, CURLY(0));
  *  Define Input #ARR_DESC_t arrays by type suffix.
  *
  *  Taking inputs in parallel from the 'a' and 'b' arrays yields the following
- *  NSE2025_VALVE cases (star is convolution):
+ *  test cases (star is convolution):
  *
  *  - zero_array   * zero_array
  *  - zero_array   * random_array
@@ -230,7 +230,7 @@ CONV_DEFINE_ALL_INPUTS(q7);
  *  to provide convolution-length pairs. Taken in parallel they provide the
  *  following cases:
  *
- *  - 1 * 1    : ShorNSE2025_VALVE convolution possible.
+ *  - 1 * 1    : Shortest convolution possible.
  *  - 1 * 2    : Short convolution   , one side is degenerate .
  *  - 17 * 1   : Medium convolution  , one side is degenerate .
  *  - 15 * MAX : Longest convolution , one side is degenerate .
@@ -282,13 +282,13 @@ ARR_DESC_DEFINE(uint32_t,
                     ));
 
 /*--------------------------------------------------------------------------------*/
-/* Convolution NSE2025_VALVEs */
+/* Convolution Tests */
 /*--------------------------------------------------------------------------------*/
 
-#define CONV_NSE2025_VALVE_TEMPLATE(fut, fut_arg_interface,                            \
+#define CONV_TEST_TEMPLATE(fut, fut_arg_interface,                            \
                            ref, ref_arg_interface,                            \
                            suffix, output_type)                               \
-    JNSE2025_VALVE_DEFINE_NSE2025_VALVE(fut##_NSE2025_VALVEs, fut)                                       \
+    JTEST_DEFINE_TEST(fut##_tests, fut)                                       \
     {                                                                         \
         TEMPLATE_DO_ARR_DESC(                                                 \
             input_idx, ARR_DESC_t *, input_ptr, conv_##suffix##_a_inputs      \
@@ -304,12 +304,12 @@ ARR_DESC_DEFINE(uint32_t,
                 uint32_t conv_len_b = ARR_DESC_ELT(                           \
                     uint32_t, conv_len_idx, &(conv_lens_b));                  \
                                                                               \
-                JNSE2025_VALVE_DUMP_STRF("Input A Length: %d\n"                        \
+                JTEST_DUMP_STRF("Input A Length: %d\n"                        \
                                 "Input B Length: %d\n",                       \
                                 (int)conv_len_a,                              \
                                 (int)conv_len_b);                             \
                                                                               \
-                NSE2025_VALVE_CALL_FUT_AND_REF(                                        \
+                TEST_CALL_FUT_AND_REF(                                        \
                     fut, fut_arg_interface(                                   \
                         input_a_ptr, conv_len_a, input_b_ptr, conv_len_b),    \
                     ref, ref_arg_interface(                                   \
@@ -319,14 +319,14 @@ ARR_DESC_DEFINE(uint32_t,
                     conv_len_a + conv_len_b - 1,                              \
                     output_type)));                                           \
                                                                               \
-        return JNSE2025_VALVE_NSE2025_VALVE_PASSED;                                             \
+        return JTEST_TEST_PASSED;                                             \
     }                                                                         \
                                                                               \
 
-#define CONV_PARTIAL_NSE2025_VALVE_TEMPLATE(fut, fut_arg_interface,                    \
+#define CONV_PARTIAL_TEST_TEMPLATE(fut, fut_arg_interface,                    \
                                    ref, ref_arg_interface,                    \
                                    suffix, output_type)                       \
-    JNSE2025_VALVE_DEFINE_NSE2025_VALVE(fut##_NSE2025_VALVEs, fut)                                       \
+    JTEST_DEFINE_TEST(fut##_tests, fut)                                       \
     {                                                                         \
         TEMPLATE_DO_ARR_DESC(                                                 \
             input_idx, ARR_DESC_t *, input_ptr, conv_##suffix##_a_inputs      \
@@ -349,12 +349,12 @@ ARR_DESC_DEFINE(uint32_t,
                         num_points_idx, uint32_t, num_points,                 \
                         num_points_arr_desc                                   \
                         ,                                                     \
-                        if (CONV_NSE2025_VALVE_VALID_PARTIAL_PARAMS(                   \
+                        if (CONV_TEST_VALID_PARTIAL_PARAMS(                   \
                                 conv_len_a, conv_len_b,                       \
                                 first_index, num_points))                     \
                         {                                                     \
-                            /* Display NSE2025_VALVE parameter values */               \
-                            JNSE2025_VALVE_DUMP_STRF("Input A Length: %d\n"            \
+                            /* Display test parameter values */               \
+                            JTEST_DUMP_STRF("Input A Length: %d\n"            \
                                             "Input B Length: %d\n"            \
                                             "First Sample Index: %d\n"        \
                                             "Number of Output Points: %d\n",  \
@@ -368,7 +368,7 @@ ARR_DESC_DEFINE(uint32_t,
                            memset(filtering_output_fut,0,                     \
                                  (2*CONV_MAX_INPUT_ELTS)*sizeof(output_type)); \
                                                                               \
-                            NSE2025_VALVE_CALL_FUT_AND_REF(                            \
+                            TEST_CALL_FUT_AND_REF(                            \
                                 fut, fut_arg_interface(                       \
                                     input_a_ptr, conv_len_a,                  \
                                     input_b_ptr, conv_len_b,                  \
@@ -387,25 +387,25 @@ ARR_DESC_DEFINE(uint32_t,
                             /* if first_index and num_points don't make */    \
                             /* sense*/                                        \
                                                                               \
-                            arm_status conv_NSE2025_VALVE_retval;                      \
-                            NSE2025_VALVE_CALL_FUT(                                    \
-                                conv_NSE2025_VALVE_retval = fut,                       \
+                            arm_status conv_test_retval;                      \
+                            TEST_CALL_FUT(                                    \
+                                conv_test_retval = fut,                       \
                                 fut_arg_interface(                            \
                                     input_a_ptr, conv_len_a,                  \
                                     input_b_ptr, conv_len_b,                  \
                                     first_index, num_points));                \
                                                                               \
-                            if (conv_NSE2025_VALVE_retval != ARM_MATH_ARGUMENT_ERROR) { \
-                                JNSE2025_VALVE_DUMP_STR("FUT failed to raise error."); \
-                                /* return JNSE2025_VALVE_NSE2025_VALVE_FAILED; */               \
+                            if (conv_test_retval != ARM_MATH_ARGUMENT_ERROR) { \
+                                JTEST_DUMP_STR("FUT failed to raise error."); \
+                                /* return JTEST_TEST_FAILED; */               \
                             }                                                 \
                         }))));                                                \
                                                                               \
-        return JNSE2025_VALVE_NSE2025_VALVE_PASSED;                                             \
+        return JTEST_TEST_PASSED;                                             \
     }
 
-#define CONV_DEFINE_NSE2025_VALVE(fn_name, suffix, output_type, NSE2025_VALVE_template)   \
-    NSE2025_VALVE_template(                                                      \
+#define CONV_DEFINE_TEST(fn_name, suffix, output_type, test_template)   \
+    test_template(                                                      \
         arm_##fn_name##_##suffix,                                       \
         CONV_arm_##fn_name##_INPUT_INTERFACE,                           \
         ref_##fn_name##_##suffix,                                       \
@@ -414,60 +414,60 @@ ARR_DESC_DEFINE(uint32_t,
         output_type                                                     \
         ) /* Note the lacking semicolon*/
 
-/* NSE2025_VALVEs on functions without partial outputs */
-CONV_DEFINE_NSE2025_VALVE(conv          , f32, float32_t, CONV_NSE2025_VALVE_TEMPLATE);
-CONV_DEFINE_NSE2025_VALVE(conv          , q31, q31_t    , CONV_NSE2025_VALVE_TEMPLATE);
-CONV_DEFINE_NSE2025_VALVE(conv          , q15, q15_t    , CONV_NSE2025_VALVE_TEMPLATE);
-CONV_DEFINE_NSE2025_VALVE(conv          , q7 , q7_t     , CONV_NSE2025_VALVE_TEMPLATE);
-CONV_DEFINE_NSE2025_VALVE(conv_opt      , q15, q15_t    , CONV_NSE2025_VALVE_TEMPLATE);
-CONV_DEFINE_NSE2025_VALVE(conv_opt      , q7 , q7_t     , CONV_NSE2025_VALVE_TEMPLATE);
-CONV_DEFINE_NSE2025_VALVE(conv_fast     , q31, q31_t    , CONV_NSE2025_VALVE_TEMPLATE);
-CONV_DEFINE_NSE2025_VALVE(conv_fast     , q15, q15_t    , CONV_NSE2025_VALVE_TEMPLATE);
-CONV_DEFINE_NSE2025_VALVE(conv_fast_opt , q15, q15_t    , CONV_NSE2025_VALVE_TEMPLATE);
+/* Tests on functions without partial outputs */
+CONV_DEFINE_TEST(conv          , f32, float32_t, CONV_TEST_TEMPLATE);
+CONV_DEFINE_TEST(conv          , q31, q31_t    , CONV_TEST_TEMPLATE);
+CONV_DEFINE_TEST(conv          , q15, q15_t    , CONV_TEST_TEMPLATE);
+CONV_DEFINE_TEST(conv          , q7 , q7_t     , CONV_TEST_TEMPLATE);
+CONV_DEFINE_TEST(conv_opt      , q15, q15_t    , CONV_TEST_TEMPLATE);
+CONV_DEFINE_TEST(conv_opt      , q7 , q7_t     , CONV_TEST_TEMPLATE);
+CONV_DEFINE_TEST(conv_fast     , q31, q31_t    , CONV_TEST_TEMPLATE);
+CONV_DEFINE_TEST(conv_fast     , q15, q15_t    , CONV_TEST_TEMPLATE);
+CONV_DEFINE_TEST(conv_fast_opt , q15, q15_t    , CONV_TEST_TEMPLATE);
 
-/* NSE2025_VALVEs on functions with partial outputs  */
-CONV_DEFINE_NSE2025_VALVE(conv_partial          , f32, float32_t, CONV_PARTIAL_NSE2025_VALVE_TEMPLATE);
-CONV_DEFINE_NSE2025_VALVE(conv_partial          , q31, q31_t    , CONV_PARTIAL_NSE2025_VALVE_TEMPLATE);
-CONV_DEFINE_NSE2025_VALVE(conv_partial          , q15, q15_t    , CONV_PARTIAL_NSE2025_VALVE_TEMPLATE);
-CONV_DEFINE_NSE2025_VALVE(conv_partial          , q7 , q7_t     , CONV_PARTIAL_NSE2025_VALVE_TEMPLATE);
-CONV_DEFINE_NSE2025_VALVE(conv_partial_fast     , q31, q31_t    , CONV_PARTIAL_NSE2025_VALVE_TEMPLATE);
-CONV_DEFINE_NSE2025_VALVE(conv_partial_fast     , q15, q15_t    , CONV_PARTIAL_NSE2025_VALVE_TEMPLATE);
-CONV_DEFINE_NSE2025_VALVE(conv_partial_fast_opt , q15, q15_t    , CONV_PARTIAL_NSE2025_VALVE_TEMPLATE);
-CONV_DEFINE_NSE2025_VALVE(conv_partial_opt      , q15, q15_t    , CONV_PARTIAL_NSE2025_VALVE_TEMPLATE);
-CONV_DEFINE_NSE2025_VALVE(conv_partial_opt      , q7 , q7_t     , CONV_PARTIAL_NSE2025_VALVE_TEMPLATE);
+/* Tests on functions with partial outputs  */
+CONV_DEFINE_TEST(conv_partial          , f32, float32_t, CONV_PARTIAL_TEST_TEMPLATE);
+CONV_DEFINE_TEST(conv_partial          , q31, q31_t    , CONV_PARTIAL_TEST_TEMPLATE);
+CONV_DEFINE_TEST(conv_partial          , q15, q15_t    , CONV_PARTIAL_TEST_TEMPLATE);
+CONV_DEFINE_TEST(conv_partial          , q7 , q7_t     , CONV_PARTIAL_TEST_TEMPLATE);
+CONV_DEFINE_TEST(conv_partial_fast     , q31, q31_t    , CONV_PARTIAL_TEST_TEMPLATE);
+CONV_DEFINE_TEST(conv_partial_fast     , q15, q15_t    , CONV_PARTIAL_TEST_TEMPLATE);
+CONV_DEFINE_TEST(conv_partial_fast_opt , q15, q15_t    , CONV_PARTIAL_TEST_TEMPLATE);
+CONV_DEFINE_TEST(conv_partial_opt      , q15, q15_t    , CONV_PARTIAL_TEST_TEMPLATE);
+CONV_DEFINE_TEST(conv_partial_opt      , q7 , q7_t     , CONV_PARTIAL_TEST_TEMPLATE);
 
 /*--------------------------------------------------------------------------------*/
-/* Collect all NSE2025_VALVEs in a group. */
+/* Collect all tests in a group. */
 /*--------------------------------------------------------------------------------*/
 
-JNSE2025_VALVE_DEFINE_GROUP(conv_NSE2025_VALVEs)
+JTEST_DEFINE_GROUP(conv_tests)
 {
     /*
-      To skip a NSE2025_VALVE, comment it out.
+      To skip a test, comment it out.
     */
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_conv_f32_NSE2025_VALVEs);
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_conv_q31_NSE2025_VALVEs);
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_conv_q15_NSE2025_VALVEs);
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_conv_q7_NSE2025_VALVEs);
+    JTEST_TEST_CALL(arm_conv_f32_tests);
+    JTEST_TEST_CALL(arm_conv_q31_tests);
+    JTEST_TEST_CALL(arm_conv_q15_tests);
+    JTEST_TEST_CALL(arm_conv_q7_tests);
 
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_conv_opt_q15_NSE2025_VALVEs);
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_conv_opt_q7_NSE2025_VALVEs);
+    JTEST_TEST_CALL(arm_conv_opt_q15_tests);
+    JTEST_TEST_CALL(arm_conv_opt_q7_tests);
 
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_conv_fast_q31_NSE2025_VALVEs);
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_conv_fast_q15_NSE2025_VALVEs);
+    JTEST_TEST_CALL(arm_conv_fast_q31_tests);
+    JTEST_TEST_CALL(arm_conv_fast_q15_tests);
 
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_conv_fast_opt_q15_NSE2025_VALVEs);
+    JTEST_TEST_CALL(arm_conv_fast_opt_q15_tests);
 
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_conv_partial_f32_NSE2025_VALVEs);
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_conv_partial_q31_NSE2025_VALVEs);
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_conv_partial_q15_NSE2025_VALVEs);
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_conv_partial_q7_NSE2025_VALVEs);
+    JTEST_TEST_CALL(arm_conv_partial_f32_tests);
+    JTEST_TEST_CALL(arm_conv_partial_q31_tests);
+    JTEST_TEST_CALL(arm_conv_partial_q15_tests);
+    JTEST_TEST_CALL(arm_conv_partial_q7_tests);
 
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_conv_partial_fast_q31_NSE2025_VALVEs);
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_conv_partial_fast_q15_NSE2025_VALVEs);
+    JTEST_TEST_CALL(arm_conv_partial_fast_q31_tests);
+    JTEST_TEST_CALL(arm_conv_partial_fast_q15_tests);
 
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_conv_partial_fast_opt_q15_NSE2025_VALVEs);
+    JTEST_TEST_CALL(arm_conv_partial_fast_opt_q15_tests);
 
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_conv_partial_opt_q15_NSE2025_VALVEs);
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_conv_partial_opt_q7_NSE2025_VALVEs);
+    JTEST_TEST_CALL(arm_conv_partial_opt_q15_tests);
+    JTEST_TEST_CALL(arm_conv_partial_opt_q7_tests);
 }

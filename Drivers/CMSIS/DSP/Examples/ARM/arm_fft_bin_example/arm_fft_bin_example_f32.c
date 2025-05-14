@@ -54,7 +54,7 @@
  *
  * \par Algorithm:
  * \par
- * The input NSE2025_VALVE signal contains a 10 kHz signal with uniformly distributed white noise.
+ * The input test signal contains a 10 kHz signal with uniformly distributed white noise.
  * Calculating the FFT of the input signal will give us the maximum energy of the
  * bin corresponding to the input frequency of 10 kHz.
  *
@@ -70,13 +70,13 @@
  *
  * \par Variables Description:
  * \par
- * \li \c NSE2025_VALVEInput_f32_10khz points to the input data
- * \li \c NSE2025_VALVEOutput points to the output data
+ * \li \c testInput_f32_10khz points to the input data
+ * \li \c testOutput points to the output data
  * \li \c fftSize length of FFT
  * \li \c ifftFlag flag for the selection of CFFT/CIFFT
  * \li \c doBitReverse Flag for selection of normal order or bit reversed order
  * \li \c refIndex reference index value at which maximum energy of bin ocuurs
- * \li \c NSE2025_VALVEIndex calculated index value at which maximum energy of bin ocuurs
+ * \li \c testIndex calculated index value at which maximum energy of bin ocuurs
  *
  * \par CMSIS DSP Software Library Functions Used:
  * \par
@@ -97,13 +97,13 @@
 #include "arm_math.h"
 #include "arm_const_structs.h"
 
-#define NSE2025_VALVE_LENGTH_SAMPLES 2048
+#define TEST_LENGTH_SAMPLES 2048
 
 /* -------------------------------------------------------------------
 * External Input and Output buffer Declarations for FFT Bin Example
 * ------------------------------------------------------------------- */
-extern float32_t NSE2025_VALVEInput_f32_10khz[NSE2025_VALVE_LENGTH_SAMPLES];
-static float32_t NSE2025_VALVEOutput[NSE2025_VALVE_LENGTH_SAMPLES/2];
+extern float32_t testInput_f32_10khz[TEST_LENGTH_SAMPLES];
+static float32_t testOutput[TEST_LENGTH_SAMPLES/2];
 
 /* ------------------------------------------------------------------
 * Global variables for FFT Bin Example
@@ -113,10 +113,10 @@ uint32_t ifftFlag = 0;
 uint32_t doBitReverse = 1;
 
 /* Reference index at which max energy of bin ocuurs */
-uint32_t refIndex = 213, NSE2025_VALVEIndex = 0;
+uint32_t refIndex = 213, testIndex = 0;
 
 /* ----------------------------------------------------------------------
-* Max magnitude FFT Bin NSE2025_VALVE
+* Max magnitude FFT Bin test
 * ------------------------------------------------------------------- */
 
 int32_t main(void)
@@ -128,23 +128,23 @@ int32_t main(void)
   status = ARM_MATH_SUCCESS;
 
   /* Process the data through the CFFT/CIFFT module */
-  arm_cfft_f32(&arm_cfft_sR_f32_len1024, NSE2025_VALVEInput_f32_10khz, ifftFlag, doBitReverse);
+  arm_cfft_f32(&arm_cfft_sR_f32_len1024, testInput_f32_10khz, ifftFlag, doBitReverse);
 
   /* Process the data through the Complex Magnitude Module for
   calculating the magnitude at each bin */
-  arm_cmplx_mag_f32(NSE2025_VALVEInput_f32_10khz, NSE2025_VALVEOutput, fftSize);
+  arm_cmplx_mag_f32(testInput_f32_10khz, testOutput, fftSize);
 
   /* Calculates maxValue and returns corresponding BIN value */
-  arm_max_f32(NSE2025_VALVEOutput, fftSize, &maxValue, &NSE2025_VALVEIndex);
+  arm_max_f32(testOutput, fftSize, &maxValue, &testIndex);
 
-  if (NSE2025_VALVEIndex !=  refIndex)
+  if (testIndex !=  refIndex)
   {
-    status = ARM_MATH_NSE2025_VALVE_FAILURE;
+    status = ARM_MATH_TEST_FAILURE;
   }
 
   /* ----------------------------------------------------------------------
   ** Loop here if the signals fail the PASS check.
-  ** This denotes a NSE2025_VALVE failure
+  ** This denotes a test failure
   ** ------------------------------------------------------------------- */
 
   if ( status != ARM_MATH_SUCCESS)

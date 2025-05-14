@@ -1,9 +1,9 @@
-#include "jNSE2025_VALVE.h"
-#include "filtering_NSE2025_VALVE_data.h"
+#include "jtest.h"
+#include "filtering_test_data.h"
 #include "arr_desc.h"
 #include "arm_math.h"           /* FUTs */
 #include "ref.h"                /* Reference Functions */
-#include "NSE2025_VALVE_templates.h"
+#include "test_templates.h"
 #include "filtering_templates.h"
 #include "type_abbrev.h"
 
@@ -19,7 +19,7 @@
 /*--------------------------------------------------------------------------------*/
 /*
  *  General:
- *  Input interfaces provide inputs to functions inside NSE2025_VALVE templates.  They
+ *  Input interfaces provide inputs to functions inside test templates.  They
  *  ONLY provide the inputs.  The output variables should be hard coded.
  *
  *  The input interfaces must have the following format:
@@ -140,7 +140,7 @@ ARR_DESC_DEFINE(float32_t, correlate_input_zeros, CORRELATE_MAX_INPUT_ELTS, CURL
  *  Define Input #ARR_DESC_t arrays by type suffix.
  *
  *  Taking inputs in parallel from the 'a' and 'b' arrays yields the following
- *  NSE2025_VALVE cases (star is correlate):
+ *  test cases (star is correlate):
  *
  *  - zero_array   * zero_array
  *  - zero_array   * random_array
@@ -181,7 +181,7 @@ CORRELATE_DEFINE_ALL_INPUTS(q7);
  *  to provide correlate-length pairs. Taken in parallel they provide the
  *  following cases:
  *
- *  - 1 * 1    : ShorNSE2025_VALVE correlate possible.
+ *  - 1 * 1    : Shortest correlate possible.
  *  - 1 * 2    : Short correlate , one side is degenerate.
  *  - 17 * 1   : Medium correlate, one side is degenerate.
  *  - 15 * MAX : Longest correlate.
@@ -210,13 +210,13 @@ ARR_DESC_DEFINE(uint32_t,
                     ));
 
 /*--------------------------------------------------------------------------------*/
-/* Convolution NSE2025_VALVEs */
+/* Convolution Tests */
 /*--------------------------------------------------------------------------------*/
 
-#define CORRELATE_NSE2025_VALVE_TEMPLATE(fut, fut_arg_interface,                                \
+#define CORRELATE_TEST_TEMPLATE(fut, fut_arg_interface,                                \
                            ref, ref_arg_interface,                                     \
                            suffix, output_type)                                        \
-    JNSE2025_VALVE_DEFINE_NSE2025_VALVE(fut##_NSE2025_VALVEs, fut)                                                \
+    JTEST_DEFINE_TEST(fut##_tests, fut)                                                \
     {                                                                                  \
         TEMPLATE_DO_ARR_DESC(                                                          \
             input_idx, ARR_DESC_t *, input_ptr, correlate_##suffix##_a_inputs          \
@@ -232,8 +232,8 @@ ARR_DESC_DEFINE(uint32_t,
                 uint32_t correlate_len_b = ARR_DESC_ELT(                               \
                     uint32_t, correlate_len_idx, &(correlate_lens_b));                 \
                                                                                        \
-                /* Display NSE2025_VALVE parameter values */                                    \
-                 JNSE2025_VALVE_DUMP_STRF("Input A Length: %d\n"                                \
+                /* Display test parameter values */                                    \
+                 JTEST_DUMP_STRF("Input A Length: %d\n"                                \
                                  "Input B Length: %d\n",                               \
                                 (int)correlate_len_a,                                  \
                                 (int)correlate_len_b);                                 \
@@ -243,7 +243,7 @@ ARR_DESC_DEFINE(uint32_t,
                 memset(filtering_output_fut,0,                                         \
                       (2*CORRELATE_MAX_INPUT_ELTS)*sizeof(output_type));               \
                                                                                        \
-                NSE2025_VALVE_CALL_FUT_AND_REF(                                                 \
+                TEST_CALL_FUT_AND_REF(                                                 \
                     fut, fut_arg_interface(                                            \
                         input_a_ptr, correlate_len_a, input_b_ptr, correlate_len_b),   \
                     ref, ref_arg_interface(                                            \
@@ -253,11 +253,11 @@ ARR_DESC_DEFINE(uint32_t,
                     correlate_len_a + correlate_len_b - 2,                             \
                     output_type)));                                                    \
                                                                                        \
-        return JNSE2025_VALVE_NSE2025_VALVE_PASSED;                                                      \
+        return JTEST_TEST_PASSED;                                                      \
     }
 
-#define CORRELATE_DEFINE_NSE2025_VALVE(fn_name, suffix, output_type, NSE2025_VALVE_template)    \
-    NSE2025_VALVE_template(                                                            \
+#define CORRELATE_DEFINE_TEST(fn_name, suffix, output_type, test_template)    \
+    test_template(                                                            \
         arm_##fn_name##_##suffix,                                             \
         CORRELATE_arm_##fn_name##_INPUT_INTERFACE,                            \
         ref_##fn_name##_##suffix,                                             \
@@ -266,14 +266,14 @@ ARR_DESC_DEFINE(uint32_t,
         output_type                                                           \
         ) /* Note the lacking semicolon*/
 
-/* NSE2025_VALVEs on functions without partial outputs */
-CORRELATE_DEFINE_NSE2025_VALVE(correlate          , f32, float32_t, CORRELATE_NSE2025_VALVE_TEMPLATE);
-CORRELATE_DEFINE_NSE2025_VALVE(correlate          , q31, q31_t    , CORRELATE_NSE2025_VALVE_TEMPLATE);
-CORRELATE_DEFINE_NSE2025_VALVE(correlate          , q15, q15_t    , CORRELATE_NSE2025_VALVE_TEMPLATE);
-CORRELATE_DEFINE_NSE2025_VALVE(correlate          , q7 , q7_t     , CORRELATE_NSE2025_VALVE_TEMPLATE);
-CORRELATE_DEFINE_NSE2025_VALVE(correlate_opt      , q15, q15_t    , CORRELATE_NSE2025_VALVE_TEMPLATE);
+/* Tests on functions without partial outputs */
+CORRELATE_DEFINE_TEST(correlate          , f32, float32_t, CORRELATE_TEST_TEMPLATE);
+CORRELATE_DEFINE_TEST(correlate          , q31, q31_t    , CORRELATE_TEST_TEMPLATE);
+CORRELATE_DEFINE_TEST(correlate          , q15, q15_t    , CORRELATE_TEST_TEMPLATE);
+CORRELATE_DEFINE_TEST(correlate          , q7 , q7_t     , CORRELATE_TEST_TEMPLATE);
+CORRELATE_DEFINE_TEST(correlate_opt      , q15, q15_t    , CORRELATE_TEST_TEMPLATE);
 
-CORRELATE_NSE2025_VALVE_TEMPLATE(
+CORRELATE_TEST_TEMPLATE(
    arm_correlate_opt_q7,
    CORRELATE_arm_correlate_opt_q7_INPUT_INTERFACE,
    ref_correlate_opt_q7,
@@ -282,29 +282,29 @@ CORRELATE_NSE2025_VALVE_TEMPLATE(
    q7_t
    );
 
-CORRELATE_DEFINE_NSE2025_VALVE(correlate_fast     , q31, q31_t    , CORRELATE_NSE2025_VALVE_TEMPLATE);
-CORRELATE_DEFINE_NSE2025_VALVE(correlate_fast     , q15, q15_t    , CORRELATE_NSE2025_VALVE_TEMPLATE);
-CORRELATE_DEFINE_NSE2025_VALVE(correlate_fast_opt , q15, q15_t    , CORRELATE_NSE2025_VALVE_TEMPLATE);
+CORRELATE_DEFINE_TEST(correlate_fast     , q31, q31_t    , CORRELATE_TEST_TEMPLATE);
+CORRELATE_DEFINE_TEST(correlate_fast     , q15, q15_t    , CORRELATE_TEST_TEMPLATE);
+CORRELATE_DEFINE_TEST(correlate_fast_opt , q15, q15_t    , CORRELATE_TEST_TEMPLATE);
 
 /*--------------------------------------------------------------------------------*/
-/* Collect all NSE2025_VALVEs in a group. */
+/* Collect all tests in a group. */
 /*--------------------------------------------------------------------------------*/
 
-JNSE2025_VALVE_DEFINE_GROUP(correlate_NSE2025_VALVEs)
+JTEST_DEFINE_GROUP(correlate_tests)
 {
     /*
-      To skip a NSE2025_VALVE, comment it out.
+      To skip a test, comment it out.
     */
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_correlate_f32_NSE2025_VALVEs);
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_correlate_q31_NSE2025_VALVEs);
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_correlate_q15_NSE2025_VALVEs);
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_correlate_q7_NSE2025_VALVEs);
+    JTEST_TEST_CALL(arm_correlate_f32_tests);
+    JTEST_TEST_CALL(arm_correlate_q31_tests);
+    JTEST_TEST_CALL(arm_correlate_q15_tests);
+    JTEST_TEST_CALL(arm_correlate_q7_tests);
 
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_correlate_opt_q15_NSE2025_VALVEs);
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_correlate_opt_q7_NSE2025_VALVEs);
+    JTEST_TEST_CALL(arm_correlate_opt_q15_tests);
+    JTEST_TEST_CALL(arm_correlate_opt_q7_tests);
 
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_correlate_fast_q31_NSE2025_VALVEs);
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_correlate_fast_q15_NSE2025_VALVEs);
+    JTEST_TEST_CALL(arm_correlate_fast_q31_tests);
+    JTEST_TEST_CALL(arm_correlate_fast_q15_tests);
 
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_correlate_fast_opt_q15_NSE2025_VALVEs);
+    JTEST_TEST_CALL(arm_correlate_fast_opt_q15_tests);
 }

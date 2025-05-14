@@ -1,9 +1,9 @@
-#ifndef _INTRINSICS_NSE2025_VALVE_GROUP_H_
-#define _INTRINSICS_NSE2025_VALVE_GROUP_H_
+#ifndef _INTRINSICS_TEST_GROUP_H_
+#define _INTRINSICS_TEST_GROUP_H_
 
 /*--------------------------------------------------------------------------------*/
-/* Declare NSE2025_VALVE Groups */
+/* Declare Test Groups */
 /*--------------------------------------------------------------------------------*/
-JNSE2025_VALVE_DECLARE_GROUP(intrinsics_NSE2025_VALVEs);
+JTEST_DECLARE_GROUP(intrinsics_tests);
 
-#endif /* _INTRINSICS_NSE2025_VALVE_GROUP_H_ */
+#endif /* _INTRINSICS_TEST_GROUP_H_ */

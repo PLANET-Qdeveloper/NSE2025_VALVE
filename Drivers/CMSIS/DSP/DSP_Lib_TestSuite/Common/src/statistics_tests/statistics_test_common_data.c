@@ -1,4 +1,4 @@
-#include "statistics_NSE2025_VALVE_data.h"
+#include "statistics_test_data.h"
 
 /*--------------------------------------------------------------------------------*/
 /* Input/Output Buffers */
@@ -29,7 +29,7 @@ statistics_output_f32_fut[STATISTICS_MAX_INPUT_ELEMENTS];
 /*--------------------------------------------------------------------------------*/
 
 /* 
-  To change NSE2025_VALVE parameter values add/remove values inside CURLY and update 
+  To change test parameter values add/remove values inside CURLY and update 
   the preceeding parameter to reflect the number of values inside CURLY. 
 */
 
@@ -39,7 +39,7 @@ ARR_DESC_DEFINE(uint32_t,
                 CURLY(1, 2, 15, 32));
 
 /*--------------------------------------------------------------------------------*/
-/* NSE2025_VALVE Data */
+/* Test Data */
 /*--------------------------------------------------------------------------------*/
 
 ARR_DESC_DEFINE(float32_t,

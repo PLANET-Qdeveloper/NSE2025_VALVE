@@ -11,7 +11,7 @@
       "runToEntryPoint": "main",
       "svdFile": "/opt/ST/STM32CubeCLT_1.18.0/STMicroelectronics_CMSIS_SVD/STM32F303.svd",
       "cwd": "${workspaceFolder}",
-      "executable": "${workspaceFolder}/build/Debug/${workspaceFolderBasename}.elf",
+      "executable": "${command:cmake.launchTargetPath}",
       "preLaunchTask": "cmake: build",
       "serverArgs": ["-m", "0"]
     }

@@ -1,17 +1,17 @@
-#ifndef _MATRIX_NSE2025_VALVES_H_
-#define _MATRIX_NSE2025_VALVES_H_
+#ifndef _MATRIX_TESTS_H_
+#define _MATRIX_TESTS_H_
 
 /*--------------------------------------------------------------------------------*/
-/* NSE2025_VALVE/Group Declarations */
+/* Test/Group Declarations */
 /*--------------------------------------------------------------------------------*/
-JNSE2025_VALVE_DECLARE_GROUP(mat_add_NSE2025_VALVEs);
-JNSE2025_VALVE_DECLARE_GROUP(mat_cmplx_mult_NSE2025_VALVEs);
-JNSE2025_VALVE_DECLARE_GROUP(mat_init_NSE2025_VALVEs);
-JNSE2025_VALVE_DECLARE_GROUP(mat_inverse_NSE2025_VALVEs);
-JNSE2025_VALVE_DECLARE_GROUP(mat_mult_NSE2025_VALVEs);
-JNSE2025_VALVE_DECLARE_GROUP(mat_mult_fast_NSE2025_VALVEs);
-JNSE2025_VALVE_DECLARE_GROUP(mat_sub_NSE2025_VALVEs);
-JNSE2025_VALVE_DECLARE_GROUP(mat_trans_NSE2025_VALVEs);
-JNSE2025_VALVE_DECLARE_GROUP(mat_scale_NSE2025_VALVEs);
+JTEST_DECLARE_GROUP(mat_add_tests);
+JTEST_DECLARE_GROUP(mat_cmplx_mult_tests);
+JTEST_DECLARE_GROUP(mat_init_tests);
+JTEST_DECLARE_GROUP(mat_inverse_tests);
+JTEST_DECLARE_GROUP(mat_mult_tests);
+JTEST_DECLARE_GROUP(mat_mult_fast_tests);
+JTEST_DECLARE_GROUP(mat_sub_tests);
+JTEST_DECLARE_GROUP(mat_trans_tests);
+JTEST_DECLARE_GROUP(mat_scale_tests);
 
-#endif /* _MATRIX_NSE2025_VALVES_H_ */
+#endif /* _MATRIX_TESTS_H_ */

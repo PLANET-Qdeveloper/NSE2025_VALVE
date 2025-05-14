@@ -1,13 +1,13 @@
-#ifndef _JNSE2025_VALVE_NSE2025_VALVE_DEFINE_H_
-#define _JNSE2025_VALVE_NSE2025_VALVE_DEFINE_H_
+#ifndef _JTEST_TEST_DEFINE_H_
+#define _JTEST_TEST_DEFINE_H_
 
 /*--------------------------------------------------------------------------------*/
 /* Includes */
 /*--------------------------------------------------------------------------------*/
 
-#include "jNSE2025_VALVE_util.h"
-#include "jNSE2025_VALVE_define.h"
-#include "jNSE2025_VALVE_NSE2025_VALVE.h"
+#include "jtest_util.h"
+#include "jtest_define.h"
+#include "jtest_test.h"
 
 /* For defining macros with optional arguments */
 #include "opt_arg/opt_arg.h"
@@ -17,112 +17,117 @@
 /*--------------------------------------------------------------------------------*/
 
 /**
- *  Prefix for all #JNSE2025_VALVE_NSE2025_VALVE_t structs.
+ *  Prefix for all #JTEST_TEST_t structs.
  */
-#define JNSE2025_VALVE_NSE2025_VALVE_STRUCT_NAME_PREFIX G_JNSE2025_VALVE_NSE2025_VALVE_STRUCT_
+#define JTEST_TEST_STRUCT_NAME_PREFIX G_JTEST_TEST_STRUCT_
 
 /**
- *  Define NSE2025_VALVE template used by #JNSE2025_VALVE_NSE2025_VALVE_t NSE2025_VALVEs.
+ *  Define test template used by #JTEST_TEST_t tests.
  */
-#define JNSE2025_VALVE_NSE2025_VALVE_FN_TEMPLATE(NSE2025_VALVE_fn) \
-    JNSE2025_VALVE_NSE2025_VALVE_RET_t NSE2025_VALVE_fn(void)
+#define JTEST_TEST_FN_TEMPLATE(test_fn)                         \
+    JTEST_TEST_RET_t test_fn(void)
 
-#define JNSE2025_VALVE_NSE2025_VALVE_FN_PROTOTYPE JNSE2025_VALVE_NSE2025_VALVE_FN_TEMPLATE /**< Alias for \
-                                                                                            * #JNSE2025_VALVE_NSE2025_VALVE_FN_TEMPLATE. */
-
-/**
- *  Evaluate to the name of the #JNSE2025_VALVE_NSE2025_VALVE_t struct associated with NSE2025_VALVE_fn.
- */
-#define JNSE2025_VALVE_NSE2025_VALVE_STRUCT_NAME(NSE2025_VALVE_fn) \
-    JNSE2025_VALVE_STRUCT_NAME(JNSE2025_VALVE_NSE2025_VALVE_STRUCT_NAME_PREFIX, NSE2025_VALVE_fn)
+#define JTEST_TEST_FN_PROTOTYPE JTEST_TEST_FN_TEMPLATE /**< Alias for
+                                                        * #JTEST_TEST_FN_TEMPLATE. */
 
 /**
- *  Define a #JNSE2025_VALVE_NSE2025_VALVE_t struct based on the given NSE2025_VALVE_fn.
+ *  Evaluate to the name of the #JTEST_TEST_t struct associated with test_fn.
  */
-#define JNSE2025_VALVE_NSE2025_VALVE_DEFINE_STRUCT(NSE2025_VALVE_fn) \
-    JNSE2025_VALVE_DEFINE_STRUCT(JNSE2025_VALVE_NSE2025_VALVE_t,     \
-                                 JNSE2025_VALVE_NSE2025_VALVE_STRUCT_NAME(NSE2025_VALVE_fn))
+#define JTEST_TEST_STRUCT_NAME(test_fn)                         \
+    JTEST_STRUCT_NAME(JTEST_TEST_STRUCT_NAME_PREFIX, test_fn)
 
 /**
- *  Declare a #JNSE2025_VALVE_NSE2025_VALVE_t struct based on the given NSE2025_VALVE_fn.
+ *  Define a #JTEST_TEST_t struct based on the given test_fn.
  */
-#define JNSE2025_VALVE_NSE2025_VALVE_DECLARE_STRUCT(NSE2025_VALVE_fn) \
-    JNSE2025_VALVE_DECLARE_STRUCT(JNSE2025_VALVE_NSE2025_VALVE_DEFINE_STRUCT(NSE2025_VALVE_fn))
+#define JTEST_TEST_DEFINE_STRUCT(test_fn)                   \
+    JTEST_DEFINE_STRUCT(JTEST_TEST_t,                       \
+                        JTEST_TEST_STRUCT_NAME(test_fn))
 
 /**
- *  Contents needed to initialize a JNSE2025_VALVE_NSE2025_VALVE_t struct.
+ *  Declare a #JTEST_TEST_t struct based on the given test_fn.
  */
-#define JNSE2025_VALVE_NSE2025_VALVE_STRUCT_INIT(NSE2025_VALVE_fn, fut, enable) \
-    NSE2025_VALVE_fn,                                                           \
-        STR_NL(NSE2025_VALVE_fn),                                               \
-        STR_NL(fut),                                                            \
-    {                                                                           \
+#define JTEST_TEST_DECLARE_STRUCT(test_fn)      \
+    JTEST_DECLARE_STRUCT(JTEST_TEST_DEFINE_STRUCT(test_fn))
+
+/**
+ *  Contents needed to initialize a JTEST_TEST_t struct.
+ */
+#define JTEST_TEST_STRUCT_INIT(test_fn, fut, enable)    \
+    test_fn,                                            \
+        STR_NL(test_fn),                                   \
+        STR_NL(fut),                                       \
+    {                                                   \
         {                                               \
             enable,                                     \
                 0                                       \
         }                                               \
-    }
+    }                                                   \
+        
 
 /**
- *  Initialize the contents of a #JNSE2025_VALVE_NSE2025_VALVE_t struct.
+ *  Initialize the contents of a #JTEST_TEST_t struct.
  */
-#define JNSE2025_VALVE_NSE2025_VALVE_INIT(NSE2025_VALVE_fn, fut, enable) \
-    JNSE2025_VALVE_NSE2025_VALVE_DEFINE_STRUCT(NSE2025_VALVE_fn) = {     \
-        JNSE2025_VALVE_NSE2025_VALVE_STRUCT_INIT(NSE2025_VALVE_fn, fut, enable)}
+#define JTEST_TEST_INIT(test_fn, fut, enable)              \
+    JTEST_TEST_DEFINE_STRUCT(test_fn) = {                  \
+        JTEST_TEST_STRUCT_INIT(test_fn, fut, enable)       \
+    }
 
-/* NSE2025_VALVE Definition Macro */
+/* Test Definition Macro */
 /*--------------------------------------------------------------------------------*/
 
 /**
- *  Define a #JNSE2025_VALVE_NSE2025_VALVE_t object and a NSE2025_VALVE function.
+ *  Define a #JTEST_TEST_t object and a test function.
  */
-#define _JNSE2025_VALVE_DEFINE_NSE2025_VALVE(NSE2025_VALVE_fn, fut, enable) \
-    JNSE2025_VALVE_NSE2025_VALVE_FN_PROTOTYPE(NSE2025_VALVE_fn);            \
-    JNSE2025_VALVE_NSE2025_VALVE_INIT(NSE2025_VALVE_fn, fut, enable);       \
-    JNSE2025_VALVE_NSE2025_VALVE_FN_PROTOTYPE(NSE2025_VALVE_fn) /* Notice the lacking semicolon */
+#define _JTEST_DEFINE_TEST(test_fn, fut, enable)           \
+    JTEST_TEST_FN_PROTOTYPE(test_fn);                      \
+    JTEST_TEST_INIT(test_fn, fut, enable);                 \
+    JTEST_TEST_FN_PROTOTYPE(test_fn) /* Notice the lacking semicolon */
 
 /**
- *  Declare a #JNSE2025_VALVE_NSE2025_VALVE_t object and a NSE2025_VALVE function prototype.
+ *  Declare a #JTEST_TEST_t object and a test function prototype.
  */
-#define JNSE2025_VALVE_DECLARE_NSE2025_VALVE(NSE2025_VALVE_fn)   \
-    JNSE2025_VALVE_NSE2025_VALVE_FN_PROTOTYPE(NSE2025_VALVE_fn); \
-    JNSE2025_VALVE_NSE2025_VALVE_DECLARE_STRUCT(NSE2025_VALVE_fn) /* Note the lacking semicolon */
+#define JTEST_DECLARE_TEST(test_fn)                                     \
+    JTEST_TEST_FN_PROTOTYPE(test_fn);                                   \
+    JTEST_TEST_DECLARE_STRUCT(test_fn) /* Note the lacking semicolon */
 
 /*--------------------------------------------------------------------------------*/
 /* Macros with optional arguments */
 /*--------------------------------------------------------------------------------*/
 
 /* Top-level Interface */
-#define JNSE2025_VALVE_DEFINE_NSE2025_VALVE(...) \
-    JNSE2025_VALVE_DEFINE_NSE2025_VALVE_(PP_NARG(__VA_ARGS__), ##__VA_ARGS__)
+#define JTEST_DEFINE_TEST(...)                             \
+    JTEST_DEFINE_TEST_(PP_NARG(__VA_ARGS__), ##__VA_ARGS__)
 
 /* Dispatch Macro*/
-#define JNSE2025_VALVE_DEFINE_NSE2025_VALVE_(N, ...) \
-    SPLICE(JNSE2025_VALVE_DEFINE_NSE2025_VALVE_, N)(__VA_ARGS__)
+#define JTEST_DEFINE_TEST_(N, ...)                         \
+    SPLICE(JTEST_DEFINE_TEST_, N)(__VA_ARGS__)
 
 /* Default Arguments */
-#define JNSE2025_VALVE_DEFINE_NSE2025_VALVE_DEFAULT_FUT /* Blank */
-#define JNSE2025_VALVE_DEFINE_NSE2025_VALVE_DEFAULT_ENABLE \
-    JNSE2025_VALVE_TRUE /* NSE2025_VALVEs enabled by       \
-                         * default. */
+#define JTEST_DEFINE_TEST_DEFAULT_FUT /* Blank */
+#define JTEST_DEFINE_TEST_DEFAULT_ENABLE                   \
+    JTEST_TRUE                                 /* Tests enabled by
+                                                * default. */ 
 
 /* Dispatch Cases*/
-#define JNSE2025_VALVE_DEFINE_NSE2025_VALVE_1(_1)        \
-    _JNSE2025_VALVE_DEFINE_NSE2025_VALVE(                \
-        _1,                                              \
-        JNSE2025_VALVE_DEFINE_NSE2025_VALVE_DEFAULT_FUT, \
-        JNSE2025_VALVE_DEFINE_NSE2025_VALVE_DEFAULT_ENABLE)
+#define JTEST_DEFINE_TEST_1(_1)                            \
+    _JTEST_DEFINE_TEST(                                    \
+        _1,                                                \
+        JTEST_DEFINE_TEST_DEFAULT_FUT,                     \
+        JTEST_DEFINE_TEST_DEFAULT_ENABLE                   \
+        )
 
-#define JNSE2025_VALVE_DEFINE_NSE2025_VALVE_2(_1, _2) \
-    _JNSE2025_VALVE_DEFINE_NSE2025_VALVE(             \
-        _1,                                           \
-        _2,                                           \
-        JNSE2025_VALVE_DEFINE_NSE2025_VALVE_DEFAULT_ENABLE)
+#define JTEST_DEFINE_TEST_2(_1, _2)                        \
+    _JTEST_DEFINE_TEST(                                    \
+        _1,                                                \
+        _2,                                                \
+        JTEST_DEFINE_TEST_DEFAULT_ENABLE                   \
+        )
 
-#define JNSE2025_VALVE_DEFINE_NSE2025_VALVE_3(_1, _2, _3) \
-    _JNSE2025_VALVE_DEFINE_NSE2025_VALVE(                 \
-        _1,                                               \
-        _2,                                               \
-        _3)
+#define JTEST_DEFINE_TEST_3(_1, _2, _3)                    \
+    _JTEST_DEFINE_TEST(                                    \
+        _1,                                                \
+        _2,                                                \
+        _3                                                 \
+        )
 
-#endif /* _JNSE2025_VALVE_NSE2025_VALVE_DEFINE_H_ */
+#endif /* _JTEST_TEST_DEFINE_H_ */

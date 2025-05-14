@@ -32,20 +32,10 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 //モータによって変更する箇所
-#define  peri_pwm 20       //PWMの周期 [ms]
 
-#define  deg_min 0      //制御角の最小値 [°]
-#define  deg_max 270       //制御角の最大値 [°]
 
-#define  width_min 500     //パルス幅の最小値 [us]
-#define  width_max 2500    //パルス幅の最大値 [us]
 
 //変えなくていい箇所
-#define  freq_pwm 1/ peri_pwm * 1000                   //PWMの周波数 [Hz]
-
-#define  deg_range deg_max - deg_min                   //制御角の範囲 [°]
-
-#define  width_range (width_max - width_min) / 1000    //パルス幅の範囲 [ms]  ＊us->msに変換している
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -67,12 +57,44 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-  int compute_pwm_from_angle(int angle){
-    int pwm;
-    int deg_con = angle - deg_min;
-    pwm = ((deg_con * width_range / deg_range + width_min / 1000) / peri_pwm * 65535);
-    return pwm;
+// 角度からパルス幅(us)を計算する関数
+int compute_pulse_us_from_angle(int angle) {
+  // 仕様や必要に応じてこれらの値を調整してください
+  #define DEG_MIN 0
+  #define DEG_MAX 270 // 仕様書では 180 or 270
+  #define WIDTH_MIN_US 500
+  #define WIDTH_MAX_US 2500
+  #define DEG_RANGE (DEG_MAX - DEG_MIN)
+  #define WIDTH_RANGE_US (WIDTH_MAX_US - WIDTH_MIN_US)
+
+  int deg_con = angle - DEG_MIN;
+  if (deg_con < 0) deg_con = 0;
+  if (deg_con > DEG_RANGE) deg_con = DEG_RANGE;
+
+  // 整数演算で計算
+  uint32_t pulse_us = ((uint32_t)deg_con * WIDTH_RANGE_US / DEG_RANGE) + WIDTH_MIN_US;
+
+  return pulse_us;
+}
+
+// パルス幅(us)からタイマーのコンペア値を計算する関数
+int compute_compare_from_us(int pulse_us) {
+  // Compare_Value = pulse_us * TIM_Clock / (Prescaler + 1) / 1,000,000
+  // Compare_Value = pulse_us * 8,000,000 / (9 + 1) / 1,000,000
+  // Compare_Value = pulse_us * 0.8
+  // 整数演算 (精度を保つため * 8 / 10 とする)
+  uint32_t compare_value = ((uint32_t)pulse_us * 8) / 10;
+
+  // クランプ処理 (500us = 400, 2500us = 2000)
+  #define COMPARE_MIN 400
+  #define COMPARE_MAX 2000
+  if (compare_value < COMPARE_MIN) {
+    compare_value = COMPARE_MIN;
+  } else if (compare_value > COMPARE_MAX) {
+    compare_value = COMPARE_MAX;
   }
+  return compare_value;
+}
 
 /* USER CODE END 0 */
 
@@ -109,6 +131,7 @@ int main(void)
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
   __HAL_RCC_TIM2_CLK_ENABLE();
+  HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -116,8 +139,18 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-  __HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_1, compute_pwm_from_angle(30));
-  HAL_Delay(1000);
+    // テストコード: 500us から 2500us まで段階的に変化させる
+    __HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_1, compute_compare_from_us(500));  // Min pulse
+    HAL_Delay(500);
+    __HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_1, compute_compare_from_us(1000));
+    HAL_Delay(500);
+    __HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_1, compute_compare_from_us(1500)); // Neutral pulse
+    HAL_Delay(500);
+    __HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_1, compute_compare_from_us(2000));
+    HAL_Delay(500);
+    __HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_1, compute_compare_from_us(2500)); // Max pulse
+    HAL_Delay(500);
+
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */

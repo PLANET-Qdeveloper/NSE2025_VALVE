@@ -1,129 +1,121 @@
-#ifndef _JNSE2025_VALVE_NSE2025_VALVE_CALL_H_
-#define _JNSE2025_VALVE_NSE2025_VALVE_CALL_H_
+#ifndef _JTEST_TEST_CALL_H_
+#define _JTEST_TEST_CALL_H_
 
 /*--------------------------------------------------------------------------------*/
 /* Includes */
 /*--------------------------------------------------------------------------------*/
-#include "jNSE2025_VALVE_NSE2025_VALVE.h"
-#include "jNSE2025_VALVE_NSE2025_VALVE_define.h"
-#include "jNSE2025_VALVE_fw.h"
+#include "jtest_test.h"
+#include "jtest_test_define.h"
+#include "jtest_fw.h"
 
 /*--------------------------------------------------------------------------------*/
 /* Macros and Defines */
 /*--------------------------------------------------------------------------------*/
 
 /**
- *  Exectute the NSE2025_VALVE in the #JNSE2025_VALVE_NSE2025_VALVE_t struct associated with the identifier
- *  NSE2025_VALVE_fn and store the result in retval.
+ *  Exectute the test in the #JTEST_TEST_t struct associated with the identifier
+ *  test_fn and store the result in retval.
  */
-#define JNSE2025_VALVE_NSE2025_VALVE_RUN(retval, NSE2025_VALVE_fn)                                                \
-    do                                                                                                            \
-    {                                                                                                             \
-        JNSE2025_VALVE_DUMP_STR("NSE2025_VALVE Name:\n");                                                         \
-        JNSE2025_VALVE_DUMP_STR(JNSE2025_VALVE_NSE2025_VALVE_STRUCT_NAME(NSE2025_VALVE_fn).NSE2025_VALVE_fn_str); \
-        JNSE2025_VALVE_DUMP_STR("Function Under NSE2025_VALVE:\n");                                               \
-        JNSE2025_VALVE_DUMP_STR(JNSE2025_VALVE_NSE2025_VALVE_STRUCT_NAME(NSE2025_VALVE_fn).fut_str);              \
-        retval = JNSE2025_VALVE_NSE2025_VALVE_STRUCT_NAME(NSE2025_VALVE_fn).NSE2025_VALVE_fn_ptr();               \
+#define JTEST_TEST_RUN(retval, test_fn)                                 \
+    do                                                                  \
+    {                                                                   \
+        JTEST_DUMP_STR("Test Name:\n");                                 \
+        JTEST_DUMP_STR(JTEST_TEST_STRUCT_NAME(test_fn).test_fn_str);    \
+        JTEST_DUMP_STR("Function Under Test:\n");                       \
+        JTEST_DUMP_STR(JTEST_TEST_STRUCT_NAME(test_fn).fut_str);        \
+        retval = JTEST_TEST_STRUCT_NAME(test_fn).test_fn_ptr();         \
     } while (0)
 
 /**
- *  Update the enclosing #JNSE2025_VALVE_GROUP_t's pass/fail information based on
- *  NSE2025_VALVE_retval.
+ *  Update the enclosing #JTEST_GROUP_t's pass/fail information based on
+ *  test_retval.
  *
- *  @param NSE2025_VALVE_retval A #JNSE2025_VALVE_NSE2025_VALVE_RET_enum for the current NSE2025_VALVE.
+ *  @param test_retval A #JTEST_TEST_RET_enum for the current test.
  *
- *  @warning Only use if #JNSE2025_VALVE_NSE2025_VALVE_t is called in the context of a
- *  #JNSE2025_VALVE_GROUP_t.
+ *  @warning Only use if #JTEST_TEST_t is called in the context of a
+ *  #JTEST_GROUP_t.
  */
-#define JNSE2025_VALVE_NSE2025_VALVE_UPDATE_PARENT_GROUP_PF(NSE2025_VALVE_retval)   \
-    do                                                                              \
-    {                                                                               \
-        /* Update enclosing JNSE2025_VALVE_GROUP_t with pass/fail info */           \
-        if (NSE2025_VALVE_retval == JNSE2025_VALVE_NSE2025_VALVE_PASSED)            \
-        {                                                                           \
-            JNSE2025_VALVE_GROUP_INC_PASSED(JNSE2025_VALVE_CURRENT_GROUP_PTR(), 1); \
-        }                                                                           \
-        else                                                                        \
-        {                                                                           \
-            JNSE2025_VALVE_GROUP_INC_FAILED(JNSE2025_VALVE_CURRENT_GROUP_PTR(), 1); \
-        }                                                                           \
+#define JTEST_TEST_UPDATE_PARENT_GROUP_PF(test_retval)              \
+    do                                                              \
+    {                                                               \
+        /* Update enclosing JTEST_GROUP_t with pass/fail info */    \
+        if (test_retval == JTEST_TEST_PASSED)                       \
+        {                                                           \
+            JTEST_GROUP_INC_PASSED(JTEST_CURRENT_GROUP_PTR(), 1);   \
+        } else {                                                    \
+            JTEST_GROUP_INC_FAILED(JTEST_CURRENT_GROUP_PTR(), 1);   \
+        }                                                           \
     } while (0)
 
 /**
- *  Update the #JNSE2025_VALVE_FW with pass/fail information based on NSE2025_VALVE_retval.
+ *  Update the #JTEST_FW with pass/fail information based on test_retval.
  *
- *  @param NSE2025_VALVE_retval A #JNSE2025_VALVE_NSE2025_VALVE_RET_enum for the current NSE2025_VALVE.
+ *  @param test_retval A #JTEST_TEST_RET_enum for the current test.
  */
-#define JNSE2025_VALVE_NSE2025_VALVE_UPDATE_FW_PF(NSE2025_VALVE_retval)  \
-    do                                                                   \
-    {                                                                    \
-        /* Update the JNSE2025_VALVE_FW with pass/fail info */           \
-        if (NSE2025_VALVE_retval == JNSE2025_VALVE_NSE2025_VALVE_PASSED) \
-        {                                                                \
-            JNSE2025_VALVE_FW_INC_PASSED(1);                             \
-        }                                                                \
-        else                                                             \
-        {                                                                \
-            JNSE2025_VALVE_FW_INC_FAILED(1);                             \
-        }                                                                \
+#define JTEST_TEST_UPDATE_FW_PF(test_retval)                        \
+    do                                                              \
+    {                                                               \
+        /* Update the JTEST_FW with pass/fail info */                \
+        if (test_retval == JTEST_TEST_PASSED)                       \
+        {                                                           \
+            JTEST_FW_INC_PASSED( 1);                                \
+        } else {                                                    \
+            JTEST_FW_INC_FAILED(1);                                 \
+        }                                                           \
     } while (0)
 
 /**
- *  Update the enclosing JNSE2025_VALVE_GROUP_t's pass/fail information, or the
- *  #JNSE2025_VALVE_FW's if this NSE2025_VALVE has no enclosing #JNSE2025_VALVE_GROUP_t.
+ *  Update the enclosing JTEST_GROUP_t's pass/fail information, or the
+ *  #JTEST_FW's if this test has no enclosing #JTEST_GROUP_t.
  *
- *  @param NSE2025_VALVE_retval A #JNSE2025_VALVE_NSE2025_VALVE_RET_enum for the current NSE2025_VALVE.
+ *  @param test_retval A #JTEST_TEST_RET_enum for the current test.
  */
-#define JNSE2025_VALVE_NSE2025_VALVE_UPDATE_PARENT_GROUP_OR_FW_PF(NSE2025_VALVE_retval) \
-    do                                                                                  \
-    {                                                                                   \
-        /* Update pass-fail information */                                              \
-        if (JNSE2025_VALVE_CURRENT_GROUP_PTR() /* Non-null */)                          \
-        {                                                                               \
-            JNSE2025_VALVE_NSE2025_VALVE_UPDATE_PARENT_GROUP_PF(NSE2025_VALVE_retval);  \
-        }                                                                               \
-        else                                                                            \
-        {                                                                               \
-            JNSE2025_VALVE_NSE2025_VALVE_UPDATE_FW_PF(NSE2025_VALVE_retval);            \
-        }                                                                               \
+#define JTEST_TEST_UPDATE_PARENT_GROUP_OR_FW_PF(test_retval)            \
+    do                                                                  \
+    {                                                                   \
+        /* Update pass-fail information */                              \
+        if (JTEST_CURRENT_GROUP_PTR() /* Non-null */)                    \
+        {                                                               \
+            JTEST_TEST_UPDATE_PARENT_GROUP_PF(test_retval);             \
+        } else {                                                        \
+            JTEST_TEST_UPDATE_FW_PF(test_retval);                       \
+        }                                                               \
     } while (0)
 
 /**
- *  Dump the results of the NSE2025_VALVE to the Keil Debugger.
+ *  Dump the results of the test to the Keil Debugger.
  */
-#define JNSE2025_VALVE_NSE2025_VALVE_DUMP_RESULTS(NSE2025_VALVE_retval)  \
-    do                                                                   \
-    {                                                                    \
-        if (NSE2025_VALVE_retval == JNSE2025_VALVE_NSE2025_VALVE_PASSED) \
-        {                                                                \
-            JNSE2025_VALVE_DUMP_STR("NSE2025_VALVE Passed\n");           \
-        }                                                                \
-        else                                                             \
-        {                                                                \
-            JNSE2025_VALVE_DUMP_STR("NSE2025_VALVE Failed\n");           \
-        }                                                                \
-    } while (0)
+#define JTEST_TEST_DUMP_RESULTS(test_retval)        \
+        do                                          \
+        {                                           \
+            if (test_retval == JTEST_TEST_PASSED)   \
+            {                                       \
+                JTEST_DUMP_STR("Test Passed\n");      \
+            } else {                                \
+                JTEST_DUMP_STR("Test Failed\n");      \
+            }                                       \
+        } while (0)
 
 /**
- *  Call the #JNSE2025_VALVE_NSE2025_VALVE_t assocaited with the identifier NSE2025_VALVE_fn.
+ *  Call the #JTEST_TEST_t assocaited with the identifier test_fn.
  */
-#define JNSE2025_VALVE_NSE2025_VALVE_CALL(NSE2025_VALVE_fn)                                                              \
-    do                                                                                                                   \
-    {                                                                                                                    \
-        if (JNSE2025_VALVE_NSE2025_VALVE_IS_ENABLED(&JNSE2025_VALVE_NSE2025_VALVE_STRUCT_NAME(NSE2025_VALVE_fn)))        \
-        {                                                                                                                \
-            /* Default to failure */                                                                                     \
-            JNSE2025_VALVE_NSE2025_VALVE_RET_t __jNSE2025_VALVE_NSE2025_VALVE_ret = JNSE2025_VALVE_NSE2025_VALVE_FAILED; \
-                                                                                                                         \
-            JNSE2025_VALVE_ACT_NSE2025_VALVE_START();                                                                    \
-            JNSE2025_VALVE_NSE2025_VALVE_RUN(__jNSE2025_VALVE_NSE2025_VALVE_ret, NSE2025_VALVE_fn);                      \
-                                                                                                                         \
-            /* Update pass-fail information */                                                                           \
-            JNSE2025_VALVE_NSE2025_VALVE_UPDATE_PARENT_GROUP_OR_FW_PF(__jNSE2025_VALVE_NSE2025_VALVE_ret);               \
-                                                                                                                         \
-            JNSE2025_VALVE_NSE2025_VALVE_DUMP_RESULTS(__jNSE2025_VALVE_NSE2025_VALVE_ret);                               \
-            JNSE2025_VALVE_ACT_NSE2025_VALVE_END();                                                                      \
-        }                                                                                                                \
+#define JTEST_TEST_CALL(test_fn)                                        \
+    do                                                                  \
+    {                                                                   \
+        if (JTEST_TEST_IS_ENABLED(&JTEST_TEST_STRUCT_NAME(test_fn)))    \
+        {                                                               \
+            /* Default to failure */                                    \
+            JTEST_TEST_RET_t __jtest_test_ret = JTEST_TEST_FAILED;      \
+                                                                        \
+            JTEST_ACT_TEST_START();                                     \
+            JTEST_TEST_RUN(__jtest_test_ret, test_fn);                  \
+                                                                        \
+            /* Update pass-fail information */                          \
+            JTEST_TEST_UPDATE_PARENT_GROUP_OR_FW_PF(__jtest_test_ret);  \
+                                                                        \
+            JTEST_TEST_DUMP_RESULTS(__jtest_test_ret);                  \
+            JTEST_ACT_TEST_END();                                       \
+        }                                                               \
     } while (0)
 
-#endif /* _JNSE2025_VALVE_NSE2025_VALVE_CALL_H_ */
+#endif /* _JTEST_TEST_CALL_H_ */

@@ -52,47 +52,47 @@
 /**
  * @brief  Caluclation of SNR
  * @param[in]  pRef 	Pointer to the reference buffer
- * @param[in]  pNSE2025_VALVE	Pointer to the NSE2025_VALVE buffer
+ * @param[in]  pTest	Pointer to the test buffer
  * @param[in]  buffSize	total number of samples
  * @return     SNR
  * The function Caluclates signal to noise ratio for the reference output
- * and NSE2025_VALVE output
+ * and test output
  */
 
-float arm_snr_f32(float *pRef, float *pNSE2025_VALVE, uint32_t buffSize)
+float arm_snr_f32(float *pRef, float *pTest, uint32_t buffSize)
 {
   float EnergySignal = 0.0, EnergyError = 0.0;
   uint32_t i;
   float SNR;
   int temp;
-  int *NSE2025_VALVE;
+  int *test;
 
   for (i = 0; i < buffSize; i++)
     {
  	  /* Checking for a NAN value in pRef array */
-	  NSE2025_VALVE =   (int *)(&pRef[i]);
-      temp =  *NSE2025_VALVE;
+	  test =   (int *)(&pRef[i]);
+      temp =  *test;
 
 	  if (temp == 0x7FC00000)
 	  {
 	  		return(0);
 	  }
 
-	  /* Checking for a NAN value in pNSE2025_VALVE array */
-	  NSE2025_VALVE =   (int *)(&pNSE2025_VALVE[i]);
-      temp =  *NSE2025_VALVE;
+	  /* Checking for a NAN value in pTest array */
+	  test =   (int *)(&pTest[i]);
+      temp =  *test;
 
 	  if (temp == 0x7FC00000)
 	  {
 	  		return(0);
 	  }
       EnergySignal += pRef[i] * pRef[i];
-      EnergyError += (pRef[i] - pNSE2025_VALVE[i]) * (pRef[i] - pNSE2025_VALVE[i]);
+      EnergyError += (pRef[i] - pTest[i]) * (pRef[i] - pTest[i]);
     }
 
 	/* Checking for a NAN value in EnergyError */
-	NSE2025_VALVE =   (int *)(&EnergyError);
-    temp =  *NSE2025_VALVE;
+	test =   (int *)(&EnergyError);
+    temp =  *test;
 
     if (temp == 0x7FC00000)
     {
@@ -156,9 +156,9 @@ void arm_float_to_q12_20(float *pIn, q31_t * pOut, uint32_t numSamples)
 }
 
 /**
- * @brief  Compare MATLAB Reference Output and ARM NSE2025_VALVE output
+ * @brief  Compare MATLAB Reference Output and ARM Test output
  * @param[in]  pIn         Pointer to Ref buffer
- * @param[in]  pOut        Pointer to NSE2025_VALVE buffer
+ * @param[in]  pOut        Pointer to Test buffer
  * @param[in]  numSamples  number of samples in the buffer
  * @return maximum difference
  */
@@ -184,9 +184,9 @@ uint32_t arm_compare_fixed_q15(q15_t *pIn, q15_t *pOut, uint32_t numSamples)
 }
 
 /**
- * @brief  Compare MATLAB Reference Output and ARM NSE2025_VALVE output
+ * @brief  Compare MATLAB Reference Output and ARM Test output
  * @param[in]  pIn         Pointer to Ref buffer
- * @param[in]  pOut        Pointer to NSE2025_VALVE buffer
+ * @param[in]  pOut        Pointer to Test buffer
  * @param[in]  numSamples number of samples in the buffer
  * @return maximum difference
  */

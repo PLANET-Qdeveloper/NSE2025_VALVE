@@ -1,17 +1,17 @@
-#ifndef _JNSE2025_VALVE_NSE2025_VALVE_RET_H_
-#define _JNSE2025_VALVE_NSE2025_VALVE_RET_H_
+#ifndef _JTEST_TEST_RET_H_
+#define _JTEST_TEST_RET_H_
 
 /*--------------------------------------------------------------------------------*/
 /* Type Definitions */
 /*--------------------------------------------------------------------------------*/
 
 /**
- *  Values a #JNSE2025_VALVE_NSE2025_VALVE_t can return.
+ *  Values a #JTEST_TEST_t can return.
  */
-typedef enum JNSE2025_VALVE_NSE2025_VALVE_RET_enum
+typedef enum JTEST_TEST_RET_enum
 {
-    JNSE2025_VALVE_NSE2025_VALVE_PASSED,
-    JNSE2025_VALVE_NSE2025_VALVE_FAILED
-} JNSE2025_VALVE_NSE2025_VALVE_RET_t;
+    JTEST_TEST_PASSED,
+    JTEST_TEST_FAILED
+} JTEST_TEST_RET_t;
 
-#endif /* _JNSE2025_VALVE_NSE2025_VALVE_RET_H_ */
+#endif /* _JTEST_TEST_RET_H_ */

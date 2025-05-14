@@ -1,8 +1,8 @@
-#include "jNSE2025_VALVE.h"
+#include "jtest.h"
 #include "ref.h"
 #include "arr_desc.h"
 #include "transform_templates.h"
-#include "transform_NSE2025_VALVE_data.h"
+#include "transform_test_data.h"
 #include "type_abbrev.h"
 
 /*--------------------------------------------------------------------------------*/
@@ -12,14 +12,14 @@
 #define CFFT_FN_NAME(fn_specifier, type_suffix) \
     arm_cfft_##fn_specifier##_##type_suffix     \
 
-#define CFFT_NSE2025_VALVE_NAME(fn_specifier, type_suffix, config_suffix)        \
-    arm_cfft_##fn_specifier##_##type_suffix##_##config_suffix##_NSE2025_VALVE    \
+#define CFFT_TEST_NAME(fn_specifier, type_suffix, config_suffix)        \
+    arm_cfft_##fn_specifier##_##type_suffix##_##config_suffix##_test    \
 
 /*--------------------------------------------------------------------------------*/
 /* Function Aliases */
 /*--------------------------------------------------------------------------------*/
 
-/* These aliases allow expansions in the CFFT_FAMILY_DEFINE_NSE2025_VALVE() template to
+/* These aliases allow expansions in the CFFT_FAMILY_DEFINE_TEST() template to
    make sense */
 #define arm_cfft_mag_init_f32 arm_cfft_radix4_init_f32
 #define arm_cfft_mag_init_q31 arm_cfft_radix4_init_q31
@@ -30,11 +30,11 @@
 #define transform_mag_fftlens transform_radix4_fftlens
 
 /*--------------------------------------------------------------------------------*/
-/* NSE2025_VALVE Definition */
+/* Test Definition */
 /*--------------------------------------------------------------------------------*/
 
 /**
- *  Defines a NSE2025_VALVE for the family of CFFT transforms.
+ *  Defines a test for the family of CFFT transforms.
  *
  *  The family of CFFT transforms includes:
  *
@@ -47,7 +47,7 @@
  *  @param fn_specifier Allowed values: radix4, radix2, mag.
  *  @param type_suffix  Allowed values: f32, q31, q15.
  *
- *  @param config_suffix Used to differentiate NSE2025_VALVE names based configuration
+ *  @param config_suffix Used to differentiate test names based configuration
  *  (in this case whether the ifft_flag is set or not.)
 
  *  @param comparison_interface Macro name used to compare reference and fut
@@ -59,13 +59,13 @@
  *  @param ifft_flag Determines whether the arm_cfft_instance_xxx is configured
  *  for an inverse FFT.
  */
-#define CFFT_FAMILY_DEFINE_NSE2025_VALVE(fn_specifier,                               \
+#define CFFT_FAMILY_DEFINE_TEST(fn_specifier,                               \
                                 type_suffix,                                \
-                                config_suffix, /* Delineate between NSE2025_VALVE configs*/ \
+                                config_suffix, /* Delineate between test configs*/ \
                                 comparison_interface,                       \
                                 output_type,                                \
                                 ifft_flag)                                  \
-    JNSE2025_VALVE_DEFINE_NSE2025_VALVE(CFFT_NSE2025_VALVE_NAME(fn_specifier, type_suffix,             \
+    JTEST_DEFINE_TEST(CFFT_TEST_NAME(fn_specifier, type_suffix,             \
                                      config_suffix),                        \
                       CFFT_FN_NAME(fn_specifier, type_suffix))              \
     {                                                                       \
@@ -89,13 +89,13 @@
                 2 /*complex_inputs*/);                                      \
                                                                             \
             /* Display parameter values */                                  \
-            JNSE2025_VALVE_DUMP_STRF("Block Size: %d\n"                              \
+            JTEST_DUMP_STRF("Block Size: %d\n"                              \
                             "Inverse-transform flag: %d\n",                 \
                             (int)fftlen,                                    \
                             (int)ifft_flag);                                \
                                                                             \
-            /* Display cycle count and run NSE2025_VALVE */                          \
-            JNSE2025_VALVE_COUNT_CYCLES(                                             \
+            /* Display cycle count and run test */                          \
+            JTEST_COUNT_CYCLES(                                             \
                 arm_cfft_##fn_specifier##_##type_suffix(                    \
                     &cfft_inst_fut,                                         \
                     (void*) transform_fft_inplace_input_fut));              \
@@ -104,80 +104,80 @@
                 &cfft_inst_ref,                                             \
                 (void *) transform_fft_inplace_input_ref);                  \
                                                                             \
-            /* NSE2025_VALVE correctness */                                          \
+            /* Test correctness */                                          \
             comparison_interface(                                           \
                 fftlen,                                                     \
                 output_type));                                              \
                                                                             \
-        return JNSE2025_VALVE_NSE2025_VALVE_PASSED;                                           \
+        return JTEST_TEST_PASSED;                                           \
     }
 
 /**
- *  Bulk wrapper for all NSE2025_VALVEs instantiated using #CFFT_FAMILY_DEFINE_NSE2025_VALVE().
+ *  Bulk wrapper for all tests instantiated using #CFFT_FAMILY_DEFINE_TEST().
  *
- *  This macro allows several NSE2025_VALVE definitions to share the same config_suffix
+ *  This macro allows several test definitions to share the same config_suffix
  *  and ifft_flag settings.
  */
-#define CFFT_FAMILY_DEFINE_ALL_NSE2025_VALVES(config_suffix, ifft_flag)      \
-    /* Radix2 NSE2025_VALVEs*/                                               \
-    CFFT_FAMILY_DEFINE_NSE2025_VALVE(radix2, q31, config_suffix,             \
+#define CFFT_FAMILY_DEFINE_ALL_TESTS(config_suffix, ifft_flag)      \
+    /* Radix2 tests*/                                               \
+    CFFT_FAMILY_DEFINE_TEST(radix2, q31, config_suffix,             \
                             TRANSFORM_SNR_COMPARE_CMPLX_INTERFACE,  \
                             TYPE_FROM_ABBREV(q31),                  \
                             ifft_flag);                             \
-    CFFT_FAMILY_DEFINE_NSE2025_VALVE(radix2, q15, config_suffix,             \
+    CFFT_FAMILY_DEFINE_TEST(radix2, q15, config_suffix,             \
                             TRANSFORM_SNR_COMPARE_CMPLX_INTERFACE,  \
                             TYPE_FROM_ABBREV(q15),                  \
                             ifft_flag);                             \
-    /* Radix4 NSE2025_VALVEs*/                                               \
-    CFFT_FAMILY_DEFINE_NSE2025_VALVE(radix4, q31, config_suffix,             \
+    /* Radix4 tests*/                                               \
+    CFFT_FAMILY_DEFINE_TEST(radix4, q31, config_suffix,             \
                             TRANSFORM_SNR_COMPARE_CMPLX_INTERFACE,  \
                             TYPE_FROM_ABBREV(q31),                  \
                             ifft_flag);                             \
-    CFFT_FAMILY_DEFINE_NSE2025_VALVE(radix4, q15, config_suffix,             \
+    CFFT_FAMILY_DEFINE_TEST(radix4, q15, config_suffix,             \
                             TRANSFORM_SNR_COMPARE_CMPLX_INTERFACE,  \
                             TYPE_FROM_ABBREV(q15),                  \
                             ifft_flag)
-    /* /\* Mag NSE2025_VALVEs*\/                                                  \ */
-    /* CFFT_FAMILY_DEFINE_NSE2025_VALVE(mag, f32, config_suffix,                \ */
+    /* /\* Mag tests*\/                                                  \ */
+    /* CFFT_FAMILY_DEFINE_TEST(mag, f32, config_suffix,                \ */
     /*                         TRANSFORM_SNR_COMPARE_INTERFACE,        \ */
     /*                         TYPE_FROM_ABBREV(f32),                  \ */
     /*                         ifft_flag);                             \ */
-    /* CFFT_FAMILY_DEFINE_NSE2025_VALVE(mag, q31, config_suffix,                \ */
+    /* CFFT_FAMILY_DEFINE_TEST(mag, q31, config_suffix,                \ */
     /*                         TRANSFORM_SNR_COMPARE_INTERFACE,        \ */
     /*                         TYPE_FROM_ABBREV(q31),                  \ */
     /*                         ifft_flag);                             \ */
-    /* CFFT_FAMILY_DEFINE_NSE2025_VALVE(mag, q15, config_suffix,                \ */
+    /* CFFT_FAMILY_DEFINE_TEST(mag, q15, config_suffix,                \ */
     /*                         TRANSFORM_SNR_COMPARE_INTERFACE,        \ */
     /*                         TYPE_FROM_ABBREV(q15),                  \ */
     /*                         ifft_flag) */
 
-CFFT_FAMILY_DEFINE_ALL_NSE2025_VALVES(forward, 0U);
-CFFT_FAMILY_DEFINE_ALL_NSE2025_VALVES(inverse, 1U);
+CFFT_FAMILY_DEFINE_ALL_TESTS(forward, 0U);
+CFFT_FAMILY_DEFINE_ALL_TESTS(inverse, 1U);
 
 /*--------------------------------------------------------------------------------*/
-/* Collect all NSE2025_VALVEs in a group */
+/* Collect all tests in a group */
 /*--------------------------------------------------------------------------------*/
 
-JNSE2025_VALVE_DEFINE_GROUP(cfft_family_NSE2025_VALVEs)
+JTEST_DEFINE_GROUP(cfft_family_tests)
 {
-    /* Forward FFT NSE2025_VALVEs */
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_cfft_radix2_q31_forward_NSE2025_VALVE);
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_cfft_radix2_q15_forward_NSE2025_VALVE);
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_cfft_radix4_q31_forward_NSE2025_VALVE);
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_cfft_radix4_q15_forward_NSE2025_VALVE);
+    /* Forward FFT tests */
+    JTEST_TEST_CALL(arm_cfft_radix2_q31_forward_test);
+    JTEST_TEST_CALL(arm_cfft_radix2_q15_forward_test);
+    JTEST_TEST_CALL(arm_cfft_radix4_q31_forward_test);
+    JTEST_TEST_CALL(arm_cfft_radix4_q15_forward_test);
 
-    /* Inverse FFT NSE2025_VALVEs */
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_cfft_radix2_q31_inverse_NSE2025_VALVE);
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_cfft_radix2_q15_inverse_NSE2025_VALVE);
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_cfft_radix4_q31_inverse_NSE2025_VALVE);
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_cfft_radix4_q15_inverse_NSE2025_VALVE);
+    /* Inverse FFT Tests */
+    JTEST_TEST_CALL(arm_cfft_radix2_q31_inverse_test);
+    JTEST_TEST_CALL(arm_cfft_radix2_q15_inverse_test);
+    JTEST_TEST_CALL(arm_cfft_radix4_q31_inverse_test);
+    JTEST_TEST_CALL(arm_cfft_radix4_q15_inverse_test);
 
-    /* Magnitude NSE2025_VALVEs removed from the DSP Library. Keeping them here in case
+    /* Magnitude tests removed from the DSP Library. Keeping them here in case
        minds are changed. */
-    /* JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_cfft_mag_f32_forward_NSE2025_VALVE); */
-    /* JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_cfft_mag_q31_forward_NSE2025_VALVE); */
-    /* JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_cfft_mag_q15_forward_NSE2025_VALVE); */
-    /* JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_cfft_mag_f32_inverse_NSE2025_VALVE); */
-    /* JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_cfft_mag_q31_inverse_NSE2025_VALVE); */
-    /* JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_cfft_mag_q15_inverse_NSE2025_VALVE); */
+    /* JTEST_TEST_CALL(arm_cfft_mag_f32_forward_test); */
+    /* JTEST_TEST_CALL(arm_cfft_mag_q31_forward_test); */
+    /* JTEST_TEST_CALL(arm_cfft_mag_q15_forward_test); */
+    /* JTEST_TEST_CALL(arm_cfft_mag_f32_inverse_test); */
+    /* JTEST_TEST_CALL(arm_cfft_mag_q31_inverse_test); */
+    /* JTEST_TEST_CALL(arm_cfft_mag_q15_inverse_test); */
 }

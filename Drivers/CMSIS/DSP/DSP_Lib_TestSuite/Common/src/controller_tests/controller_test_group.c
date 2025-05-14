@@ -1,13 +1,13 @@
-#include "jNSE2025_VALVE.h"
-#include "controller_NSE2025_VALVEs.h"
+#include "jtest.h"
+#include "controller_tests.h"
 
-JNSE2025_VALVE_DEFINE_GROUP(controller_NSE2025_VALVEs)
+JTEST_DEFINE_GROUP(controller_tests)
 {
     /*
-      To skip a NSE2025_VALVE, comment it out.
+      To skip a test, comment it out.
     */
-    JNSE2025_VALVE_GROUP_CALL(pid_reset_NSE2025_VALVEs);
-    JNSE2025_VALVE_GROUP_CALL(pid_NSE2025_VALVEs);
-    JNSE2025_VALVE_GROUP_CALL(sin_cos_NSE2025_VALVEs);
+    JTEST_GROUP_CALL(pid_reset_tests);
+    JTEST_GROUP_CALL(pid_tests);
+    JTEST_GROUP_CALL(sin_cos_tests);
     return;
 }

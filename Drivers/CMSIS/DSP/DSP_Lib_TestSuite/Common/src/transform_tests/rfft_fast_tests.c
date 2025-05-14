@@ -1,16 +1,16 @@
-#include "jNSE2025_VALVE.h"
+#include "jtest.h"
 #include "ref.h"
 #include "arr_desc.h"
 #include "transform_templates.h"
-#include "transform_NSE2025_VALVE_data.h"
+#include "transform_test_data.h"
 #include "type_abbrev.h"
 
 /*
-FFT fast function NSE2025_VALVE template. Arguments are: function configuration suffix
+FFT fast function test template. Arguments are: function configuration suffix
 (q7/q15/q31/f32) and inverse-transform flag
 */
-#define RFFT_FAST_DEFINE_NSE2025_VALVE(config_suffix, ifft_flag)                 \
-    JNSE2025_VALVE_DEFINE_NSE2025_VALVE(arm_rfft_fast_f32_##config_suffix##_NSE2025_VALVE,         \
+#define RFFT_FAST_DEFINE_TEST(config_suffix, ifft_flag)                 \
+    JTEST_DEFINE_TEST(arm_rfft_fast_f32_##config_suffix##_test,         \
                       arm_fft_f32)                                      \
     {                                                                   \
         arm_rfft_fast_instance_f32 rfft_inst_fut = {{0}, 0, 0};         \
@@ -34,13 +34,13 @@ FFT fast function NSE2025_VALVE template. Arguments are: function configuration 
                 sizeof(float32_t));                                     \
                                                                         \
             /* Display parameter values */                              \
-            JNSE2025_VALVE_DUMP_STRF("Block Size: %d\n"                          \
+            JTEST_DUMP_STRF("Block Size: %d\n"                          \
                             "Inverse-transform flag: %d\n",             \
                          (int)fftlen,                                   \
                          (int)ifft_flag);                               \
                                                                         \
-            /* Display cycle count and run NSE2025_VALVE */                      \
-            JNSE2025_VALVE_COUNT_CYCLES(                                         \
+            /* Display cycle count and run test */                      \
+            JTEST_COUNT_CYCLES(                                         \
                 arm_rfft_fast_f32(                                      \
                     &rfft_inst_fut,                                     \
                     (void *) transform_fft_input_fut,                   \
@@ -53,23 +53,23 @@ FFT fast function NSE2025_VALVE template. Arguments are: function configuration 
                 (void *) transform_fft_output_ref,                      \
                 ifft_flag);                                             \
                                                                         \
-            /* NSE2025_VALVE correctness */                                      \
+            /* Test correctness */                                      \
             TRANSFORM_SNR_COMPARE_INTERFACE(                            \
                 fftlen,                                                 \
                 float32_t));                                            \
                                                                         \
-        return JNSE2025_VALVE_NSE2025_VALVE_PASSED;                                       \
+        return JTEST_TEST_PASSED;                                       \
     }
 
-RFFT_FAST_DEFINE_NSE2025_VALVE(forward, 0U);
-RFFT_FAST_DEFINE_NSE2025_VALVE(inverse, 1U);
+RFFT_FAST_DEFINE_TEST(forward, 0U);
+RFFT_FAST_DEFINE_TEST(inverse, 1U);
 
 /*--------------------------------------------------------------------------------*/
-/* Collect all NSE2025_VALVEs in a group */
+/* Collect all tests in a group */
 /*--------------------------------------------------------------------------------*/
 
-JNSE2025_VALVE_DEFINE_GROUP(rfft_fast_NSE2025_VALVEs)
+JTEST_DEFINE_GROUP(rfft_fast_tests)
 {
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_rfft_fast_f32_forward_NSE2025_VALVE);
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_rfft_fast_f32_inverse_NSE2025_VALVE);
+    JTEST_TEST_CALL(arm_rfft_fast_f32_forward_test);
+    JTEST_TEST_CALL(arm_rfft_fast_f32_inverse_test);
 }

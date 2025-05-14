@@ -434,7 +434,7 @@ HAL_StatusTypeDef HAL_I2S_Init(I2S_HandleTypeDef *hi2s)
     i2sodd = 0U;
   }
 
-  /* NSE2025_VALVE if the divider is 1 or 0 or greater than 0xFF */
+  /* Test if the divider is 1 or 0 or greater than 0xFF */
   if ((i2sdiv < 2U) || (i2sdiv > 0xFFU))
   {
     /* Set the error code and execute error callback*/

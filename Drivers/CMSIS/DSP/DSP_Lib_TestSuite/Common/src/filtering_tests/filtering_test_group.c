@@ -1,17 +1,17 @@
-#include "jNSE2025_VALVE.h"
-#include "filtering_NSE2025_VALVEs.h"
+#include "jtest.h"
+#include "filtering_tests.h"
 
-JNSE2025_VALVE_DEFINE_GROUP(filtering_NSE2025_VALVEs)
+JTEST_DEFINE_GROUP(filtering_tests)
 {
     /*
-      To skip a NSE2025_VALVE, comment it out.
+      To skip a test, comment it out.
     */
-    JNSE2025_VALVE_GROUP_CALL(biquad_NSE2025_VALVEs);
-    JNSE2025_VALVE_GROUP_CALL(conv_NSE2025_VALVEs);
-    JNSE2025_VALVE_GROUP_CALL(correlate_NSE2025_VALVEs);
-    JNSE2025_VALVE_GROUP_CALL(fir_NSE2025_VALVEs);
-    JNSE2025_VALVE_GROUP_CALL(iir_NSE2025_VALVEs);
-    JNSE2025_VALVE_GROUP_CALL(lms_NSE2025_VALVEs);
+    JTEST_GROUP_CALL(biquad_tests);
+    JTEST_GROUP_CALL(conv_tests);
+    JTEST_GROUP_CALL(correlate_tests);
+    JTEST_GROUP_CALL(fir_tests);
+    JTEST_GROUP_CALL(iir_tests);
+    JTEST_GROUP_CALL(lms_tests);
 
     return;
 }

@@ -1,14 +1,14 @@
-#include "jNSE2025_VALVE.h"
-#include "filtering_NSE2025_VALVE_data.h"
+#include "jtest.h"
+#include "filtering_test_data.h"
 #include "arr_desc.h"
 #include "arm_math.h"           /* FUTs */
 #include "ref.h"                /* Reference Functions */
-#include "NSE2025_VALVE_templates.h"
+#include "test_templates.h"
 #include "filtering_templates.h"
 #include "type_abbrev.h"
 
-#define BIQUAD_DEFINE_NSE2025_VALVE(suffix, instance_name, config_suffix, output_type)    \
-   JNSE2025_VALVE_DEFINE_NSE2025_VALVE(arm_biquad_cascade_##config_suffix##_##suffix##_NSE2025_VALVE,       \
+#define BIQUAD_DEFINE_TEST(suffix, instance_name, config_suffix, output_type)    \
+   JTEST_DEFINE_TEST(arm_biquad_cascade_##config_suffix##_##suffix##_test,       \
          arm_biquad_cascade_##config_suffix##_##suffix)                          \
    {                                                                             \
       instance_name biquad_inst_fut = { 0 };                                     \
@@ -26,13 +26,13 @@
                      (output_type*)filtering_coeffs_b_##suffix,                  \
                      (void *) filtering_pState);                                 \
                                                                                  \
-               /* Display NSE2025_VALVE parameter values */                               \
-               JNSE2025_VALVE_DUMP_STRF("Block Size: %d\n"                                \
+               /* Display test parameter values */                               \
+               JTEST_DUMP_STRF("Block Size: %d\n"                                \
                                "Number of Stages: %d\n",                         \
                                (int)blockSize,                                   \
                                (int)numStages);                                  \
                                                                                  \
-               JNSE2025_VALVE_COUNT_CYCLES(                                               \
+               JTEST_COUNT_CYCLES(                                               \
                      arm_biquad_cascade_##config_suffix##_##suffix(              \
                            &biquad_inst_fut,                                     \
                            (void *) filtering_##suffix##_inputs,                 \
@@ -54,11 +54,11 @@
                      blockSize,                                                  \
                      output_type)));                                             \
                                                                                  \
-            return JNSE2025_VALVE_NSE2025_VALVE_PASSED;                                            \
+            return JTEST_TEST_PASSED;                                            \
    }
 
-#define BIQUAD_WITH_POSTSHIFT_DEFINE_NSE2025_VALVE(suffix, config_suffix, speed, output_type)   \
-   JNSE2025_VALVE_DEFINE_NSE2025_VALVE(arm_biquad_cascade_##config_suffix##speed##_##suffix##_NSE2025_VALVE,      \
+#define BIQUAD_WITH_POSTSHIFT_DEFINE_TEST(suffix, config_suffix, speed, output_type)   \
+   JTEST_DEFINE_TEST(arm_biquad_cascade_##config_suffix##speed##_##suffix##_test,      \
          arm_biquad_cascade_##config_suffix##speed##_##suffix)                         \
    {                                                                                   \
       arm_biquad_casd_##config_suffix##_inst_##suffix biquad_inst_fut = { 0 };         \
@@ -73,8 +73,8 @@
             TEMPLATE_DO_ARR_DESC(                                                      \
                   postshifts_idx, uint8_t, postShift, filtering_postshifts             \
                   ,                                                                    \
-                  /* Display NSE2025_VALVE parameter values */                                  \
-                  JNSE2025_VALVE_DUMP_STRF("Block Size: %d\n"                                   \
+                  /* Display test parameter values */                                  \
+                  JTEST_DUMP_STRF("Block Size: %d\n"                                   \
                                   "Number of Stages: %d\n"                             \
                                   "Post Shift: %d\n",                                  \
                                   (int)blockSize,                                      \
@@ -87,7 +87,7 @@
                         (output_type*)filtering_coeffs_b_##suffix,                     \
                         (void *) filtering_pState, postShift);                         \
                                                                                        \
-                  JNSE2025_VALVE_COUNT_CYCLES(                                                  \
+                  JTEST_COUNT_CYCLES(                                                  \
                         arm_biquad_cascade_##config_suffix##speed##_##suffix(          \
                               &biquad_inst_fut,                                        \
                               (void *) filtering_##suffix##_inputs,                    \
@@ -109,11 +109,11 @@
                         blockSize,                                                     \
                         output_type))));                                               \
                                                                                        \
-            return JNSE2025_VALVE_NSE2025_VALVE_PASSED;                                                  \
+            return JTEST_TEST_PASSED;                                                  \
    }
 
 
-JNSE2025_VALVE_DEFINE_NSE2025_VALVE(arm_biquad_cas_df1_32x64_q31_NSE2025_VALVE,
+JTEST_DEFINE_TEST(arm_biquad_cas_df1_32x64_q31_test,
       arm_biquad_cas_df1_32x64_q31)
 {
    arm_biquad_cas_df1_32x64_ins_q31 biquad_inst_fut = { 0 };
@@ -134,13 +134,13 @@ JNSE2025_VALVE_DEFINE_NSE2025_VALVE(arm_biquad_cas_df1_32x64_q31_NSE2025_VALVE,
                      (q31_t*)filtering_coeffs_b_q31,
                      (void *) filtering_pState, postShift);
 
-              /* Display NSE2025_VALVE parameter values */
-              JNSE2025_VALVE_DUMP_STRF("Block Size: %d\n"
+              /* Display test parameter values */
+              JTEST_DUMP_STRF("Block Size: %d\n"
                               "Number of Stages: %d\n",
                               (int)blockSize,
                               (int)numStages);
 
-               JNSE2025_VALVE_COUNT_CYCLES(
+               JTEST_COUNT_CYCLES(
                      arm_biquad_cas_df1_32x64_q31(
                            &biquad_inst_fut,
                            (void *) filtering_q31_inputs,
@@ -162,10 +162,10 @@ JNSE2025_VALVE_DEFINE_NSE2025_VALVE(arm_biquad_cas_df1_32x64_q31_NSE2025_VALVE,
                      blockSize,
                      q31_t))));
 
-         return JNSE2025_VALVE_NSE2025_VALVE_PASSED;
+         return JTEST_TEST_PASSED;
 }
 
-JNSE2025_VALVE_DEFINE_NSE2025_VALVE(arm_biquad_cascade_df2T_f64_NSE2025_VALVE,
+JTEST_DEFINE_TEST(arm_biquad_cascade_df2T_f64_test,
      arm_biquad_cascade_df2T_f64)
 {
   arm_biquad_cascade_df2T_instance_f64 biquad_inst_fut = { 0 };
@@ -177,8 +177,8 @@ JNSE2025_VALVE_DEFINE_NSE2025_VALVE(arm_biquad_cascade_df2T_f64_NSE2025_VALVE,
      TEMPLATE_DO_ARR_DESC(
            numstages_idx, uint16_t, numStages, filtering_numstages
            ,
-           /* Display NSE2025_VALVE parameter values */
-           JNSE2025_VALVE_DUMP_STRF("Block Size: %d\n"
+           /* Display test parameter values */
+           JTEST_DUMP_STRF("Block Size: %d\n"
                            "Number of Stages: %d\n",
                            (int)blockSize,
                            (int)numStages);
@@ -189,7 +189,7 @@ JNSE2025_VALVE_DEFINE_NSE2025_VALVE(arm_biquad_cascade_df2T_f64_NSE2025_VALVE,
                  (float64_t*)filtering_coeffs_b_f64,
                  (void *) filtering_pState);
 
-           JNSE2025_VALVE_COUNT_CYCLES(
+           JTEST_COUNT_CYCLES(
                  arm_biquad_cascade_df2T_f64(
                        &biquad_inst_fut,
                        (void *) filtering_f64_inputs,
@@ -211,34 +211,34 @@ JNSE2025_VALVE_DEFINE_NSE2025_VALVE(arm_biquad_cascade_df2T_f64_NSE2025_VALVE,
                  blockSize,
                  float64_t)));
 
-        return JNSE2025_VALVE_NSE2025_VALVE_PASSED;
+        return JTEST_TEST_PASSED;
 }
 
 
-BIQUAD_DEFINE_NSE2025_VALVE(f32,arm_biquad_casd_df1_inst_f32, df1,float32_t);
-BIQUAD_DEFINE_NSE2025_VALVE(f32,arm_biquad_cascade_df2T_instance_f32,df2T,float32_t);
-BIQUAD_DEFINE_NSE2025_VALVE(f32,arm_biquad_cascade_stereo_df2T_instance_f32,stereo_df2T,float32_t);
-BIQUAD_WITH_POSTSHIFT_DEFINE_NSE2025_VALVE(q31,df1,,q31_t);
-BIQUAD_WITH_POSTSHIFT_DEFINE_NSE2025_VALVE(q15,df1,,q15_t);
-BIQUAD_WITH_POSTSHIFT_DEFINE_NSE2025_VALVE(q31,df1,_fast,q31_t);
-BIQUAD_WITH_POSTSHIFT_DEFINE_NSE2025_VALVE(q15,df1,_fast,q15_t);
+BIQUAD_DEFINE_TEST(f32,arm_biquad_casd_df1_inst_f32, df1,float32_t);
+BIQUAD_DEFINE_TEST(f32,arm_biquad_cascade_df2T_instance_f32,df2T,float32_t);
+BIQUAD_DEFINE_TEST(f32,arm_biquad_cascade_stereo_df2T_instance_f32,stereo_df2T,float32_t);
+BIQUAD_WITH_POSTSHIFT_DEFINE_TEST(q31,df1,,q31_t);
+BIQUAD_WITH_POSTSHIFT_DEFINE_TEST(q15,df1,,q15_t);
+BIQUAD_WITH_POSTSHIFT_DEFINE_TEST(q31,df1,_fast,q31_t);
+BIQUAD_WITH_POSTSHIFT_DEFINE_TEST(q15,df1,_fast,q15_t);
 
 /*--------------------------------------------------------------------------------*/
-/* Collect all NSE2025_VALVEs in a group. */
+/* Collect all tests in a group. */
 /*--------------------------------------------------------------------------------*/
 
-JNSE2025_VALVE_DEFINE_GROUP(biquad_NSE2025_VALVEs)
+JTEST_DEFINE_GROUP(biquad_tests)
 {
     /*
-      To skip a NSE2025_VALVE, comment it out.
+      To skip a test, comment it out.
     */
-   JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_biquad_cascade_df1_f32_NSE2025_VALVE);
-   JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_biquad_cascade_df2T_f32_NSE2025_VALVE);
-   JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_biquad_cascade_stereo_df2T_f32_NSE2025_VALVE);
-   JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_biquad_cascade_df2T_f64_NSE2025_VALVE);
-   JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_biquad_cascade_df1_q31_NSE2025_VALVE);
-   JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_biquad_cascade_df1_q15_NSE2025_VALVE);
-   JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_biquad_cascade_df1_fast_q31_NSE2025_VALVE);
-   JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_biquad_cascade_df1_fast_q15_NSE2025_VALVE);
-   JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_biquad_cas_df1_32x64_q31_NSE2025_VALVE);
+   JTEST_TEST_CALL(arm_biquad_cascade_df1_f32_test);
+   JTEST_TEST_CALL(arm_biquad_cascade_df2T_f32_test);
+   JTEST_TEST_CALL(arm_biquad_cascade_stereo_df2T_f32_test);
+   JTEST_TEST_CALL(arm_biquad_cascade_df2T_f64_test);
+   JTEST_TEST_CALL(arm_biquad_cascade_df1_q31_test);
+   JTEST_TEST_CALL(arm_biquad_cascade_df1_q15_test);
+   JTEST_TEST_CALL(arm_biquad_cascade_df1_fast_q31_test);
+   JTEST_TEST_CALL(arm_biquad_cascade_df1_fast_q15_test);
+   JTEST_TEST_CALL(arm_biquad_cas_df1_32x64_q31_test);
 }

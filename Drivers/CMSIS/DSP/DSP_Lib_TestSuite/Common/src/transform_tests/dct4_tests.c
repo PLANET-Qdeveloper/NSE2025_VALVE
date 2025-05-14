@@ -1,9 +1,9 @@
-#include "jNSE2025_VALVE.h"
+#include "jtest.h"
 #include "ref.h"
 #include "arm_math.h"
 #include "arr_desc.h"
 #include "transform_templates.h"
-#include "transform_NSE2025_VALVE_data.h"
+#include "transform_test_data.h"
 #include "type_abbrev.h"
 #include <math.h>               /* sqrtf() */
 
@@ -13,15 +13,15 @@
 #define ref_sqrt_f32(x) sqrtf(x)
 
 /*--------------------------------------------------------------------------------*/
-/* NSE2025_VALVE Definitions */
+/* Test Definitions */
 /*--------------------------------------------------------------------------------*/
 
 /*
-DCT function NSE2025_VALVE template. Arguments are: function configuration suffix
+DCT function test template. Arguments are: function configuration suffix
 (q7/q15/q31/f32) and input type (q7_t/q15_t/q31_t/float32_t)
 */
-#define DCT4_DEFINE_NSE2025_VALVE(suffix, input_type)                            \
-    JNSE2025_VALVE_DEFINE_NSE2025_VALVE(arm_dct4_##suffix##_NSE2025_VALVE, arm_dct4_##suffix)      \
+#define DCT4_DEFINE_TEST(suffix, input_type)                            \
+    JTEST_DEFINE_TEST(arm_dct4_##suffix##_test, arm_dct4_##suffix)      \
     {                                                                   \
         CONCAT(arm_dct4_instance_,suffix) dct4_inst_fut        = {0};   \
         CONCAT(arm_rfft_instance_,suffix) rfft_inst_fut        = {0};   \
@@ -41,7 +41,7 @@ DCT function NSE2025_VALVE template. Arguments are: function configuration suffi
             input_type normalize;                                       \
                                                                         \
             /* Calculate normalized DCT4 value for input_type. */       \
-            NSE2025_VALVE_CONVERT_FLOAT_TO(&normalize_f32, &normalize,           \
+            TEST_CONVERT_FLOAT_TO(&normalize_f32, &normalize,           \
                                   1, input_type);                       \
                                                                         \
             /* Initialize the DCT4, RFFT, and CFFT instances */         \
@@ -65,12 +65,12 @@ DCT function NSE2025_VALVE template. Arguments are: function configuration suffi
                 fftlen * sizeof(input_type));                           \
                                                                         \
             /* Display parameter values */                              \
-            JNSE2025_VALVE_DUMP_STRF("Block Size: %d\n",                         \
+            JTEST_DUMP_STRF("Block Size: %d\n",                         \
                          (int)fftlen);                                  \
                                                                         \
             /* Input provided as a scratch buffer. Inplace input is     \
-             * actual input. Display cycle count and run NSE2025_VALVE*/         \
-            JNSE2025_VALVE_COUNT_CYCLES(                                         \
+             * actual input. Display cycle count and run test*/         \
+            JTEST_COUNT_CYCLES(                                         \
                 arm_dct4_##suffix(                                      \
                     &dct4_inst_fut,                                     \
                     (void *) transform_fft_input_fut,                   \
@@ -86,21 +86,21 @@ DCT function NSE2025_VALVE template. Arguments are: function configuration suffi
                 (void *) transform_fft_input_ref,                       \
                 (void *) transform_fft_inplace_input_ref);              \
                                                                         \
-            /* NSE2025_VALVE correctness */                                      \
+            /* Test correctness */                                      \
             DCT_TRANSFORM_SNR_COMPARE_INTERFACE(                        \
                 fftlen,                                                 \
                 input_type));                                           \
                                                                         \
-        return JNSE2025_VALVE_NSE2025_VALVE_PASSED;                                       \
+        return JTEST_TEST_PASSED;                                       \
     }
 
 /*
-  DCT function NSE2025_VALVE template for fixed point data. Arguments are: function
+  DCT function test template for fixed point data. Arguments are: function
   suffix (q7/q15/q31/f32), input type (q7_t/q15_t/q31_t/float32_t) and prefix
   (dct_4)
 */
-#define DCT4_FIXED_POINT_DEFINE_NSE2025_VALVE(suffix, input_type, prefix)           \
-    JNSE2025_VALVE_DEFINE_NSE2025_VALVE(arm_dct4_##suffix##_NSE2025_VALVE, arm_dct4_##suffix)         \
+#define DCT4_FIXED_POINT_DEFINE_TEST(suffix, input_type, prefix)           \
+    JTEST_DEFINE_TEST(arm_dct4_##suffix##_test, arm_dct4_##suffix)         \
     {                                                                      \
         CONCAT(arm_dct4_instance_,suffix) dct4_inst_fut        = {0};      \
         CONCAT(arm_rfft_instance_,suffix) rfft_inst_fut        = {0};      \
@@ -119,7 +119,7 @@ DCT function NSE2025_VALVE template. Arguments are: function configuration suffi
             input_type normalize;                                          \
                                                                            \
             /* Calculate normalized DCT4 value for input_type. */          \
-            NSE2025_VALVE_CONVERT_FLOAT_TO(&normalize_f32, &normalize,              \
+            TEST_CONVERT_FLOAT_TO(&normalize_f32, &normalize,              \
                                   1, input_type);                          \
                                                                            \
             /* Initialize the DCT4, RFFT, and CFFT instances */            \
@@ -151,13 +151,13 @@ DCT function NSE2025_VALVE template. Arguments are: function configuration suffi
              memset( transform_fft_input_fut,0,                            \
                      fftlen*sizeof(input_type));                           \
                                                                            \
-             /* Display NSE2025_VALVE parameter values */                           \
-            JNSE2025_VALVE_DUMP_STRF("Block Size: %d\n",                            \
+             /* Display test parameter values */                           \
+            JTEST_DUMP_STRF("Block Size: %d\n",                            \
                          (int)fftlen);                                     \
                                                                            \
             /* Input provided as a scratch buffer. Inplace input is        \
              * actual input. */                                            \
-            JNSE2025_VALVE_COUNT_CYCLES(                                            \
+            JTEST_COUNT_CYCLES(                                            \
                 arm_dct4_##suffix(                                         \
                     &dct4_inst_fut,                                        \
                     (void *) transform_fft_input_fut,                      \
@@ -173,25 +173,25 @@ DCT function NSE2025_VALVE template. Arguments are: function configuration suffi
                 (void *) transform_fft_input_ref,                          \
                 (void *) transform_fft_inplace_input_ref);                 \
                                                                            \
-            /* NSE2025_VALVE correctness */                                         \
+            /* Test correctness */                                         \
             DCT_TRANSFORM_SNR_COMPARE_INTERFACE(                           \
                 fftlen,                                                    \
                 input_type));                                              \
                                                                            \
-        return JNSE2025_VALVE_NSE2025_VALVE_PASSED;                                          \
+        return JTEST_TEST_PASSED;                                          \
     }
 
-DCT4_DEFINE_NSE2025_VALVE(f32, float32_t);
-DCT4_FIXED_POINT_DEFINE_NSE2025_VALVE(q31, q31_t,);
-DCT4_FIXED_POINT_DEFINE_NSE2025_VALVE(q15, q15_t, dct4_);
+DCT4_DEFINE_TEST(f32, float32_t);
+DCT4_FIXED_POINT_DEFINE_TEST(q31, q31_t,);
+DCT4_FIXED_POINT_DEFINE_TEST(q15, q15_t, dct4_);
 
 /*--------------------------------------------------------------------------------*/
-/* Collect all NSE2025_VALVEs in a group */
+/* Collect all tests in a group */
 /*--------------------------------------------------------------------------------*/
 
-JNSE2025_VALVE_DEFINE_GROUP(dct4_NSE2025_VALVEs)
+JTEST_DEFINE_GROUP(dct4_tests)
 {
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_dct4_f32_NSE2025_VALVE);
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_dct4_q31_NSE2025_VALVE);
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_dct4_q15_NSE2025_VALVE);
+    JTEST_TEST_CALL(arm_dct4_f32_test);
+    JTEST_TEST_CALL(arm_dct4_q31_test);
+    JTEST_TEST_CALL(arm_dct4_q15_test);
 }

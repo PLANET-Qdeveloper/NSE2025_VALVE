@@ -55,7 +55,7 @@
  *
  * \par Variables Description:
  * \par
- * \li \c NSE2025_VALVEMarks_f32 points to the marks scored by 20 students in 4 subjects
+ * \li \c testMarks_f32 points to the marks scored by 20 students in 4 subjects
  * \li \c max_marks     Maximum of all marks
  * \li \c min_marks     Minimum of all marks
  * \li \c mean          Mean of all marks
@@ -89,12 +89,12 @@
 ** Global defines
 ** ------------------------------------------------------------------- */
 
-#define NSE2025_VALVE_LENGTH_SAMPLES   (20*4)
+#define TEST_LENGTH_SAMPLES   (20*4)
 
 /* ----------------------------------------------------------------------
 ** List of Marks scored by 20 students for 4 subjects
 ** ------------------------------------------------------------------- */
-const float32_t NSE2025_VALVEMarks_f32[NSE2025_VALVE_LENGTH_SAMPLES] =
+const float32_t testMarks_f32[TEST_LENGTH_SAMPLES] =
 {
   42.000000,  37.000000,  81.000000,  28.000000,
   83.000000,  72.000000,  36.000000,  38.000000,
@@ -122,7 +122,7 @@ const float32_t NSE2025_VALVEMarks_f32[NSE2025_VALVE_LENGTH_SAMPLES] =
 /* ----------------------------------------------------------------------
 * Number of subjects X 1
 * ------------------------------------------------------------------- */
-const float32_t NSE2025_VALVEUnity_f32[4] =
+const float32_t testUnity_f32[4] =
 {
   1.000,  1.000,   1.000,  1.000
 };
@@ -131,7 +131,7 @@ const float32_t NSE2025_VALVEUnity_f32[4] =
 /* ----------------------------------------------------------------------
 ** f32 Output buffer
 ** ------------------------------------------------------------------- */
-static float32_t NSE2025_VALVEOutput[NSE2025_VALVE_LENGTH_SAMPLES];
+static float32_t testOutput[TEST_LENGTH_SAMPLES];
 
 
 /* ------------------------------------------------------------------
@@ -150,7 +150,7 @@ float32_t    max_marks, min_marks, mean, std, var;
  uint32_t    student_num;
 
 /* ----------------------------------------------------------------------------------
-* Main f32 NSE2025_VALVE function.  It returns maximum marks secured and student number
+* Main f32 test function.  It returns maximum marks secured and student number
 * ------------------------------------------------------------------------------- */
 
 int32_t main()
@@ -163,16 +163,16 @@ int32_t main()
   arm_matrix_instance_f32 dstC;
 
   /* Input and output matrices initializations */
-  arm_mat_init_f32(&srcA, numStudents, numSubjects, (float32_t *)NSE2025_VALVEMarks_f32);
-  arm_mat_init_f32(&srcB, numSubjects, 1, (float32_t *)NSE2025_VALVEUnity_f32);
-  arm_mat_init_f32(&dstC, numStudents, 1, NSE2025_VALVEOutput);
+  arm_mat_init_f32(&srcA, numStudents, numSubjects, (float32_t *)testMarks_f32);
+  arm_mat_init_f32(&srcB, numSubjects, 1, (float32_t *)testUnity_f32);
+  arm_mat_init_f32(&dstC, numStudents, 1, testOutput);
 
 #else
 
   /* Static Initializations of Input and output matrix sizes and array */
-  arm_matrix_instance_f32 srcA = {NUMSTUDENTS, NUMSUBJECTS, (float32_t *)NSE2025_VALVEMarks_f32};
-  arm_matrix_instance_f32 srcB = {NUMSUBJECTS, 1, (float32_t *)NSE2025_VALVEUnity_f32};
-  arm_matrix_instance_f32 dstC = {NUMSTUDENTS, 1, NSE2025_VALVEOutput};
+  arm_matrix_instance_f32 srcA = {NUMSTUDENTS, NUMSUBJECTS, (float32_t *)testMarks_f32};
+  arm_matrix_instance_f32 srcB = {NUMSUBJECTS, 1, (float32_t *)testUnity_f32};
+  arm_matrix_instance_f32 dstC = {NUMSTUDENTS, 1, testOutput};
 
 #endif
 
@@ -185,27 +185,27 @@ int32_t main()
   /* ----------------------------------------------------------------------
   ** Call the Max function to calculate max marks among numStudents
   ** ------------------------------------------------------------------- */
-  arm_max_f32(NSE2025_VALVEOutput, numStudents, &max_marks, &student_num);
+  arm_max_f32(testOutput, numStudents, &max_marks, &student_num);
 
   /* ----------------------------------------------------------------------
   ** Call the Min function to calculate min marks among numStudents
   ** ------------------------------------------------------------------- */
-  arm_min_f32(NSE2025_VALVEOutput, numStudents, &min_marks, &student_num);
+  arm_min_f32(testOutput, numStudents, &min_marks, &student_num);
 
   /* ----------------------------------------------------------------------
   ** Call the Mean function to calculate mean
   ** ------------------------------------------------------------------- */
-  arm_mean_f32(NSE2025_VALVEOutput, numStudents, &mean);
+  arm_mean_f32(testOutput, numStudents, &mean);
 
   /* ----------------------------------------------------------------------
   ** Call the std function to calculate standard deviation
   ** ------------------------------------------------------------------- */
-  arm_std_f32(NSE2025_VALVEOutput, numStudents, &std);
+  arm_std_f32(testOutput, numStudents, &std);
 
   /* ----------------------------------------------------------------------
   ** Call the var function to calculate variance
   ** ------------------------------------------------------------------- */
-  arm_var_f32(NSE2025_VALVEOutput, numStudents, &var);
+  arm_var_f32(testOutput, numStudents, &var);
 
   while (1);                             /* main function does not return */
 }

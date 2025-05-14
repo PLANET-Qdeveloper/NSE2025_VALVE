@@ -1062,7 +1062,7 @@ HAL_StatusTypeDef HAL_SPI_Receive(SPI_HandleTypeDef *hspi, uint8_t *pData, uint1
   if (hspi->Init.CRCCalculation == SPI_CRCCALCULATION_ENABLE)
   {
     SPI_RESET_CRC(hspi);
-    /* this is done to handle the CRCNEXT before the laNSE2025_VALVE data */
+    /* this is done to handle the CRCNEXT before the latest data */
     hspi->RxXferCount--;
   }
 #endif /* USE_SPI_CRC */
@@ -1149,13 +1149,13 @@ HAL_StatusTypeDef HAL_SPI_Receive(SPI_HandleTypeDef *hspi, uint8_t *pData, uint1
   /* Handle the CRC Transmission */
   if (hspi->Init.CRCCalculation == SPI_CRCCALCULATION_ENABLE)
   {
-    /* freeze the CRC before the laNSE2025_VALVE data */
+    /* freeze the CRC before the latest data */
     SET_BIT(hspi->Instance->CR1, SPI_CR1_CRCNEXT);
 
-    /* Read the laNSE2025_VALVE data */
+    /* Read the latest data */
     if (SPI_WaitFlagStateUntilTimeout(hspi, SPI_FLAG_RXNE, SET, Timeout, tickstart) != HAL_OK)
     {
-      /* the laNSE2025_VALVE data has not been received */
+      /* the latest data has not been received */
       errorcode = HAL_TIMEOUT;
       goto error;
     }
@@ -2994,7 +2994,7 @@ __weak void HAL_SPI_ErrorCallback(SPI_HandleTypeDef *hspi)
             the HAL_SPI_ErrorCallback should be implemented in the user file
    */
   /* NOTE : The ErrorCode parameter in the hspi handle is updated by the SPI processes
-            and user can use HAL_SPI_GetError() API to check the laNSE2025_VALVE error occurred
+            and user can use HAL_SPI_GetError() API to check the latest error occurred
    */
 }
 

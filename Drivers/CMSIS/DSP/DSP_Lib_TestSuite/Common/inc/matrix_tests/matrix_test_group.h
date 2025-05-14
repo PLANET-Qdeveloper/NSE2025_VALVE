@@ -1,9 +1,9 @@
-#ifndef _MATRIX_NSE2025_VALVE_GROUP_H_
-#define _MATRIX_NSE2025_VALVE_GROUP_H_
+#ifndef _MATRIX_TEST_GROUP_H_
+#define _MATRIX_TEST_GROUP_H_
 
 /*--------------------------------------------------------------------------------*/
-/* Declare NSE2025_VALVE Groups */
+/* Declare Test Groups */
 /*--------------------------------------------------------------------------------*/
-JNSE2025_VALVE_DECLARE_GROUP(matrix_NSE2025_VALVEs);
+JTEST_DECLARE_GROUP(matrix_tests);
 
-#endif /* _MATRIX_NSE2025_VALVE_GROUP_H_ */
+#endif /* _MATRIX_TEST_GROUP_H_ */

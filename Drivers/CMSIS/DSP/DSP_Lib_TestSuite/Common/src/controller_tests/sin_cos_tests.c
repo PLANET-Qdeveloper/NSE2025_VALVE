@@ -1,9 +1,9 @@
-#include "jNSE2025_VALVE.h"
+#include "jtest.h"
 #include "arr_desc.h"
 #include "arm_math.h"
 #include "ref.h"
 #include "type_abbrev.h"
-#include "NSE2025_VALVE_templates.h"
+#include "test_templates.h"
 
 /*--------------------------------------------------------------------------------*/
 /* Input Data */
@@ -48,14 +48,14 @@ float32_t sin_val_ref = 0;
 float32_t cos_val_ref = 0;
 
 /*--------------------------------------------------------------------------------*/
-/* NSE2025_VALVE Definitions */
+/* Test Definitions */
 /*--------------------------------------------------------------------------------*/
 
 #define MAX_DELTA_f32 50.0e-8f
 #define ABS(x) ((x) > 0 ? (x) : -(x))
 
 /*
-  Function to NSE2025_VALVE correctness of sin_cos output by comparing it with reference library
+  Function to test correctness of sin_cos output by comparing it with reference library
 */
 #define COMPARISON_INTERFACE(type, threshold)                           \
     if ( (ABS((type) sin_val_ref - (type) sin_val_fut) >                 \
@@ -63,24 +63,24 @@ float32_t cos_val_ref = 0;
         (ABS((type) cos_val_ref - (type) cos_val_fut) >                 \
          (type) threshold))                                             \
     {                                                                   \
-        JNSE2025_VALVE_DUMP_STRF("Error: %f %f\n",                               \
+        JTEST_DUMP_STRF("Error: %f %f\n",                               \
                         ABS((type) sin_val_ref - (type) sin_val_fut),   \
                         ABS((type) cos_val_ref - (type) cos_val_fut));  \
-        return JNSE2025_VALVE_NSE2025_VALVE_FAILED;                                       \
+        return JTEST_TEST_FAILED;                                       \
     }
 
 /*
-  Sine and cosine NSE2025_VALVE function for float32_t input
+  Sine and cosine test function for float32_t input
 */
-JNSE2025_VALVE_DEFINE_NSE2025_VALVE(arm_sin_cos_f32_NSE2025_VALVE, arm_sin_cos_f32)
+JTEST_DEFINE_TEST(arm_sin_cos_f32_test, arm_sin_cos_f32)
 {
-    /* NSE2025_VALVE function for all input degree values */
+    /* Test function for all input degree values */
     TEMPLATE_DO_ARR_DESC(
         degree_idx, TYPE_FROM_ABBREV(f32),
         degree, arm_sin_cos_degrees_f32
         ,
-        /* Display cycle count and run NSE2025_VALVE */
-        JNSE2025_VALVE_COUNT_CYCLES(
+        /* Display cycle count and run test */
+        JTEST_COUNT_CYCLES(
             arm_sin_cos_f32(
                 degree,
                 (TYPE_FROM_ABBREV(f32) *) &sin_val_fut,
@@ -91,28 +91,28 @@ JNSE2025_VALVE_DEFINE_NSE2025_VALVE(arm_sin_cos_f32_NSE2025_VALVE, arm_sin_cos_f
             (TYPE_FROM_ABBREV(f32) *) &sin_val_ref,
             (TYPE_FROM_ABBREV(f32) *) &cos_val_ref);
 
-        /* NSE2025_VALVE correctness */
+        /* Test correctness */
         COMPARISON_INTERFACE(
             TYPE_FROM_ABBREV(f32),
             MAX_DELTA_f32));
 
-    return JNSE2025_VALVE_NSE2025_VALVE_PASSED;
+    return JTEST_TEST_PASSED;
 }
 
 
 /*
-  Sine and cosine NSE2025_VALVE function for q31_t input
+  Sine and cosine test function for q31_t input
 */
-JNSE2025_VALVE_DEFINE_NSE2025_VALVE(arm_sin_cos_q31_NSE2025_VALVE,
+JTEST_DEFINE_TEST(arm_sin_cos_q31_test,
                   arm_sin_cos_q31)
 {
-    /* NSE2025_VALVE function for all input degree values */
+    /* Test function for all input degree values */
     TEMPLATE_DO_ARR_DESC(
         degree_idx, TYPE_FROM_ABBREV(q31),
         degree, arm_sin_cos_degrees_q31
         ,
-        /* Display cycle count and run NSE2025_VALVE */
-        JNSE2025_VALVE_COUNT_CYCLES(
+        /* Display cycle count and run test */
+        JTEST_COUNT_CYCLES(
             arm_sin_cos_q31(
                 degree,
                 (TYPE_FROM_ABBREV(q31) *) &sin_val_fut,
@@ -129,23 +129,23 @@ JNSE2025_VALVE_DEFINE_NSE2025_VALVE(arm_sin_cos_q31_NSE2025_VALVE,
         ref_q31_t_to_float((TYPE_FROM_ABBREV(q31) *) &sin_val_ref, &sin_val_ref, 1);
         ref_q31_t_to_float((TYPE_FROM_ABBREV(q31) *) &cos_val_ref, &cos_val_ref, 1);
 
-        /* NSE2025_VALVE correctness */
+        /* Test correctness */
         COMPARISON_INTERFACE(
             TYPE_FROM_ABBREV(f32),
             MAX_DELTA_f32));
 
-    return JNSE2025_VALVE_NSE2025_VALVE_PASSED;
+    return JTEST_TEST_PASSED;
 }
 
 /*--------------------------------------------------------------------------------*/
-/* Collect all NSE2025_VALVEs in a group */
+/* Collect all tests in a group */
 /*--------------------------------------------------------------------------------*/
 
-JNSE2025_VALVE_DEFINE_GROUP(sin_cos_NSE2025_VALVEs)
+JTEST_DEFINE_GROUP(sin_cos_tests)
 {
     /*
-      To skip a NSE2025_VALVE, comment it out.
+      To skip a test, comment it out.
     */
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_sin_cos_f32_NSE2025_VALVE);
-    JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_sin_cos_q31_NSE2025_VALVE);
+    JTEST_TEST_CALL(arm_sin_cos_f32_test);
+    JTEST_TEST_CALL(arm_sin_cos_q31_test);
 }

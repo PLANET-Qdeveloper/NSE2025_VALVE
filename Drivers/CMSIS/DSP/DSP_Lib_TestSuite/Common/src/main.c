@@ -1,5 +1,5 @@
-#include "jNSE2025_VALVE.h"
-#include "all_NSE2025_VALVEs.h"
+#include "jtest.h"
+#include "all_tests.h"
 #include "arm_math.h"
 
 
@@ -18,10 +18,10 @@ int main(void)
 {
     debug_init();
 
-    JNSE2025_VALVE_INIT();               /* Initialize NSE2025_VALVE framework. */
+    JTEST_INIT();               /* Initialize test framework. */
 
-    JNSE2025_VALVE_GROUP_CALL(all_NSE2025_VALVEs); /* Run all NSE2025_VALVEs. */
+    JTEST_GROUP_CALL(all_tests); /* Run all tests. */
 
-    JNSE2025_VALVE_ACT_EXIT_FW();        /* Exit NSE2025_VALVE framework.  */
+    JTEST_ACT_EXIT_FW();        /* Exit test framework.  */
     while (1);                   /* Never return. */
 }

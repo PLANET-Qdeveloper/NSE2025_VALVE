@@ -1,9 +1,9 @@
-#include "jNSE2025_VALVE.h"
-#include "filtering_NSE2025_VALVE_data.h"
+#include "jtest.h"
+#include "filtering_test_data.h"
 #include "arr_desc.h"
 #include "arm_math.h"           /* FUTs */
 #include "ref.h"                /* Reference Functions */
-#include "NSE2025_VALVE_templates.h"
+#include "test_templates.h"
 #include "filtering_templates.h"
 #include "type_abbrev.h"
 
@@ -12,8 +12,8 @@ static const float32_t mu2_f32 = 1.0f;
 static const q31_t mu_q31 = 0x7fffffff;
 static const q15_t mu_q15 = 0x7fff;
 
-#define LMS_DEFINE_NSE2025_VALVE(suffix, config_suffix, output_type, mu)                        \
-   JNSE2025_VALVE_DEFINE_NSE2025_VALVE(arm_lms##config_suffix##_##suffix##_NSE2025_VALVE,                         \
+#define LMS_DEFINE_TEST(suffix, config_suffix, output_type, mu)                        \
+   JTEST_DEFINE_TEST(arm_lms##config_suffix##_##suffix##_test,                         \
          arm_lms##config_suffix##_##suffix)                                            \
    {                                                                                   \
       arm_lms##config_suffix##_instance_##suffix lms_inst_fut = { 0 };                 \
@@ -55,8 +55,8 @@ static const q15_t mu_q15 = 0x7fff;
                         *((output_type*)filtering_##suffix##_inputs + i) / 200.0f;     \
                }                                                                       \
                                                                                        \
-               /* Display NSE2025_VALVE parameter values */                                     \
-               JNSE2025_VALVE_DUMP_STRF("Block Size: %d\n"                                      \
+               /* Display test parameter values */                                     \
+               JTEST_DUMP_STRF("Block Size: %d\n"                                      \
                                "Number of Taps: %d\n",                                 \
                                (int)blockSize,                                         \
                                (int)numTaps);                                          \
@@ -67,7 +67,7 @@ static const q15_t mu_q15 = 0x7fff;
                      (output_type*)filtering_coeffs_lms,                               \
                      (void *) filtering_pState, mu, blockSize);                        \
                                                                                        \
-               JNSE2025_VALVE_COUNT_CYCLES(                                                     \
+               JTEST_COUNT_CYCLES(                                                     \
                      arm_lms##config_suffix##_##suffix(                                \
                            &lms_inst_fut,                                              \
                            (void *) filtering_output_f32_fut,                          \
@@ -98,11 +98,11 @@ static const q15_t mu_q15 = 0x7fff;
                      blockSize,                                                        \
                      output_type)));                                                   \
                                                                                        \
-            return JNSE2025_VALVE_NSE2025_VALVE_PASSED;                                                  \
+            return JTEST_TEST_PASSED;                                                  \
    }
 
-#define LMS_WITH_POSTSHIFT_DEFINE_NSE2025_VALVE(suffix, config_suffix, output_type)             \
-   JNSE2025_VALVE_DEFINE_NSE2025_VALVE(arm_lms##config_suffix##_##suffix##_NSE2025_VALVE,                         \
+#define LMS_WITH_POSTSHIFT_DEFINE_TEST(suffix, config_suffix, output_type)             \
+   JTEST_DEFINE_TEST(arm_lms##config_suffix##_##suffix##_test,                         \
          arm_lms##config_suffix##_##suffix)                                            \
    {                                                                                   \
       arm_lms##config_suffix##_instance_##suffix lms_inst_fut = { 0 };                 \
@@ -144,8 +144,8 @@ static const q15_t mu_q15 = 0x7fff;
                            *((output_type*)filtering_##suffix##_inputs + i) >> 6;      \
                   }                                                                    \
                                                                                        \
-                  /* Display NSE2025_VALVE parameter values */                                  \
-                  JNSE2025_VALVE_DUMP_STRF("Block Size: %d\n"                                   \
+                  /* Display test parameter values */                                  \
+                  JTEST_DUMP_STRF("Block Size: %d\n"                                   \
                                   "Number of Taps: %d\n"                               \
                                   "Post Shift: %d\n",                                  \
                                   (int)blockSize,                                      \
@@ -158,7 +158,7 @@ static const q15_t mu_q15 = 0x7fff;
                         (output_type*)filtering_coeffs_lms,                            \
                         (void *) filtering_pState, mu_##suffix, blockSize, postShift); \
                                                                                        \
-                  JNSE2025_VALVE_COUNT_CYCLES(                                                  \
+                  JTEST_COUNT_CYCLES(                                                  \
                         arm_lms##config_suffix##_##suffix(                             \
                               &lms_inst_fut,                                           \
                               (void *) filtering_output_f32_fut,                       \
@@ -189,31 +189,31 @@ static const q15_t mu_q15 = 0x7fff;
                         blockSize,                                                     \
                         output_type))));                                               \
                                                                                        \
-            return JNSE2025_VALVE_NSE2025_VALVE_PASSED;                                                  \
+            return JTEST_TEST_PASSED;                                                  \
    }
 
-LMS_DEFINE_NSE2025_VALVE(f32,,float32_t, mu_f32);
-LMS_WITH_POSTSHIFT_DEFINE_NSE2025_VALVE(q31,,q31_t);
-LMS_WITH_POSTSHIFT_DEFINE_NSE2025_VALVE(q15,,q15_t);
+LMS_DEFINE_TEST(f32,,float32_t, mu_f32);
+LMS_WITH_POSTSHIFT_DEFINE_TEST(q31,,q31_t);
+LMS_WITH_POSTSHIFT_DEFINE_TEST(q15,,q15_t);
 
-LMS_DEFINE_NSE2025_VALVE(f32,_norm,float32_t, mu2_f32);
-LMS_WITH_POSTSHIFT_DEFINE_NSE2025_VALVE(q31,_norm,q31_t);
-LMS_WITH_POSTSHIFT_DEFINE_NSE2025_VALVE(q15,_norm,q15_t);
+LMS_DEFINE_TEST(f32,_norm,float32_t, mu2_f32);
+LMS_WITH_POSTSHIFT_DEFINE_TEST(q31,_norm,q31_t);
+LMS_WITH_POSTSHIFT_DEFINE_TEST(q15,_norm,q15_t);
 
 /*--------------------------------------------------------------------------------*/
-/* Collect all NSE2025_VALVEs in a group. */
+/* Collect all tests in a group. */
 /*--------------------------------------------------------------------------------*/
 
-JNSE2025_VALVE_DEFINE_GROUP(lms_NSE2025_VALVEs)
+JTEST_DEFINE_GROUP(lms_tests)
 {
     /*
-      To skip a NSE2025_VALVE, comment it out.
+      To skip a test, comment it out.
     */
-   JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_lms_f32_NSE2025_VALVE);
-   JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_lms_q31_NSE2025_VALVE);
-   JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_lms_q15_NSE2025_VALVE);
+   JTEST_TEST_CALL(arm_lms_f32_test);
+   JTEST_TEST_CALL(arm_lms_q31_test);
+   JTEST_TEST_CALL(arm_lms_q15_test);
 
-   JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_lms_norm_f32_NSE2025_VALVE);
-   JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_lms_norm_q31_NSE2025_VALVE);
-   JNSE2025_VALVE_NSE2025_VALVE_CALL(arm_lms_norm_q15_NSE2025_VALVE);
+   JTEST_TEST_CALL(arm_lms_norm_f32_test);
+   JTEST_TEST_CALL(arm_lms_norm_q31_test);
+   JTEST_TEST_CALL(arm_lms_norm_q15_test);
 }

@@ -1897,7 +1897,7 @@ HAL_StatusTypeDef HAL_ADC_PollForEvent(ADC_HandleTypeDef* hadc, uint32_t EventTy
   {
   /* Analog watchdog (level out of window) event */
   /* Note: In case of several analog watchdog enabled, if needed to know      */
-  /* which one triggered and on which ADCx, NSE2025_VALVE ADC state of analog watchdog */
+  /* which one triggered and on which ADCx, test ADC state of analog watchdog */
   /* flags HAL_ADC_STATE_AWD1/2U/3 using function "HAL_ADC_GetState()".        */
   /* For example:                                                             */
   /*  " if (HAL_IS_BIT_SET(HAL_ADC_GetState(hadc1), HAL_ADC_STATE_AWD1)) "    */

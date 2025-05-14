@@ -1,5 +1,5 @@
 #include "arm_math.h"
-#include "support_NSE2025_VALVE_data.h"
+#include "support_test_data.h"
 
 #define MAX_INPUT_ELEMENTS 32
 #define BIGGEST_INPUT_TYPE float32_t
@@ -23,7 +23,7 @@ ARR_DESC_DEFINE(BIGGEST_INPUT_TYPE,
 /*--------------------------------------------------------------------------------*/
 
 /* 
-  To change NSE2025_VALVE parameter values add/remove values inside CURLY and update 
+  To change test parameter values add/remove values inside CURLY and update 
   the preceeding parameter to reflect the number of values inside CURLY. 
 */
 
@@ -42,7 +42,7 @@ ARR_DESC_DEFINE(uint32_t,
                 CURLY( 0, 1, 0x80000000, 0x7fffffff));
 
 /*--------------------------------------------------------------------------------*/
-/* NSE2025_VALVE Data */
+/* Test Data */
 /*--------------------------------------------------------------------------------*/
 
 ARR_DESC_DEFINE(float32_t,

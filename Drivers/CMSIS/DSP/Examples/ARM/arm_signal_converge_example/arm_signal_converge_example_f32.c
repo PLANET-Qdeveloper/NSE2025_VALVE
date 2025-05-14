@@ -66,7 +66,7 @@
  * \par
  * The adaptive filter converges properly even if the input signal has a large dynamic
  * range (i.e., varies from small to large values). The coefficients of the adaptive filter
- * are initially zero, and then converge over 1536 samples. The internal function NSE2025_VALVE_signal_converge()
+ * are initially zero, and then converge over 1536 samples. The internal function test_signal_converge()
  * implements the stopping condition. The function checks if all of the values of the error signal have a
  * magnitude below a threshold DELTA.
  *
@@ -77,7 +77,7 @@
  *
  * \par Variables Description:
  * \par
- * \li \c NSE2025_VALVEInput_f32 points to the input data
+ * \li \c testInput_f32 points to the input data
  * \li \c firStateF32 points to FIR state buffer
  * \li \c lmsStateF32 points to Normalised Least mean square FIR filter state buffer
  * \li \c FIRCoeff_f32 points to coefficient buffer
@@ -113,14 +113,14 @@
 ** Global defines for the simulation
 * ------------------------------------------------------------------- */
 
-#define NSE2025_VALVE_LENGTH_SAMPLES 1536
+#define TEST_LENGTH_SAMPLES 1536
 #define NUMTAPS               32
 #define BLOCKSIZE             32
 #define DELTA_ERROR         0.000001f
 #define DELTA_COEFF         0.0001f
 #define MU                  0.5f
 
-#define NUMFRAMES (NSE2025_VALVE_LENGTH_SAMPLES / BLOCKSIZE)
+#define NUMFRAMES (TEST_LENGTH_SAMPLES / BLOCKSIZE)
 
 /* ----------------------------------------------------------------------
 * Declare FIR state buffers and structure
@@ -134,7 +134,7 @@ arm_fir_instance_f32 LPF_instance;
 * ------------------------------------------------------------------- */
 
 float32_t lmsStateF32[NUMTAPS + BLOCKSIZE];
-float32_t errOutput[NSE2025_VALVE_LENGTH_SAMPLES];
+float32_t errOutput[TEST_LENGTH_SAMPLES];
 arm_lms_norm_instance_f32 lmsNorm_instance;
 
 
@@ -142,13 +142,13 @@ arm_lms_norm_instance_f32 lmsNorm_instance;
 * Function Declarations for Signal Convergence Example
 * ------------------------------------------------------------------- */
 
-arm_status NSE2025_VALVE_signal_converge_example( void );
+arm_status test_signal_converge_example( void );
 
 
 /* ----------------------------------------------------------------------
 * Internal functions
 * ------------------------------------------------------------------- */
-arm_status NSE2025_VALVE_signal_converge(float32_t* err_signal,
+arm_status test_signal_converge(float32_t* err_signal,
                         uint32_t blockSize);
 
 void getinput(float32_t* input,
@@ -156,9 +156,9 @@ void getinput(float32_t* input,
           uint32_t blockSize);
 
 /* ----------------------------------------------------------------------
-* External Declarations for FIR F32 module NSE2025_VALVE
+* External Declarations for FIR F32 module Test
 * ------------------------------------------------------------------- */
-extern float32_t NSE2025_VALVEInput_f32[NSE2025_VALVE_LENGTH_SAMPLES];
+extern float32_t testInput_f32[TEST_LENGTH_SAMPLES];
 extern float32_t lmsNormCoeff_f32[32];
 extern const float32_t FIRCoeff_f32[32];
 extern arm_lms_norm_instance_f32 lmsNorm_instance;
@@ -173,7 +173,7 @@ float32_t wire3[BLOCKSIZE];
 float32_t err_signal[BLOCKSIZE];
 
 /* ----------------------------------------------------------------------
-* Signal converge NSE2025_VALVE
+* Signal converge test
 * ------------------------------------------------------------------- */
 
 int32_t main(void)
@@ -197,7 +197,7 @@ int32_t main(void)
   for(i=0; i < NUMFRAMES; i++)
   {
     /* Read the input data - uniformly distributed random noise - into wire1 */
-    arm_copy_f32(NSE2025_VALVEInput_f32 + (i * BLOCKSIZE), wire1, BLOCKSIZE);
+    arm_copy_f32(testInput_f32 + (i * BLOCKSIZE), wire1, BLOCKSIZE);
 
     /* Execute the FIR processing function.  Input wire1 and output wire2 */
     arm_fir_f32(&LPF_instance, wire1, wire2, BLOCKSIZE);
@@ -218,7 +218,7 @@ int32_t main(void)
   status = ARM_MATH_SUCCESS;
 
   /* -------------------------------------------------------------------------------
-  * NSE2025_VALVE whether the error signal has reached towards 0.
+  * Test whether the error signal has reached towards 0.
   * ----------------------------------------------------------------------------- */
 
   arm_abs_f32(err_signal, err_signal, BLOCKSIZE);
@@ -226,11 +226,11 @@ int32_t main(void)
 
   if (minValue > DELTA_ERROR)
   {
-    status = ARM_MATH_NSE2025_VALVE_FAILURE;
+    status = ARM_MATH_TEST_FAILURE;
   }
 
   /* ----------------------------------------------------------------------
-  * NSE2025_VALVE whether the filter coefficients have converged.
+  * Test whether the filter coefficients have converged.
   * ------------------------------------------------------------------- */
 
   arm_sub_f32((float32_t *)FIRCoeff_f32, lmsNormCoeff_f32, lmsNormCoeff_f32, NUMTAPS);
@@ -240,12 +240,12 @@ int32_t main(void)
 
   if (minValue > DELTA_COEFF)
   {
-    status = ARM_MATH_NSE2025_VALVE_FAILURE;
+    status = ARM_MATH_TEST_FAILURE;
   }
 
   /* ----------------------------------------------------------------------
   * Loop here if the signals did not pass the convergence check.
-  * This denotes a NSE2025_VALVE failure
+  * This denotes a test failure
   * ------------------------------------------------------------------- */
 
   if ( status != ARM_MATH_SUCCESS)

@@ -1,14 +1,14 @@
-#ifndef _COMPLEX_MATH_NSE2025_VALVES_H_
-#define _COMPLEX_MATH_NSE2025_VALVES_H_
+#ifndef _COMPLEX_MATH_TESTS_H_
+#define _COMPLEX_MATH_TESTS_H_
 
 /*--------------------------------------------------------------------------------*/
-/* NSE2025_VALVE/Group Declarations */
+/* Test/Group Declarations */
 /*--------------------------------------------------------------------------------*/
-JNSE2025_VALVE_DECLARE_GROUP(cmplx_conj_NSE2025_VALVEs);
-JNSE2025_VALVE_DECLARE_GROUP(cmplx_dot_prod_NSE2025_VALVEs);
-JNSE2025_VALVE_DECLARE_GROUP(cmplx_mag_NSE2025_VALVEs);
-JNSE2025_VALVE_DECLARE_GROUP(cmplx_mag_squared_NSE2025_VALVEs);
-JNSE2025_VALVE_DECLARE_GROUP(cmplx_mult_cmplx_NSE2025_VALVEs);
-JNSE2025_VALVE_DECLARE_GROUP(cmplx_mult_real_NSE2025_VALVEs);
+JTEST_DECLARE_GROUP(cmplx_conj_tests);
+JTEST_DECLARE_GROUP(cmplx_dot_prod_tests);
+JTEST_DECLARE_GROUP(cmplx_mag_tests);
+JTEST_DECLARE_GROUP(cmplx_mag_squared_tests);
+JTEST_DECLARE_GROUP(cmplx_mult_cmplx_tests);
+JTEST_DECLARE_GROUP(cmplx_mult_real_tests);
 
-#endif /* _COMPLEX_MATH_NSE2025_VALVES_H_ */
+#endif /* _COMPLEX_MATH_TESTS_H_ */

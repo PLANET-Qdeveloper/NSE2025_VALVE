@@ -1,10 +1,10 @@
-#include "jNSE2025_VALVE.h"
-#include "support_NSE2025_VALVEs.h"
+#include "jtest.h"
+#include "support_tests.h"
 
-JNSE2025_VALVE_DEFINE_GROUP(support_NSE2025_VALVEs)
+JTEST_DEFINE_GROUP(support_tests)
 {
-    JNSE2025_VALVE_GROUP_CALL(copy_NSE2025_VALVEs);
-    JNSE2025_VALVE_GROUP_CALL(fill_NSE2025_VALVEs);
-    JNSE2025_VALVE_GROUP_CALL(x_to_y_NSE2025_VALVEs);
+    JTEST_GROUP_CALL(copy_tests);
+    JTEST_GROUP_CALL(fill_tests);
+    JTEST_GROUP_CALL(x_to_y_tests);
     return;
 }

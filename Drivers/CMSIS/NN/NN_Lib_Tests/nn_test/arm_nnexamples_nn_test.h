@@ -10,25 +10,25 @@
 #include "arm_nnfunctions.h"
 #include "ref_functions.h"
 
-extern int NSE2025_VALVE_index;
-extern q7_t NSE2025_VALVE_flags[50];
+extern int test_index;
+extern q7_t test_flags[50];
 
-void initialize_results_q7(q7_t *ref, q7_t *opt, int length)
+void initialize_results_q7(q7_t * ref, q7_t * opt, int length)
 {
     arm_fill_q7(0, ref, length);
     arm_fill_q7(37, opt, length);
 }
 
-void initialize_results_q15(q15_t *ref, q15_t *opt, int length)
+void initialize_results_q15(q15_t * ref, q15_t * opt, int length)
 {
     arm_fill_q15(0, ref, length);
     arm_fill_q15(0x5F5, opt, length);
 }
 
-void verify_results_q7(q7_t *ref, q7_t *opt, int length)
+void verify_results_q7(q7_t * ref, q7_t * opt, int length)
 {
 
-    bool if_match = true;
+    bool      if_match = true;
 
     for (int i = 0; i < length; i++)
     {
@@ -43,18 +43,17 @@ void verify_results_q7(q7_t *ref, q7_t *opt, int length)
     if (if_match == true)
     {
         printf("Outputs match.\r\n\r\n");
-        NSE2025_VALVE_flags[NSE2025_VALVE_index++] = 0;
+        test_flags[test_index++] = 0;
+    } else {
+        test_flags[test_index++] = 1;
     }
-    else
-    {
-        NSE2025_VALVE_flags[NSE2025_VALVE_index++] = 1;
-    }
+
 }
 
-void verify_results_q15(q15_t *ref, q15_t *opt, int length)
+void verify_results_q15(q15_t * ref, q15_t * opt, int length)
 {
 
-    bool if_match = true;
+    bool      if_match = true;
 
     for (int i = 0; i < length; i++)
     {
@@ -69,12 +68,11 @@ void verify_results_q15(q15_t *ref, q15_t *opt, int length)
     if (if_match == true)
     {
         printf("Outputs match.\r\n\r\n");
-        NSE2025_VALVE_flags[NSE2025_VALVE_index++] = 0;
+        test_flags[test_index++] = 0;
+    } else {
+        test_flags[test_index++] = 1;
     }
-    else
-    {
-        NSE2025_VALVE_flags[NSE2025_VALVE_index++] = 1;
-    }
+
 }
 
 #endif

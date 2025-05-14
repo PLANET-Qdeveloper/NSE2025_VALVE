@@ -345,13 +345,13 @@ void LL_RTC_TIME_StructInit(LL_RTC_TimeTypeDef *RTC_TimeStruct)
   * @param  RTC_Format This parameter can be one of the following values:
   *         @arg @ref LL_RTC_FORMAT_BIN
   *         @arg @ref LL_RTC_FORMAT_BCD
-  * @param  RTC_DaNSE2025_VALVEruct pointer to a RTC_DateTypeDef structure that contains
+  * @param  RTC_DateStruct pointer to a RTC_DateTypeDef structure that contains
   *                         the date configuration information for the RTC.
   * @retval An ErrorStatus enumeration value:
   *          - SUCCESS: RTC Day register is configured
   *          - ERROR: RTC Day register is not configured
   */
-ErrorStatus LL_RTC_DATE_Init(RTC_TypeDef *RTCx, uint32_t RTC_Format, LL_RTC_DateTypeDef *RTC_DaNSE2025_VALVEruct)
+ErrorStatus LL_RTC_DATE_Init(RTC_TypeDef *RTCx, uint32_t RTC_Format, LL_RTC_DateTypeDef *RTC_DateStruct)
 {
   ErrorStatus status = ERROR;
 
@@ -359,23 +359,23 @@ ErrorStatus LL_RTC_DATE_Init(RTC_TypeDef *RTCx, uint32_t RTC_Format, LL_RTC_Date
   assert_param(IS_RTC_ALL_INSTANCE(RTCx));
   assert_param(IS_LL_RTC_FORMAT(RTC_Format));
 
-  if ((RTC_Format == LL_RTC_FORMAT_BIN) && ((RTC_DaNSE2025_VALVEruct->Month & 0x10U) == 0x10U))
+  if ((RTC_Format == LL_RTC_FORMAT_BIN) && ((RTC_DateStruct->Month & 0x10U) == 0x10U))
   {
-    RTC_DaNSE2025_VALVEruct->Month = (uint8_t)(RTC_DaNSE2025_VALVEruct->Month & (uint8_t)~(0x10U)) + 0x0AU;
+    RTC_DateStruct->Month = (uint8_t)(RTC_DateStruct->Month & (uint8_t)~(0x10U)) + 0x0AU;
   }
   if (RTC_Format == LL_RTC_FORMAT_BIN)
   {
-    assert_param(IS_LL_RTC_YEAR(RTC_DaNSE2025_VALVEruct->Year));
-    assert_param(IS_LL_RTC_MONTH(RTC_DaNSE2025_VALVEruct->Month));
-    assert_param(IS_LL_RTC_DAY(RTC_DaNSE2025_VALVEruct->Day));
+    assert_param(IS_LL_RTC_YEAR(RTC_DateStruct->Year));
+    assert_param(IS_LL_RTC_MONTH(RTC_DateStruct->Month));
+    assert_param(IS_LL_RTC_DAY(RTC_DateStruct->Day));
   }
   else
   {
-    assert_param(IS_LL_RTC_YEAR(__LL_RTC_CONVERT_BCD2BIN(RTC_DaNSE2025_VALVEruct->Year)));
-    assert_param(IS_LL_RTC_MONTH(__LL_RTC_CONVERT_BCD2BIN(RTC_DaNSE2025_VALVEruct->Month)));
-    assert_param(IS_LL_RTC_DAY(__LL_RTC_CONVERT_BCD2BIN(RTC_DaNSE2025_VALVEruct->Day)));
+    assert_param(IS_LL_RTC_YEAR(__LL_RTC_CONVERT_BCD2BIN(RTC_DateStruct->Year)));
+    assert_param(IS_LL_RTC_MONTH(__LL_RTC_CONVERT_BCD2BIN(RTC_DateStruct->Month)));
+    assert_param(IS_LL_RTC_DAY(__LL_RTC_CONVERT_BCD2BIN(RTC_DateStruct->Day)));
   }
-  assert_param(IS_LL_RTC_WEEKDAY(RTC_DaNSE2025_VALVEruct->WeekDay));
+  assert_param(IS_LL_RTC_WEEKDAY(RTC_DateStruct->WeekDay));
 
   /* Disable the write protection for RTC registers */
   LL_RTC_DisableWriteProtection(RTCx);
@@ -386,12 +386,12 @@ ErrorStatus LL_RTC_DATE_Init(RTC_TypeDef *RTCx, uint32_t RTC_Format, LL_RTC_Date
     /* Check the input parameters format */
     if (RTC_Format != LL_RTC_FORMAT_BIN)
     {
-      LL_RTC_DATE_Config(RTCx, RTC_DaNSE2025_VALVEruct->WeekDay, RTC_DaNSE2025_VALVEruct->Day, RTC_DaNSE2025_VALVEruct->Month, RTC_DaNSE2025_VALVEruct->Year);
+      LL_RTC_DATE_Config(RTCx, RTC_DateStruct->WeekDay, RTC_DateStruct->Day, RTC_DateStruct->Month, RTC_DateStruct->Year);
     }
     else
     {
-      LL_RTC_DATE_Config(RTCx, RTC_DaNSE2025_VALVEruct->WeekDay, __LL_RTC_CONVERT_BIN2BCD(RTC_DaNSE2025_VALVEruct->Day),
-                         __LL_RTC_CONVERT_BIN2BCD(RTC_DaNSE2025_VALVEruct->Month), __LL_RTC_CONVERT_BIN2BCD(RTC_DaNSE2025_VALVEruct->Year));
+      LL_RTC_DATE_Config(RTCx, RTC_DateStruct->WeekDay, __LL_RTC_CONVERT_BIN2BCD(RTC_DateStruct->Day),
+                         __LL_RTC_CONVERT_BIN2BCD(RTC_DateStruct->Month), __LL_RTC_CONVERT_BIN2BCD(RTC_DateStruct->Year));
     }
 
     /* Exit Initialization mode */
@@ -415,16 +415,16 @@ ErrorStatus LL_RTC_DATE_Init(RTC_TypeDef *RTCx, uint32_t RTC_Format, LL_RTC_Date
 
 /**
   * @brief  Set each @ref LL_RTC_DateTypeDef field to default value (date = Monday, January 01 xx00)
-  * @param  RTC_DaNSE2025_VALVEruct pointer to a @ref LL_RTC_DateTypeDef structure which will be initialized.
+  * @param  RTC_DateStruct pointer to a @ref LL_RTC_DateTypeDef structure which will be initialized.
   * @retval None
   */
-void LL_RTC_DATE_StructInit(LL_RTC_DateTypeDef *RTC_DaNSE2025_VALVEruct)
+void LL_RTC_DATE_StructInit(LL_RTC_DateTypeDef *RTC_DateStruct)
 {
   /* Monday, January 01 xx00 */
-  RTC_DaNSE2025_VALVEruct->WeekDay = LL_RTC_WEEKDAY_MONDAY;
-  RTC_DaNSE2025_VALVEruct->Day     = 1U;
-  RTC_DaNSE2025_VALVEruct->Month   = LL_RTC_MONTH_JANUARY;
-  RTC_DaNSE2025_VALVEruct->Year    = 0U;
+  RTC_DateStruct->WeekDay = LL_RTC_WEEKDAY_MONDAY;
+  RTC_DateStruct->Day     = 1U;
+  RTC_DateStruct->Month   = LL_RTC_MONTH_JANUARY;
+  RTC_DateStruct->Year    = 0U;
 }
 
 /**

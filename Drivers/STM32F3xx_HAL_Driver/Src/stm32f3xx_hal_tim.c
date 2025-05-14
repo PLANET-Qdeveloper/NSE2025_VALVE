@@ -103,7 +103,7 @@
            (++) Encoder mode output : HAL_TIM_Encoder_Start(), HAL_TIM_Encoder_Start_DMA(), HAL_TIM_Encoder_Start_IT().
 
      (#) The DMA Burst is managed with the two following functions:
-         HAL_TIM_DMABurst_WriNSE2025_VALVEart()
+         HAL_TIM_DMABurst_WriteStart()
          HAL_TIM_DMABurst_ReadStart()
 
     *** Callback registration ***
@@ -4585,13 +4585,13 @@ HAL_StatusTypeDef HAL_TIM_OnePulse_ConfigChannel(TIM_HandleTypeDef *htim,  TIM_O
   * @note   This function should be used only when BurstLength is equal to DMA data transfer length.
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_TIM_DMABurst_WriNSE2025_VALVEart(TIM_HandleTypeDef *htim, uint32_t BurstBaseAddress,
+HAL_StatusTypeDef HAL_TIM_DMABurst_WriteStart(TIM_HandleTypeDef *htim, uint32_t BurstBaseAddress,
                                               uint32_t BurstRequestSrc, const uint32_t *BurstBuffer,
                                               uint32_t  BurstLength)
 {
   HAL_StatusTypeDef status;
 
-  status = HAL_TIM_DMABurst_MultiWriNSE2025_VALVEart(htim, BurstBaseAddress, BurstRequestSrc, BurstBuffer, BurstLength,
+  status = HAL_TIM_DMABurst_MultiWriteStart(htim, BurstBaseAddress, BurstRequestSrc, BurstBuffer, BurstLength,
                                             ((BurstLength) >> 8U) + 1U);
 
 
@@ -4643,7 +4643,7 @@ HAL_StatusTypeDef HAL_TIM_DMABurst_WriNSE2025_VALVEart(TIM_HandleTypeDef *htim, 
   *         between 1 and 0xFFFF.
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_TIM_DMABurst_MultiWriNSE2025_VALVEart(TIM_HandleTypeDef *htim, uint32_t BurstBaseAddress,
+HAL_StatusTypeDef HAL_TIM_DMABurst_MultiWriteStart(TIM_HandleTypeDef *htim, uint32_t BurstBaseAddress,
                                                    uint32_t BurstRequestSrc, const uint32_t *BurstBuffer,
                                                    uint32_t  BurstLength,  uint32_t  DataLength)
 {
@@ -4827,7 +4827,7 @@ HAL_StatusTypeDef HAL_TIM_DMABurst_MultiWriNSE2025_VALVEart(TIM_HandleTypeDef *h
   * @param  BurstRequestSrc TIM DMA Request sources to disable
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_TIM_DMABurst_WriNSE2025_VALVEop(TIM_HandleTypeDef *htim, uint32_t BurstRequestSrc)
+HAL_StatusTypeDef HAL_TIM_DMABurst_WriteStop(TIM_HandleTypeDef *htim, uint32_t BurstRequestSrc)
 {
   HAL_StatusTypeDef status = HAL_OK;
 

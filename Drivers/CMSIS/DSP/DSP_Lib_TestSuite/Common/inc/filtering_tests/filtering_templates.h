@@ -4,14 +4,14 @@
 /*--------------------------------------------------------------------------------*/
 /* Includes */
 /*--------------------------------------------------------------------------------*/
-#include "NSE2025_VALVE_templates.h"
+#include "test_templates.h"
 
 /*--------------------------------------------------------------------------------*/
 /* Group Specific Templates */
 /*--------------------------------------------------------------------------------*/
 
 /*
- * Comparison SNR thresholds for the data types used in statistics_NSE2025_VALVEs.
+ * Comparison SNR thresholds for the data types used in statistics_tests.
  */
 #define FILTERING_SNR_THRESHOLD_float64_t 120
 #define FILTERING_SNR_THRESHOLD_float32_t 99
@@ -24,8 +24,8 @@
  *
  *  @note The outputs are converted to float32_t before comparison.
  */
-#define FILTERING_SNR_COMPARE_INTERFACE(block_size,  \
-                                        output_type) \
+#define FILTERING_SNR_COMPARE_INTERFACE(block_size,                     \
+                                        output_type)                    \
     FILTERING_SNR_COMPARE_INTERFACE_OFFSET(0, block_size, output_type)
 
 /**
@@ -36,37 +36,39 @@
                                                output_type) \
     do                                                      \
     {                                                       \
-        NSE2025_VALVE_CONVERT_AND_ASSERT_SNR(               \
+        TEST_CONVERT_AND_ASSERT_SNR(                        \
             filtering_output_f32_ref,                       \
-            (output_type *)filtering_output_ref + offset,   \
+            (output_type *) filtering_output_ref + offset,  \
             filtering_output_f32_fut,                       \
-            (output_type *)filtering_output_fut + offset,   \
+            (output_type *) filtering_output_fut + offset,  \
             block_size,                                     \
             output_type,                                    \
-            FILTERING_SNR_THRESHOLD_##output_type);         \
-    } while (0)
+            FILTERING_SNR_THRESHOLD_##output_type           \
+            );                                              \
+    } while (0)                                              
 
 /**
  *  Compare reference and fut outputs starting at some offset using SNR.
  *  Special case for float64_t
  */
-#define FILTERING_DBL_SNR_COMPARE_INTERFACE(block_size,  \
-                                            output_type) \
-    do                                                   \
-    {                                                    \
-        NSE2025_VALVE_ASSERT_DBL_SNR(                    \
-            (float64_t *)filtering_output_ref,           \
-            (float64_t *)filtering_output_fut,           \
-            block_size,                                  \
-            FILTERING_SNR_THRESHOLD_##output_type);      \
-    } while (0)
-
+#define FILTERING_DBL_SNR_COMPARE_INTERFACE(block_size,  				\
+                                            output_type) 				\
+    do                                                      		\
+    {                                                       		\
+        TEST_ASSERT_DBL_SNR(                        						\
+            (float64_t*)filtering_output_ref,               \
+            (float64_t*)filtering_output_fut,               \
+            block_size,                                     		\
+            FILTERING_SNR_THRESHOLD_##output_type           		\
+            );                                              		\
+    } while (0)                                              
+		
 /*--------------------------------------------------------------------------------*/
 /* Input Interfaces */
 /*--------------------------------------------------------------------------------*/
 /*
  *  General:
- *  Input interfaces provide inputs to functions inside NSE2025_VALVE templates.  They
+ *  Input interfaces provide inputs to functions inside test templates.  They
  *  ONLY provide the inputs.  The output variables should be hard coded.
  *
  *  The input interfaces must have the following format:
@@ -79,8 +81,11 @@
  *  functions arm_add_q31.
  */
 
+
 /*--------------------------------------------------------------------------------*/
-/* NSE2025_VALVE Templates */
+/* Test Templates */
 /*--------------------------------------------------------------------------------*/
+
+
 
 #endif /* _FILTERING_TEMPLATES_H_ */

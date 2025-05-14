@@ -92,9 +92,9 @@
  *
  * \par Variables Description:
  * \par
- * \li \c NSE2025_VALVEInput_f32 points to the input data
- * \li \c NSE2025_VALVERefOutput_f32 points to the reference output data
- * \li \c NSE2025_VALVEOutput points to the NSE2025_VALVE output data
+ * \li \c testInput_f32 points to the input data
+ * \li \c testRefOutput_f32 points to the reference output data
+ * \li \c testOutput points to the test output data
  * \li \c inputQ31 temporary input buffer
  * \li \c outputQ31 temporary output buffer
  * \li \c biquadStateBand1Q31 points to state buffer for band1
@@ -129,14 +129,14 @@
 #include "arm_math.h"
 #include "math_helper.h"
 
-/* Length of the overall data in the NSE2025_VALVE */
-#define NSE2025_VALVELENGTH 320
+/* Length of the overall data in the test */
+#define TESTLENGTH 320
 
 /* Block size for the underlying processing */
 #define BLOCKSIZE 32
 
 /* Total number of blocks to run */
-#define NUMBLOCKS (NSE2025_VALVELENGTH/BLOCKSIZE)
+#define NUMBLOCKS (TESTLENGTH/BLOCKSIZE)
 
 /* Number of 2nd order Biquad stages per filter */
 #define NUMSTAGES 2
@@ -147,10 +147,10 @@
  * External Declarations for Input and Output buffers
  * ------------------------------------------------------------------- */
 
-extern float32_t NSE2025_VALVEInput_f32[NSE2025_VALVELENGTH];
-static float32_t NSE2025_VALVEOutput[NSE2025_VALVELENGTH];
+extern float32_t testInput_f32[TESTLENGTH];
+static float32_t testOutput[TESTLENGTH];
 
-extern float32_t NSE2025_VALVERefOutput_f32[NSE2025_VALVELENGTH];
+extern float32_t testRefOutput_f32[TESTLENGTH];
 
 /* ----------------------------------------------------------------------
 ** Q31 state buffers for Band1, Band2, Band3, Band4, Band5
@@ -309,8 +309,8 @@ int32_t main(void)
   int i;
   int32_t status;
 
-  inputF32 = &NSE2025_VALVEInput_f32[0];
-  outputF32 = &NSE2025_VALVEOutput[0];
+  inputF32 = &testInput_f32[0];
+  outputF32 = &testOutput[0];
 
   /* Initialize the state and coefficient buffers for all Biquad sections */
 
@@ -382,11 +382,11 @@ int32_t main(void)
     arm_scale_f32(outputF32 + (i * BLOCKSIZE), 8.0f, outputF32 + (i * BLOCKSIZE), BLOCKSIZE);
   };
 
-  snr = arm_snr_f32(NSE2025_VALVERefOutput_f32, NSE2025_VALVEOutput, NSE2025_VALVELENGTH);
+  snr = arm_snr_f32(testRefOutput_f32, testOutput, TESTLENGTH);
 
   if (snr < SNR_THRESHOLD_F32)
   {
-    status = ARM_MATH_NSE2025_VALVE_FAILURE;
+    status = ARM_MATH_TEST_FAILURE;
   }
   else
   {

@@ -1,13 +1,13 @@
-#ifndef _TRANSFORM_NSE2025_VALVES_H_
-#define _TRANSFORM_NSE2025_VALVES_H_
+#ifndef _TRANSFORM_TESTS_H_
+#define _TRANSFORM_TESTS_H_
 
 /*--------------------------------------------------------------------------------*/
-/* NSE2025_VALVE/Group Declarations */
+/* Test/Group Declarations */
 /*--------------------------------------------------------------------------------*/
-JNSE2025_VALVE_DECLARE_GROUP(cfft_NSE2025_VALVEs);
-JNSE2025_VALVE_DECLARE_GROUP(cfft_family_NSE2025_VALVEs);
-JNSE2025_VALVE_DECLARE_GROUP(dct4_NSE2025_VALVEs);
-JNSE2025_VALVE_DECLARE_GROUP(rfft_NSE2025_VALVEs);
-JNSE2025_VALVE_DECLARE_GROUP(rfft_fast_NSE2025_VALVEs);
+JTEST_DECLARE_GROUP(cfft_tests);
+JTEST_DECLARE_GROUP(cfft_family_tests);
+JTEST_DECLARE_GROUP(dct4_tests);
+JTEST_DECLARE_GROUP(rfft_tests);
+JTEST_DECLARE_GROUP(rfft_fast_tests);
 
-#endif /* _TRANSFORM_NSE2025_VALVES_H_ */
+#endif /* _TRANSFORM_TESTS_H_ */

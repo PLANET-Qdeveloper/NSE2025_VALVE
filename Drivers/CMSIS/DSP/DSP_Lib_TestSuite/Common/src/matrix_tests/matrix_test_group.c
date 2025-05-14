@@ -1,19 +1,19 @@
-#include "jNSE2025_VALVE.h"
-#include "matrix_NSE2025_VALVEs.h"
+#include "jtest.h"
+#include "matrix_tests.h"
 
-JNSE2025_VALVE_DEFINE_GROUP(matrix_NSE2025_VALVEs)
+JTEST_DEFINE_GROUP(matrix_tests)
 {
     /*
-      To skip a NSE2025_VALVE, comment it out.
+      To skip a test, comment it out.
     */
-    JNSE2025_VALVE_GROUP_CALL(mat_add_NSE2025_VALVEs);
-    JNSE2025_VALVE_GROUP_CALL(mat_cmplx_mult_NSE2025_VALVEs);
-    JNSE2025_VALVE_GROUP_CALL(mat_init_NSE2025_VALVEs);
-    JNSE2025_VALVE_GROUP_CALL(mat_inverse_NSE2025_VALVEs);
-    JNSE2025_VALVE_GROUP_CALL(mat_mult_NSE2025_VALVEs);
-    JNSE2025_VALVE_GROUP_CALL(mat_mult_fast_NSE2025_VALVEs);
-    JNSE2025_VALVE_GROUP_CALL(mat_sub_NSE2025_VALVEs);
-    JNSE2025_VALVE_GROUP_CALL(mat_trans_NSE2025_VALVEs);
-    JNSE2025_VALVE_GROUP_CALL(mat_scale_NSE2025_VALVEs);
+    JTEST_GROUP_CALL(mat_add_tests);
+    JTEST_GROUP_CALL(mat_cmplx_mult_tests);
+    JTEST_GROUP_CALL(mat_init_tests);
+    JTEST_GROUP_CALL(mat_inverse_tests);
+    JTEST_GROUP_CALL(mat_mult_tests);
+    JTEST_GROUP_CALL(mat_mult_fast_tests);
+    JTEST_GROUP_CALL(mat_sub_tests);
+    JTEST_GROUP_CALL(mat_trans_tests);
+    JTEST_GROUP_CALL(mat_scale_tests);
     return;
 }

@@ -1,17 +1,17 @@
-#ifndef _BASIC_MATH_NSE2025_VALVES_H_
-#define _BASIC_MATH_NSE2025_VALVES_H_
+#ifndef _BASIC_MATH_TESTS_H_
+#define _BASIC_MATH_TESTS_H_
 
 /*--------------------------------------------------------------------------------*/
-/* NSE2025_VALVE/Group Declarations */
+/* Test/Group Declarations */
 /*--------------------------------------------------------------------------------*/
-JNSE2025_VALVE_DECLARE_GROUP(abs_NSE2025_VALVEs);
-JNSE2025_VALVE_DECLARE_GROUP(add_NSE2025_VALVEs);
-JNSE2025_VALVE_DECLARE_GROUP(dot_prod_NSE2025_VALVEs);
-JNSE2025_VALVE_DECLARE_GROUP(mult_NSE2025_VALVEs);
-JNSE2025_VALVE_DECLARE_GROUP(negate_NSE2025_VALVEs);
-JNSE2025_VALVE_DECLARE_GROUP(offset_NSE2025_VALVEs);
-JNSE2025_VALVE_DECLARE_GROUP(scale_NSE2025_VALVEs);
-JNSE2025_VALVE_DECLARE_GROUP(shift_NSE2025_VALVEs);
-JNSE2025_VALVE_DECLARE_GROUP(sub_NSE2025_VALVEs);
+JTEST_DECLARE_GROUP(abs_tests);
+JTEST_DECLARE_GROUP(add_tests);
+JTEST_DECLARE_GROUP(dot_prod_tests);
+JTEST_DECLARE_GROUP(mult_tests);
+JTEST_DECLARE_GROUP(negate_tests);
+JTEST_DECLARE_GROUP(offset_tests);
+JTEST_DECLARE_GROUP(scale_tests);
+JTEST_DECLARE_GROUP(shift_tests);
+JTEST_DECLARE_GROUP(sub_tests);
 
-#endif /* _BASIC_MATH_NSE2025_VALVES_H_ */
+#endif /* _BASIC_MATH_TESTS_H_ */

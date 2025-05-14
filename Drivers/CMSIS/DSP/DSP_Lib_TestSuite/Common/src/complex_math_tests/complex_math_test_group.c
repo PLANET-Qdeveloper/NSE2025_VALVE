@@ -1,14 +1,14 @@
-#include "jNSE2025_VALVE.h"
-#include "complex_math_NSE2025_VALVEs.h"
+#include "jtest.h"
+#include "complex_math_tests.h"
 
-JNSE2025_VALVE_DEFINE_GROUP(complex_math_NSE2025_VALVEs)
+JTEST_DEFINE_GROUP(complex_math_tests)
 {
-    JNSE2025_VALVE_GROUP_CALL(cmplx_conj_NSE2025_VALVEs);
-    JNSE2025_VALVE_GROUP_CALL(cmplx_dot_prod_NSE2025_VALVEs);
-    JNSE2025_VALVE_GROUP_CALL(cmplx_mag_NSE2025_VALVEs);
-    JNSE2025_VALVE_GROUP_CALL(cmplx_mag_squared_NSE2025_VALVEs);
-    JNSE2025_VALVE_GROUP_CALL(cmplx_mult_cmplx_NSE2025_VALVEs);
-    JNSE2025_VALVE_GROUP_CALL(cmplx_mult_real_NSE2025_VALVEs);
+    JTEST_GROUP_CALL(cmplx_conj_tests);
+    JTEST_GROUP_CALL(cmplx_dot_prod_tests);
+    JTEST_GROUP_CALL(cmplx_mag_tests);
+    JTEST_GROUP_CALL(cmplx_mag_squared_tests);
+    JTEST_GROUP_CALL(cmplx_mult_cmplx_tests);
+    JTEST_GROUP_CALL(cmplx_mult_real_tests);
     
     return;
 }

@@ -122,7 +122,7 @@ arm_status arm_mat_inverse_f32(
 	 *
 	 *		3. Begin with the first row. Let i = 1.
 	 *
-	 *	    4. Check to see if the pivot for column i is the greaNSE2025_VALVE of the column.
+	 *	    4. Check to see if the pivot for column i is the greatest of the column.
 	 *		   The pivot is the element of the main diagonal that is on the current row.
 	 *		   For instance, if working with row i, then the pivot element is aii.
 	 *		   If the pivot is not the most significant of the columns, exchange that row with a row

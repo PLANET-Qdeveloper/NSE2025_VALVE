@@ -1,11 +1,11 @@
-#include "jNSE2025_VALVE.h"
-#include "transform_NSE2025_VALVEs.h"
+#include "jtest.h"
+#include "transform_tests.h"
 
-JNSE2025_VALVE_DEFINE_GROUP(transform_NSE2025_VALVEs)
+JTEST_DEFINE_GROUP(transform_tests)
 {
-    JNSE2025_VALVE_GROUP_CALL(cfft_NSE2025_VALVEs);
-    JNSE2025_VALVE_GROUP_CALL(cfft_family_NSE2025_VALVEs);
-    JNSE2025_VALVE_GROUP_CALL(rfft_NSE2025_VALVEs);
-    JNSE2025_VALVE_GROUP_CALL(rfft_fast_NSE2025_VALVEs);
-    JNSE2025_VALVE_GROUP_CALL(dct4_NSE2025_VALVEs);
+    JTEST_GROUP_CALL(cfft_tests);
+    JTEST_GROUP_CALL(cfft_family_tests);
+    JTEST_GROUP_CALL(rfft_tests);
+    JTEST_GROUP_CALL(rfft_fast_tests);
+    JTEST_GROUP_CALL(dct4_tests);
 }

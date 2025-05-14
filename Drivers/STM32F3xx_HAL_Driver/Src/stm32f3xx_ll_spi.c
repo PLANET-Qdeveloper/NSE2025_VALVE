@@ -496,7 +496,7 @@ ErrorStatus LL_I2S_Init(SPI_TypeDef *SPIx, LL_I2S_InitTypeDef *I2S_InitStruct)
       i2sodd = (i2sodd << 8U);
     }
 
-    /* NSE2025_VALVE if the divider is 1 or 0 or greater than 0xFF */
+    /* Test if the divider is 1 or 0 or greater than 0xFF */
     if ((i2sdiv < 2U) || (i2sdiv > 0xFFU))
     {
       /* Set the default values */

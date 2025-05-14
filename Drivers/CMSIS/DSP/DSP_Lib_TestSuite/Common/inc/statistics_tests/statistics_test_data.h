@@ -1,5 +1,5 @@
-#ifndef _STATISTICS_NSE2025_VALVE_DATA_H_
-#define _STATISTICS_NSE2025_VALVE_DATA_H_
+#ifndef _STATISTICS_TEST_DATA_H_
+#define _STATISTICS_TEST_DATA_H_
 
 /*--------------------------------------------------------------------------------*/
 /* Includes */
@@ -25,10 +25,11 @@ extern uint32_t statistics_idx_fut;
 extern uint32_t statistics_idx_ref;
 
 extern STATISTICS_BIGGEST_INPUT_TYPE
-    statistics_output_f32_ref[STATISTICS_MAX_INPUT_ELEMENTS];
+statistics_output_f32_ref[STATISTICS_MAX_INPUT_ELEMENTS];
 
 extern STATISTICS_BIGGEST_INPUT_TYPE
-    statistics_output_f32_fut[STATISTICS_MAX_INPUT_ELEMENTS];
+statistics_output_f32_fut[STATISTICS_MAX_INPUT_ELEMENTS];
+
 
 /* Block Sizes */
 ARR_DESC_DECLARE(statistics_block_sizes);
@@ -40,4 +41,4 @@ ARR_DESC_DECLARE(statistics_f_15);
 ARR_DESC_DECLARE(statistics_f_32);
 ARR_DESC_DECLARE(statistics_f_all);
 
-#endif /* _STATISTICS_NSE2025_VALVE_DATA_H_ */
+#endif /* _STATISTICS_TEST_DATA_H_ */

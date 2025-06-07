@@ -22,7 +22,9 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include <stdio.h>
+#include <string.h>
+#include "servo.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -71,12 +73,33 @@ static void MX_TIM3_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_USART2_UART_Init(void);
 /* USER CODE BEGIN PFP */
-
+int _write(int file, char *ptr, int len);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+FATFS fs;
+FIL fil;
+FRESULT fresult;
+char buffer[1024];
+char buffer2[1024];
+UINT br, bw;
+unsigned int servo_rise = 0;
+FATFS *pfs;
+uint32_t fre_clust, tot_size, fre_size;
 
+void send_uart(char *s)
+{
+	HAL_UART_Transmit(&huart2, (uint8_t *) s, strlen(s), 2000);
+}
+
+// printf関数をUART経由で出力するためのリダイレクト
+int _write(int file, char *ptr, int len)
+{
+    (void)file; // 未使用パラメータの警告を抑制
+    HAL_UART_Transmit(&huart2, (uint8_t*)ptr, len, HAL_MAX_DELAY);
+    return len;
+}
 /* USER CODE END 0 */
 
 /**
@@ -87,7 +110,7 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-
+	setbuf(stdout, NULL);
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -109,16 +132,56 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_I2C1_Init();
-  MX_I2C2_Init();
-  MX_I2C3_Init();
   MX_SPI1_Init();
+  MX_I2C3_Init();
   MX_SPI2_Init();
   MX_SPI3_Init();
   MX_TIM3_Init();
-  MX_USART1_UART_Init();
   MX_USART2_UART_Init();
   MX_FATFS_Init();
+  MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
+  //初期設定
+  servo_init();
+  HAL_GPIO_WritePin(GPIOA,GPIO_PIN_11,GPIO_PIN_SET);
+
+  printf("Hello!");
+
+  /*
+  //NOS動作用プログラム5秒間開く（動作確認済み）
+  HAL_GPIO_WritePin(GPIOA,GPIO_PIN_11,GPIO_PIN_RESET);
+  HAL_Delay(3000);
+  HAL_GPIO_WritePin(GPIOA,GPIO_PIN_11,GPIO_PIN_SET);
+  */
+
+  fresult = f_mount(&fs, "/", 1);
+  if(fresult == FR_OK){
+	  send_uart("SD CARD mounted successfully!!!\n");
+  }else{
+	  send_uart("ERROR!!! in mounting SD CARD...\n");
+  }
+
+  if(f_getfree("", &fre_clust, &pfs) == FR_OK){
+ 	  tot_size = (pfs->n_fatent - 2) * pfs->csize * 0.5;
+ 	  sprintf(buffer, "Total size: %15lu B\n", tot_size * 1024);
+ 	  send_uart(buffer);
+ 	  fre_size = fre_clust * pfs->csize * 0.5;
+ 	  sprintf(buffer, "Free size: %15lu B\n", fre_size * 1024);
+ 	  send_uart(buffer);
+  }
+
+  if(f_open(&fil, "file1.txt", FA_CREATE_ALWAYS | FA_WRITE) == FR_OK){
+ 	  strcpy(buffer, "aaaaaaaa\n");
+ 	  f_write(&fil, buffer, strlen(buffer), &bw);
+ 	  f_close(&fil);
+  }
+
+  if(f_open(&fil, "file1.txt", FA_READ) == FR_OK){
+ 	  send_uart("file1 open.\n");
+      f_read(&fil, buffer2, f_size(&fil), &br);
+      send_uart(buffer2);
+      f_close(&fil);
+  }
 
   /* USER CODE END 2 */
 
@@ -126,6 +189,35 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  printf("Hello!");
+	  /*
+	  //以下サーボ動作用プログラム0度から270度を10秒おきに回転する（動作確認済み）
+	  servo_set_angle(0);  // 0度に設定
+	  HAL_Delay(10000);
+
+	  servo_set_angle(270); // 270度に設定
+	  HAL_Delay(10000);
+	  */
+
+	  //以下初回動作確認用プログラム（LiftOff信号でサーボ開けて、EmmergencyStop信号でNOS開く）
+	  if (HAL_GPIO_ReadPin (GPIOA, GPIO_PIN_10)) {
+		  servo_rise = HAL_GetTick() + 30000;
+
+
+	  }
+	  if(servo_rise > HAL_GetTick()){
+		  servo_set_angle(0);  // 0度に設定
+	  }else{
+		  servo_set_angle(270); // 270度に設定
+	  }
+
+	  if (HAL_GPIO_ReadPin (GPIOA, GPIO_PIN_9) == GPIO_PIN_SET) {
+		  HAL_GPIO_WritePin(GPIOA,GPIO_PIN_11,GPIO_PIN_RESET);
+	  	  }
+	  else {
+		  HAL_GPIO_WritePin(GPIOA,GPIO_PIN_11,GPIO_PIN_SET);
+	  }
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

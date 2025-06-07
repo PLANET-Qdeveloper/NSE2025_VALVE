@@ -1,43 +1,57 @@
 {
+  "version": "2.0.0",
+  "windows": {
+    "options": {
+      "shell": {
+        "executable": "cmd.exe",
+        "args": ["/d", "/c"]
+      }
+    }
+  },
   "tasks": [
     {
-      "label": "cmake: configure",
       "type": "shell",
-      "command": "cmake",
+      "label": "CubeProg: Flash project (SWD)",
+      "command": "STM32_Programmer_CLI",
       "args": [
-        "-B",
-        "build",
-        "-S",
-        ".",
-        "-DCMAKE_BUILD_TYPE=Debug",
-        "-DCMAKE_TOOLCHAIN_FILE=cmake/gcc-arm-none-eabi.cmake"
+        "--connect",
+        "port=swd",
+        "--download",
+        "${command:cmake.launchTargetPath}",
+        // Let CMake extension decide executable: "${command:cmake.launchTargetPath}",
+        "-hardRst", // Hardware reset - if rst pin is connected
+        "-rst", // Software reset (backup)
+        "--start" // Start execution
       ],
       "options": {
-        "cwd": "${workspaceFolder}",
-        "env": {
-          "PATH": "/Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin:${env:PATH}"
-        }
+        "cwd": "${workspaceFolder}"
       },
       "problemMatcher": []
     },
     {
-      "type": "shell",
-      "label": "cmake: build",
-      "dependsOn": "cmake: configure",
-      "command": "cmake",
-      "args": ["--build", "build"],
-      "options": {
-        "cwd": "${workspaceFolder}",
-        "env": {
-          "PATH": "/Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin:${env:PATH}"
-        }
-      },
+      "label": "Build + Flash",
+      "dependsOrder": "sequence",
+      "dependsOn": ["CMake: clean rebuild", "CubeProg: Flash project (SWD)"]
+    },
+    {
+      "type": "cmake",
+      "label": "CMake: clean rebuild",
+      "command": "cleanRebuild",
+      "targets": ["all"],
+      "preset": "${command:cmake.activeBuildPresetName}",
+      "group": "build",
       "problemMatcher": [],
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      }
+      "detail": "CMake template clean rebuild task"
+    },
+    {
+      "type": "shell",
+      "label": "CubeProg: List all available communication interfaces",
+      "command": "STM32_Programmer_CLI",
+      "args": ["--list"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
     }
-  ],
-  "version": "2.0.0"
+  ]
 }

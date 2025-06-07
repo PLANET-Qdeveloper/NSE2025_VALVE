@@ -1183,10 +1183,10 @@
 			[
 				{
 					"name" : "HELPSTRING",
-					"value" : "The CMake toolchain file"
+					"value" : "No help, variable specified on the command line."
 				}
 			],
-			"type" : "FILEPATH",
+			"type" : "UNINITIALIZED",
 			"value" : "/Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/cmake/gcc-arm-none-eabi.cmake"
 		},
 		{

@@ -1,0 +1,18 @@
+{
+  "cmake.cmakePath": "/opt/homebrew/bin/cmake",
+  "cmake.debugConfig": {
+    "name": "Debug STM32F303x8",
+    "type": "cortex-debug",
+    "request": "launch",
+    "program": "${command:cmake.launchTargetPath}",
+    "servertype": "stlink",
+    "toolchainPath": "/Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin",
+    "miMode": "gdb",
+    "miDebuggerPath": "/Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin/arm-none-eabi-gdb",
+    "interface": "swd",
+    "runToEntryPoint": "main",
+    "svdFile": "/opt/ST/STM32CubeCLT_1.18.0/STMicroelectronics_CMSIS_SVD/STM32F303.svd",
+    "preLaunchTask": "cmake: build",
+    "serverArgs": ["-m", "0"]
+  }
+}

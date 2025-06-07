@@ -33,6 +33,7 @@ set(CMAKE_ASM_TARGET_INCLUDE_PATH
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "/Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Core/Src/fatfs_sd.c" "CMakeFiles/NSE2025_VALVE.dir/Core/Src/fatfs_sd.c.obj" "gcc" "CMakeFiles/NSE2025_VALVE.dir/Core/Src/fatfs_sd.c.obj.d"
   "/Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Core/Src/main.c" "CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj" "gcc" "CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj.d"
   "/Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Core/Src/servo.c" "CMakeFiles/NSE2025_VALVE.dir/Core/Src/servo.c.obj" "gcc" "CMakeFiles/NSE2025_VALVE.dir/Core/Src/servo.c.obj.d"
   "/Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Core/Src/stm32f4xx_hal_msp.c" "CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_hal_msp.c.obj" "gcc" "CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_hal_msp.c.obj.d"

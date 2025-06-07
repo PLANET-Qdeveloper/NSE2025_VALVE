@@ -36,13 +36,13 @@
 			{
 				"command" : 1,
 				"file" : 1,
-				"line" : 103,
+				"line" : 104,
 				"parent" : 2
 			},
 			{
 				"command" : 2,
 				"file" : 1,
-				"line" : 97,
+				"line" : 98,
 				"parent" : 2
 			}
 		]
@@ -124,7 +124,8 @@
 				4,
 				5,
 				6,
-				7
+				7,
+				8
 			]
 		},
 		{
@@ -187,7 +188,7 @@
 			"language" : "ASM",
 			"sourceIndexes" : 
 			[
-				8
+				9
 			]
 		}
 	],
@@ -234,21 +235,21 @@
 				4,
 				5,
 				6,
-				7
+				7,
+				8
 			]
 		},
 		{
 			"name" : "",
 			"sourceIndexes" : 
 			[
-				8
+				9
 			]
 		},
 		{
 			"name" : "Object Libraries",
 			"sourceIndexes" : 
 			[
-				9,
 				10,
 				11,
 				12,
@@ -271,7 +272,8 @@
 				29,
 				30,
 				31,
-				32
+				32,
+				33
 			]
 		}
 	],
@@ -298,12 +300,6 @@
 		{
 			"backtrace" : 4,
 			"compileGroupIndex" : 0,
-			"path" : "Core/Src/servo.c",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 4,
-			"compileGroupIndex" : 0,
 			"path" : "Core/Src/stm32f4xx_it.c",
 			"sourceGroupIndex" : 0
 		},
@@ -323,6 +319,18 @@
 			"backtrace" : 4,
 			"compileGroupIndex" : 0,
 			"path" : "Core/Src/syscalls.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 0,
+			"path" : "Core/Src/servo.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 0,
+			"path" : "Core/Src/fatfs_sd.c",
 			"sourceGroupIndex" : 0
 		},
 		{

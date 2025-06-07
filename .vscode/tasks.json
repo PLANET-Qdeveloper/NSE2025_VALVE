@@ -1,57 +1,43 @@
 {
-  "version": "2.0.0",
-  "windows": {
-    "options": {
-      "shell": {
-        "executable": "cmd.exe",
-        "args": ["/d", "/c"]
-      }
-    }
-  },
   "tasks": [
     {
+      "label": "cmake: configure",
       "type": "shell",
-      "label": "CubeProg: Flash project (SWD)",
-      "command": "STM32_Programmer_CLI",
+      "command": "cmake",
       "args": [
-        "--connect",
-        "port=swd",
-        "--download",
-        "${command:cmake.launchTargetPath}",
-        // Let CMake extension decide executable: "${command:cmake.launchTargetPath}",
-        "-hardRst", // Hardware reset - if rst pin is connected
-        "-rst", // Software reset (backup)
-        "--start" // Start execution
+        "-B",
+        "build",
+        "-S",
+        ".",
+        "-DCMAKE_BUILD_TYPE=Debug",
+        "-DCMAKE_TOOLCHAIN_FILE=cmake/gcc-arm-none-eabi.cmake"
       ],
       "options": {
-        "cwd": "${workspaceFolder}"
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "PATH": "/Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin:${env:PATH}"
+        }
       },
       "problemMatcher": []
-    },
-    {
-      "label": "Build + Flash",
-      "dependsOrder": "sequence",
-      "dependsOn": ["CMake: clean rebuild", "CubeProg: Flash project (SWD)"]
-    },
-    {
-      "type": "cmake",
-      "label": "CMake: clean rebuild",
-      "command": "cleanRebuild",
-      "targets": ["all"],
-      "preset": "${command:cmake.activeBuildPresetName}",
-      "group": "build",
-      "problemMatcher": [],
-      "detail": "CMake template clean rebuild task"
     },
     {
       "type": "shell",
-      "label": "CubeProg: List all available communication interfaces",
-      "command": "STM32_Programmer_CLI",
-      "args": ["--list"],
+      "label": "cmake: build",
+      "dependsOn": "cmake: configure",
+      "command": "cmake",
+      "args": ["--build", "build"],
       "options": {
-        "cwd": "${workspaceFolder}"
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "PATH": "/Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin:${env:PATH}"
+        }
       },
-      "problemMatcher": []
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
     }
-  ]
+  ],
+  "version": "2.0.0"
 }

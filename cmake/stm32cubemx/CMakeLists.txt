@@ -25,11 +25,12 @@ set(MX_Application_Src
     ${CMAKE_SOURCE_DIR}/FATFS/Target/user_diskio.c
     ${CMAKE_SOURCE_DIR}/FATFS/App/fatfs.c
     ${CMAKE_SOURCE_DIR}/Core/Src/main.c
-    ${CMAKE_SOURCE_DIR}/Core/Src/servo.c
     ${CMAKE_SOURCE_DIR}/Core/Src/stm32f4xx_it.c
     ${CMAKE_SOURCE_DIR}/Core/Src/stm32f4xx_hal_msp.c
     ${CMAKE_SOURCE_DIR}/Core/Src/sysmem.c
     ${CMAKE_SOURCE_DIR}/Core/Src/syscalls.c
+    ${CMAKE_SOURCE_DIR}/Core/Src/servo.c
+    ${CMAKE_SOURCE_DIR}/Core/Src/fatfs_sd.c
     ${CMAKE_SOURCE_DIR}/startup_stm32f413xx.s
 )
 

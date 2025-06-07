@@ -1,4 +1,3 @@
-/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file   fatfs.c
@@ -6,16 +5,17 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2025 STMicroelectronics.
-  * All rights reserved.
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * This software component is licensed by ST under Ultimate Liberty license
+  * SLA0044, the "License"; You may not use this file except in compliance with
+  * the License. You may obtain a copy of the License at:
+  *                             www.st.com/SLA0044
   *
   ******************************************************************************
   */
-/* USER CODE END Header */
+
 #include "fatfs.h"
 
 uint8_t retUSER;    /* Return value for USER */
@@ -25,20 +25,20 @@ FIL USERFile;       /* File object for USER */
 
 /* USER CODE BEGIN Variables */
 
-/* USER CODE END Variables */
+/* USER CODE END Variables */    
 
-void MX_FATFS_Init(void)
+void MX_FATFS_Init(void) 
 {
   /*## FatFS: Link the USER driver ###########################*/
   retUSER = FATFS_LinkDriver(&USER_Driver, USERPath);
 
   /* USER CODE BEGIN Init */
-  /* additional user code for init */
+  /* additional user code for init */     
   /* USER CODE END Init */
 }
 
 /**
-  * @brief  Gets Time from RTC
+  * @brief  Gets Time from RTC 
   * @param  None
   * @retval Time in DWORD
   */
@@ -46,9 +46,11 @@ DWORD get_fattime(void)
 {
   /* USER CODE BEGIN get_fattime */
   return 0;
-  /* USER CODE END get_fattime */
+  /* USER CODE END get_fattime */  
 }
 
 /* USER CODE BEGIN Application */
-
+     
 /* USER CODE END Application */
+
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -44,17 +44,4 @@ cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/f
  /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h \
  /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h \
  /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
- /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
- /opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/arm-none-eabi/include/stdlib.h \
- /opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/arm-none-eabi/include/machine/ieeefp.h \
- /opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/arm-none-eabi/include/_ansi.h \
- /opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/arm-none-eabi/include/newlib.h \
- /opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/arm-none-eabi/include/sys/config.h \
- /opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/arm-none-eabi/include/sys/reent.h \
- /opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/arm-none-eabi/include/_ansi.h \
- /opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/arm-none-eabi/include/sys/cdefs.h \
- /opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/arm-none-eabi/include/sys/_types.h \
- /opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/arm-none-eabi/include/machine/_types.h \
- /opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/arm-none-eabi/include/sys/lock.h \
- /opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/arm-none-eabi/include/machine/stdlib.h \
- /opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/arm-none-eabi/include/alloca.h
+ /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h

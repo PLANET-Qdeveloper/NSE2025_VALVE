@@ -1,5 +1,7 @@
 file(REMOVE_RECURSE
   "NSE2025_VALVE.map"
+  "CMakeFiles/NSE2025_VALVE.dir/Core/Src/fatfs_sd.c.obj"
+  "CMakeFiles/NSE2025_VALVE.dir/Core/Src/fatfs_sd.c.obj.d"
   "CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj"
   "CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj.d"
   "CMakeFiles/NSE2025_VALVE.dir/Core/Src/servo.c.obj"

@@ -1,30 +1,33 @@
 /* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2025 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file           : main.c
+ * @brief          : Main program body
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2025 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file
+ * in the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "fatfs.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
 #include <string.h>
 #include "servo.h"
+#include "fatfs.h"
+#include "diskio.h"
+#include "ff.h"
+#include "fatfs_sd.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -51,13 +54,15 @@ SPI_HandleTypeDef hspi1;
 SPI_HandleTypeDef hspi2;
 SPI_HandleTypeDef hspi3;
 
+TIM_HandleTypeDef htim1;
+TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim3;
 
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
-
+volatile uint8_t Timer1, Timer2; /* 1ms Timer Counter for SD card operations */
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -72,6 +77,8 @@ static void MX_SPI3_Init(void);
 static void MX_TIM3_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_USART2_UART_Init(void);
+static void MX_TIM1_Init(void);
+static void MX_TIM2_Init(void);
 /* USER CODE BEGIN PFP */
 int _write(int file, char *ptr, int len);
 /* USER CODE END PFP */
@@ -90,27 +97,142 @@ uint32_t fre_clust, tot_size, fre_size;
 
 void send_uart(char *s)
 {
-	HAL_UART_Transmit(&huart2, (uint8_t *) s, strlen(s), 2000);
+  HAL_UART_Transmit(&huart2, (uint8_t *)s, strlen(s), 2000);
 }
 
 // printf関数をUART経由で出力するためのリダイレクト
 int _write(int file, char *ptr, int len)
 {
-    (void)file; // 未使用パラメータの警告を抑制
-    HAL_UART_Transmit(&huart2, (uint8_t*)ptr, len, HAL_MAX_DELAY);
-    return len;
+  (void)file; // 未使用パラメータの警告を抑制
+  HAL_UART_Transmit(&huart1, (uint8_t *)ptr, len, HAL_MAX_DELAY);
+  return len;
+}
+
+// SDカードのセクター内容をデバッグ出力する関数
+void debug_sector_content(DWORD sector)
+{
+  BYTE sector_buffer[512];
+  DRESULT res;
+
+  printf("\n=== Sector %lu Debug Info ===\n", sector);
+
+  res = SD_disk_read(0, sector_buffer, sector, 1);
+  if (res != RES_OK)
+  {
+    printf("Error reading sector %lu: %d\n", sector, res);
+    return;
+  }
+
+  // ブートシグネチャチェック (0x55AA at offset 510-511)
+  WORD signature = (sector_buffer[511] << 8) | sector_buffer[510];
+  printf("Boot signature (0x55AA): 0x%04X %s\n", signature,
+         (signature == 0xAA55) ? "OK" : "INVALID");
+
+  // ジャンプ命令チェック
+  printf("Jump instruction: 0x%02X 0x%02X 0x%02X\n",
+         sector_buffer[0], sector_buffer[1], sector_buffer[2]);
+
+  // ファイルシステムタイプ文字列チェック (offset 54)
+  printf("FS Type (54): ");
+  for (int i = 54; i < 62; i++)
+  {
+    printf("%c", (sector_buffer[i] >= 32 && sector_buffer[i] < 127) ? sector_buffer[i] : '.');
+  }
+  printf("\n");
+
+  // FAT32ファイルシステムタイプ文字列チェック (offset 82)
+  printf("FS Type32 (82): ");
+  for (int i = 82; i < 90; i++)
+  {
+    printf("%c", (sector_buffer[i] >= 32 && sector_buffer[i] < 127) ? sector_buffer[i] : '.');
+  }
+  printf("\n");
+
+  // MBRパーティションテーブル情報 (sector 0の場合)
+  if (sector == 0)
+  {
+    printf("\n--- MBR Partition Table ---\n");
+    for (int i = 0; i < 4; i++)
+    {
+      BYTE *pte = sector_buffer + 446 + (i * 16);
+      BYTE system_id = pte[4];
+      DWORD start_lba = (pte[11] << 24) | (pte[10] << 16) | (pte[9] << 8) | pte[8];
+      DWORD size_sectors = (pte[15] << 24) | (pte[14] << 16) | (pte[13] << 8) | pte[12];
+
+      printf("Partition %d: System=0x%02X, Start=%lu, Size=%lu\n",
+             i + 1, system_id, start_lba, size_sectors);
+    }
+  }
+
+  // 最初の32バイトをhex dump
+  printf("\nFirst 32 bytes (hex):\n");
+  for (int i = 0; i < 32; i++)
+  {
+    if (i % 16 == 0)
+      printf("%04X: ", i);
+    printf("%02X ", sector_buffer[i]);
+    if (i % 16 == 15)
+      printf("\n");
+  }
+  printf("\n");
+}
+
+// check_fs関数の動作をシミュレートする関数
+BYTE debug_check_fs(DWORD sector)
+{
+  BYTE sector_buffer[512];
+  DRESULT res;
+
+  res = SD_disk_read(0, sector_buffer, sector, 1);
+  if (res != RES_OK)
+  {
+    printf("Disk error reading sector %lu\n", sector);
+    return 4; // Disk error
+  }
+
+  // ブートレコードシグネチャチェック
+  WORD signature = (sector_buffer[511] << 8) | sector_buffer[510];
+  if (signature != 0xAA55)
+  {
+    printf("Invalid boot signature: 0x%04X\n", signature);
+    return 3; // Not a BS
+  }
+
+  // ジャンプ命令チェック
+  if (sector_buffer[0] == 0xE9 || (sector_buffer[0] == 0xEB && sector_buffer[2] == 0x90))
+  {
+    // FAT文字列チェック (offset 54)
+    DWORD fat_str = (sector_buffer[56] << 16) | (sector_buffer[55] << 8) | sector_buffer[54];
+    if ((fat_str & 0xFFFFFF) == 0x544146)
+    { // "FAT"
+      printf("Found FAT filesystem at sector %lu\n", sector);
+      return 0; // FAT
+    }
+
+    // FAT32文字列チェック (offset 82)
+    DWORD fat32_str = (sector_buffer[85] << 24) | (sector_buffer[84] << 16) |
+                      (sector_buffer[83] << 8) | sector_buffer[82];
+    if (fat32_str == 0x33544146)
+    { // "FAT3"
+      printf("Found FAT32 filesystem at sector %lu\n", sector);
+      return 0; // FAT
+    }
+  }
+
+  printf("Valid boot sector but not FAT at sector %lu\n", sector);
+  return 2; // Valid BS but not FAT
 }
 /* USER CODE END 0 */
 
 /**
-  * @brief  The application entry point.
-  * @retval int
-  */
+ * @brief  The application entry point.
+ * @retval int
+ */
 int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-	setbuf(stdout, NULL);
+  setbuf(stdout, NULL);
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -132,20 +254,21 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_I2C1_Init();
-  MX_SPI1_Init();
+  MX_I2C2_Init();
   MX_I2C3_Init();
+  MX_SPI1_Init();
   MX_SPI2_Init();
   MX_SPI3_Init();
   MX_TIM3_Init();
+  MX_USART1_UART_Init();
   MX_USART2_UART_Init();
   MX_FATFS_Init();
-  MX_USART1_UART_Init();
+  MX_TIM1_Init();
+  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
-  //初期設定
+  // 初期設定
   servo_init();
-  HAL_GPIO_WritePin(GPIOA,GPIO_PIN_11,GPIO_PIN_SET);
-
-  printf("Hello!");
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, GPIO_PIN_SET);
 
   /*
   //NOS動作用プログラム5秒間開く（動作確認済み）
@@ -154,33 +277,98 @@ int main(void)
   HAL_GPIO_WritePin(GPIOA,GPIO_PIN_11,GPIO_PIN_SET);
   */
 
-  fresult = f_mount(&fs, "/", 1);
-  if(fresult == FR_OK){
-	  send_uart("SD CARD mounted successfully!!!\n");
-  }else{
-	  send_uart("ERROR!!! in mounting SD CARD...\n");
+  // SDカードの詳細デバッグ情報を出力
+  printf("\n=== SD Card Debug Analysis ===\n");
+
+  // SDカード初期化状態確認
+  DSTATUS sd_status = SD_disk_status(0);
+  printf("SD Status: 0x%02X\n", sd_status);
+
+  if (!(sd_status & STA_NOINIT))
+  {
+    // セクター0 (MBR) の内容を確認
+    debug_sector_content(0);
+
+    // check_fs関数の動作をシミュレート
+    printf("\n=== check_fs simulation ===\n");
+    BYTE fmt0 = debug_check_fs(0);
+    printf("check_fs(0) result: %d\n", fmt0);
+
+    // パーティションテーブルから各パーティションの開始セクターを確認
+    BYTE sector_buffer[512];
+    if (SD_disk_read(0, sector_buffer, 0, 1) == RES_OK)
+    {
+      printf("\n=== Checking partitions ===\n");
+      for (int i = 0; i < 4; i++)
+      {
+        BYTE *pte = sector_buffer + 446 + (i * 16);
+        BYTE system_id = pte[4];
+        DWORD start_lba = (pte[11] << 24) | (pte[10] << 16) | (pte[9] << 8) | pte[8];
+
+        if (system_id != 0 && start_lba != 0)
+        {
+          printf("Checking partition %d at sector %lu:\n", i + 1, start_lba);
+          debug_sector_content(start_lba);
+          BYTE fmt_part = debug_check_fs(start_lba);
+          printf("check_fs(%lu) result: %d\n", start_lba, fmt_part);
+        }
+      }
+    }
+  }
+  else
+  {
+    printf("SD card not initialized properly\n");
   }
 
-  if(f_getfree("", &fre_clust, &pfs) == FR_OK){
- 	  tot_size = (pfs->n_fatent - 2) * pfs->csize * 0.5;
- 	  sprintf(buffer, "Total size: %15lu B\n", tot_size * 1024);
- 	  send_uart(buffer);
- 	  fre_size = fre_clust * pfs->csize * 0.5;
- 	  sprintf(buffer, "Free size: %15lu B\n", fre_size * 1024);
- 	  send_uart(buffer);
+  printf("\n=== End SD Debug ===\n");
+
+  // SDカードを明示的に初期化
+  printf("Initializing SD card...\n");
+  DSTATUS init_result = SD_disk_initialize(0);
+  printf("SD initialization result: 0x%02X\n", init_result);
+
+  if (init_result == 0)
+  {
+    printf("SD card initialized successfully\n");
+  }
+  else
+  {
+    printf("SD card initialization failed\n");
   }
 
-  if(f_open(&fil, "file1.txt", FA_CREATE_ALWAYS | FA_WRITE) == FR_OK){
- 	  strcpy(buffer, "aaaaaaaa\n");
- 	  f_write(&fil, buffer, strlen(buffer), &bw);
- 	  f_close(&fil);
+  fresult = f_mount(&fs, "/", 0);
+  if (fresult == FR_OK)
+  {
+    send_uart("SD CARD mounted successfully.");
+  }
+  else
+  {
+    send_uart("ERROR : SD CARD mounted failed.");
   }
 
-  if(f_open(&fil, "file1.txt", FA_READ) == FR_OK){
- 	  send_uart("file1 open.\n");
-      f_read(&fil, buffer2, f_size(&fil), &br);
-      send_uart(buffer2);
-      f_close(&fil);
+  if (f_getfree("", &fre_clust, &pfs) == FR_OK)
+  {
+    tot_size = (pfs->n_fatent - 2) * pfs->csize * 0.5;
+    sprintf(buffer, "Total size: %15lu B\n", tot_size * 1024);
+    send_uart(buffer);
+    fre_size = fre_clust * pfs->csize * 0.5;
+    sprintf(buffer, "Free size: %15lu B\n", fre_size * 1024);
+    send_uart(buffer);
+  }
+
+  if (f_open(&fil, "file1.txt", FA_CREATE_ALWAYS | FA_WRITE) == FR_OK)
+  {
+    strcpy(buffer, "qwertyuiop\n");
+    f_write(&fil, buffer, strlen(buffer), &bw);
+    f_close(&fil);
+  }
+
+  if (f_open(&fil, "file1.txt", FA_READ) == FR_OK)
+  {
+    send_uart("file1 open.\n");
+    f_read(&fil, buffer2, f_size(&fil), &br);
+    send_uart(buffer2);
+    f_close(&fil);
   }
 
   /* USER CODE END 2 */
@@ -189,34 +377,37 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  printf("Hello!");
-	  /*
-	  //以下サーボ動作用プログラム0度から270度を10秒おきに回転する（動作確認済み）
-	  servo_set_angle(0);  // 0度に設定
-	  HAL_Delay(10000);
+    /*
+    //以下サーボ動作用プログラム0度から270度を10秒おきに回転する（動作確認済み）
+    servo_set_angle(0);  // 0度に設定
+    HAL_Delay(10000);
 
-	  servo_set_angle(270); // 270度に設定
-	  HAL_Delay(10000);
-	  */
+    servo_set_angle(270); // 270度に設定
+    HAL_Delay(10000);
+    */
 
-	  //以下初回動作確認用プログラム（LiftOff信号でサーボ開けて、EmmergencyStop信号でNOS開く）
-	  if (HAL_GPIO_ReadPin (GPIOA, GPIO_PIN_10)) {
-		  servo_rise = HAL_GetTick() + 30000;
+    // 以下初回動作確認用プログラム（LiftOff信号でサーボ開けて、EmmergencyStop信号でNOS開く）
+    if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10))
+    {
+      servo_rise = HAL_GetTick() + 30000;
+    }
+    if (servo_rise > HAL_GetTick())
+    {
+      servo_set_angle(0); // 0度に設定
+    }
+    else
+    {
+      servo_set_angle(270); // 270度に設定
+    }
 
-
-	  }
-	  if(servo_rise > HAL_GetTick()){
-		  servo_set_angle(0);  // 0度に設定
-	  }else{
-		  servo_set_angle(270); // 270度に設定
-	  }
-
-	  if (HAL_GPIO_ReadPin (GPIOA, GPIO_PIN_9) == GPIO_PIN_SET) {
-		  HAL_GPIO_WritePin(GPIOA,GPIO_PIN_11,GPIO_PIN_RESET);
-	  	  }
-	  else {
-		  HAL_GPIO_WritePin(GPIOA,GPIO_PIN_11,GPIO_PIN_SET);
-	  }
+    if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_9) == GPIO_PIN_SET)
+    {
+      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, GPIO_PIN_RESET);
+    }
+    else
+    {
+      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, GPIO_PIN_SET);
+    }
 
     /* USER CODE END WHILE */
 
@@ -226,22 +417,22 @@ int main(void)
 }
 
 /**
-  * @brief System Clock Configuration
-  * @retval None
-  */
+ * @brief System Clock Configuration
+ * @retval None
+ */
 void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
   /** Configure the main internal regulator output voltage
-  */
+   */
   __HAL_RCC_PWR_CLK_ENABLE();
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
 
   /** Initializes the RCC Oscillators according to the specified parameters
-  * in the RCC_OscInitTypeDef structure.
-  */
+   * in the RCC_OscInitTypeDef structure.
+   */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
@@ -252,9 +443,8 @@ void SystemClock_Config(void)
   }
 
   /** Initializes the CPU, AHB and APB buses clocks
-  */
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
-                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+   */
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
@@ -267,10 +457,10 @@ void SystemClock_Config(void)
 }
 
 /**
-  * @brief I2C1 Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief I2C1 Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_I2C1_Init(void)
 {
 
@@ -297,14 +487,13 @@ static void MX_I2C1_Init(void)
   /* USER CODE BEGIN I2C1_Init 2 */
 
   /* USER CODE END I2C1_Init 2 */
-
 }
 
 /**
-  * @brief I2C2 Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief I2C2 Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_I2C2_Init(void)
 {
 
@@ -331,14 +520,13 @@ static void MX_I2C2_Init(void)
   /* USER CODE BEGIN I2C2_Init 2 */
 
   /* USER CODE END I2C2_Init 2 */
-
 }
 
 /**
-  * @brief I2C3 Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief I2C3 Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_I2C3_Init(void)
 {
 
@@ -365,14 +553,13 @@ static void MX_I2C3_Init(void)
   /* USER CODE BEGIN I2C3_Init 2 */
 
   /* USER CODE END I2C3_Init 2 */
-
 }
 
 /**
-  * @brief SPI1 Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief SPI1 Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_SPI1_Init(void)
 {
 
@@ -403,14 +590,13 @@ static void MX_SPI1_Init(void)
   /* USER CODE BEGIN SPI1_Init 2 */
 
   /* USER CODE END SPI1_Init 2 */
-
 }
 
 /**
-  * @brief SPI2 Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief SPI2 Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_SPI2_Init(void)
 {
 
@@ -441,14 +627,13 @@ static void MX_SPI2_Init(void)
   /* USER CODE BEGIN SPI2_Init 2 */
 
   /* USER CODE END SPI2_Init 2 */
-
 }
 
 /**
-  * @brief SPI3 Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief SPI3 Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_SPI3_Init(void)
 {
 
@@ -479,14 +664,102 @@ static void MX_SPI3_Init(void)
   /* USER CODE BEGIN SPI3_Init 2 */
 
   /* USER CODE END SPI3_Init 2 */
-
 }
 
 /**
-  * @brief TIM3 Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief TIM1 Initialization Function
+ * @param None
+ * @retval None
+ */
+static void MX_TIM1_Init(void)
+{
+
+  /* USER CODE BEGIN TIM1_Init 0 */
+
+  /* USER CODE END TIM1_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM1_Init 1 */
+
+  /* USER CODE END TIM1_Init 1 */
+  htim1.Instance = TIM1;
+  htim1.Init.Prescaler = 0;
+  htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim1.Init.Period = 65535;
+  htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim1.Init.RepetitionCounter = 0;
+  htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim1, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim1, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM1_Init 2 */
+
+  /* USER CODE END TIM1_Init 2 */
+}
+
+/**
+ * @brief TIM2 Initialization Function
+ * @param None
+ * @retval None
+ */
+static void MX_TIM2_Init(void)
+{
+
+  /* USER CODE BEGIN TIM2_Init 0 */
+
+  /* USER CODE END TIM2_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM2_Init 1 */
+
+  /* USER CODE END TIM2_Init 1 */
+  htim2.Instance = TIM2;
+  htim2.Init.Prescaler = 0;
+  htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim2.Init.Period = 4294967295;
+  htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM2_Init 2 */
+
+  /* USER CODE END TIM2_Init 2 */
+}
+
+/**
+ * @brief TIM3 Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_TIM3_Init(void)
 {
 
@@ -528,14 +801,13 @@ static void MX_TIM3_Init(void)
 
   /* USER CODE END TIM3_Init 2 */
   HAL_TIM_MspPostInit(&htim3);
-
 }
 
 /**
-  * @brief USART1 Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief USART1 Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_USART1_UART_Init(void)
 {
 
@@ -561,14 +833,13 @@ static void MX_USART1_UART_Init(void)
   /* USER CODE BEGIN USART1_Init 2 */
 
   /* USER CODE END USART1_Init 2 */
-
 }
 
 /**
-  * @brief USART2 Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief USART2 Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_USART2_UART_Init(void)
 {
 
@@ -594,14 +865,13 @@ static void MX_USART2_UART_Init(void)
   /* USER CODE BEGIN USART2_Init 2 */
 
   /* USER CODE END USART2_Init 2 */
-
 }
 
 /**
-  * @brief GPIO Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief GPIO Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_GPIO_Init(void)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
@@ -615,10 +885,22 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET); // SD Card CS pin - initially HIGH (deselected)
 
-  /*Configure GPIO pin : PA4 */
+  /*Configure GPIO pin : PA4 (SD Card CS) */
   GPIO_InitStruct.Pin = GPIO_PIN_4;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PA9 (EmergencyStop), PA10 (LiftOff), PA11 (NOS Output) */
+  GPIO_InitStruct.Pin = GPIO_PIN_9 | GPIO_PIN_10;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  GPIO_InitStruct.Pin = GPIO_PIN_11;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -634,9 +916,9 @@ static void MX_GPIO_Init(void)
 /* USER CODE END 4 */
 
 /**
-  * @brief  This function is executed in case of error occurrence.
-  * @retval None
-  */
+ * @brief  This function is executed in case of error occurrence.
+ * @retval None
+ */
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
@@ -648,14 +930,14 @@ void Error_Handler(void)
   /* USER CODE END Error_Handler_Debug */
 }
 
-#ifdef  USE_FULL_ASSERT
+#ifdef USE_FULL_ASSERT
 /**
-  * @brief  Reports the name of the source file and the source line number
-  *         where the assert_param error has occurred.
-  * @param  file: pointer to the source file name
-  * @param  line: assert_param error line source number
-  * @retval None
-  */
+ * @brief  Reports the name of the source file and the source line number
+ *         where the assert_param error has occurred.
+ * @param  file: pointer to the source file name
+ * @param  line: assert_param error line source number
+ * @retval None
+ */
 void assert_failed(uint8_t *file, uint32_t line)
 {
   /* USER CODE BEGIN 6 */

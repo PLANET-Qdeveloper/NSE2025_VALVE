@@ -30,6 +30,7 @@
 #include "ff.h"
 #include "fatfs_sd.h"
 #include "MAX6675.h"
+#include "MAX31855.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/

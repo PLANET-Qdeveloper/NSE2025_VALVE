@@ -8,10 +8,10 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Middlewares/Third_Party/FatFs/src/diskio.c" "cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/diskio.c.obj" "gcc" "cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/diskio.c.obj.d"
-  "/Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Middlewares/Third_Party/FatFs/src/ff.c" "cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/ff.c.obj" "gcc" "cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/ff.c.obj.d"
-  "/Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Middlewares/Third_Party/FatFs/src/ff_gen_drv.c" "cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/ff_gen_drv.c.obj" "gcc" "cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/ff_gen_drv.c.obj.d"
-  "/Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Middlewares/Third_Party/FatFs/src/option/syscall.c" "cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/option/syscall.c.obj" "gcc" "cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/option/syscall.c.obj.d"
+  "/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Middlewares/Third_Party/FatFs/src/diskio.c" "cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/diskio.c.obj" "gcc" "cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/diskio.c.obj.d"
+  "/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Middlewares/Third_Party/FatFs/src/ff.c" "cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/ff.c.obj" "gcc" "cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/ff.c.obj.d"
+  "/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Middlewares/Third_Party/FatFs/src/ff_gen_drv.c" "cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/ff_gen_drv.c.obj" "gcc" "cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/ff_gen_drv.c.obj.d"
+  "/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Middlewares/Third_Party/FatFs/src/option/syscall.c" "cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/option/syscall.c.obj" "gcc" "cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/option/syscall.c.obj.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

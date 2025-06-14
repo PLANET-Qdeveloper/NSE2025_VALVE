@@ -1,17 +1,17 @@
 CMakeFiles/NSE2025_VALVE.dir/FATFS/App/fatfs.c.obj: \
- /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/FATFS/App/fatfs.c \
- /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/FATFS/App/fatfs.h \
- /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Middlewares/Third_Party/FatFs/src/ff.h \
- /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Middlewares/Third_Party/FatFs/src/integer.h \
- /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/FATFS/Target/ffconf.h \
- /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Core/Inc/main.h \
- /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
- /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Core/Inc/stm32f4xx_hal_conf.h \
- /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h \
- /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h \
- /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h \
- /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f413xx.h \
- /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/CMSIS/Include/core_cm4.h \
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/FATFS/App/fatfs.c \
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/FATFS/App/fatfs.h \
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Middlewares/Third_Party/FatFs/src/ff.h \
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Middlewares/Third_Party/FatFs/src/integer.h \
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/FATFS/Target/ffconf.h \
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Inc/main.h \
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Inc/stm32f4xx_hal_conf.h \
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h \
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h \
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h \
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f413xx.h \
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/CMSIS/Include/core_cm4.h \
  /opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/lib/gcc/arm-none-eabi/13.3.1/include/stdint.h \
  /opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/arm-none-eabi/include/stdint.h \
  /opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/arm-none-eabi/include/machine/_default_types.h \
@@ -19,32 +19,47 @@ CMakeFiles/NSE2025_VALVE.dir/FATFS/App/fatfs.c.obj: \
  /opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/arm-none-eabi/include/_newlib_version.h \
  /opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/arm-none-eabi/include/sys/_intsup.h \
  /opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/arm-none-eabi/include/sys/_stdint.h \
- /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/CMSIS/Include/cmsis_version.h \
- /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/CMSIS/Include/cmsis_compiler.h \
- /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/CMSIS/Include/cmsis_gcc.h \
- /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/CMSIS/Include/mpu_armv7.h \
- /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h \
- /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h \
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/CMSIS/Include/cmsis_version.h \
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/CMSIS/Include/cmsis_compiler.h \
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/CMSIS/Include/cmsis_gcc.h \
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/CMSIS/Include/mpu_armv7.h \
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h \
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h \
  /opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/lib/gcc/arm-none-eabi/13.3.1/include/stddef.h \
- /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc_ex.h \
- /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h \
- /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio_ex.h \
- /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_exti.h \
- /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h \
- /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma_ex.h \
- /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h \
- /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h \
- /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h \
- /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h \
- /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c.h \
- /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c_ex.h \
- /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h \
- /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h \
- /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h \
- /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h \
- /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
- /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
- /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Middlewares/Third_Party/FatFs/src/ff_gen_drv.h \
- /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Middlewares/Third_Party/FatFs/src/diskio.h \
- /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/Middlewares/Third_Party/FatFs/src/ff.h \
- /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/FATFS/Target/user_diskio.h
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc_ex.h \
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h \
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio_ex.h \
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_exti.h \
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h \
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma_ex.h \
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h \
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h \
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h \
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h \
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c.h \
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c_ex.h \
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h \
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h \
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rtc.h \
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rtc_ex.h \
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h \
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h \
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
+ /opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/arm-none-eabi/include/stdlib.h \
+ /opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/arm-none-eabi/include/machine/ieeefp.h \
+ /opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/arm-none-eabi/include/_ansi.h \
+ /opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/arm-none-eabi/include/newlib.h \
+ /opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/arm-none-eabi/include/sys/config.h \
+ /opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/arm-none-eabi/include/sys/reent.h \
+ /opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/arm-none-eabi/include/_ansi.h \
+ /opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/arm-none-eabi/include/sys/cdefs.h \
+ /opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/arm-none-eabi/include/sys/_types.h \
+ /opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/arm-none-eabi/include/machine/_types.h \
+ /opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/arm-none-eabi/include/sys/lock.h \
+ /opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/arm-none-eabi/include/machine/stdlib.h \
+ /opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/arm-none-eabi/include/alloca.h \
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Middlewares/Third_Party/FatFs/src/ff_gen_drv.h \
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Middlewares/Third_Party/FatFs/src/diskio.h \
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Middlewares/Third_Party/FatFs/src/ff.h \
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/FATFS/Target/user_diskio.h

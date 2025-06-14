@@ -57,10 +57,10 @@ RM = /opt/homebrew/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE
+CMAKE_SOURCE_DIR = /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build
+CMAKE_BINARY_DIR = /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -68,7 +68,7 @@ CMAKE_BINARY_DIR = /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Running CMake cache editor..."
-	/opt/ST/STM32CubeCLT_1.18.0/CMake/bin/ccmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/opt/homebrew/bin/ccmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -87,9 +87,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build/CMakeFiles /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/CMakeFiles /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -323,6 +323,30 @@ Core/Src/sysmem.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSE2025_VALVE.dir/build.make CMakeFiles/NSE2025_VALVE.dir/Core/Src/sysmem.c.s
 .PHONY : Core/Src/sysmem.c.s
 
+Core/Src/system_stm32f4xx.obj: Core/Src/system_stm32f4xx.c.obj
+.PHONY : Core/Src/system_stm32f4xx.obj
+
+# target to build an object file
+Core/Src/system_stm32f4xx.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSE2025_VALVE.dir/build.make CMakeFiles/NSE2025_VALVE.dir/Core/Src/system_stm32f4xx.c.obj
+.PHONY : Core/Src/system_stm32f4xx.c.obj
+
+Core/Src/system_stm32f4xx.i: Core/Src/system_stm32f4xx.c.i
+.PHONY : Core/Src/system_stm32f4xx.i
+
+# target to preprocess a source file
+Core/Src/system_stm32f4xx.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSE2025_VALVE.dir/build.make CMakeFiles/NSE2025_VALVE.dir/Core/Src/system_stm32f4xx.c.i
+.PHONY : Core/Src/system_stm32f4xx.c.i
+
+Core/Src/system_stm32f4xx.s: Core/Src/system_stm32f4xx.c.s
+.PHONY : Core/Src/system_stm32f4xx.s
+
+# target to generate assembly for a file
+Core/Src/system_stm32f4xx.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSE2025_VALVE.dir/build.make CMakeFiles/NSE2025_VALVE.dir/Core/Src/system_stm32f4xx.c.s
+.PHONY : Core/Src/system_stm32f4xx.c.s
+
 FATFS/App/fatfs.obj: FATFS/App/fatfs.c.obj
 .PHONY : FATFS/App/fatfs.obj
 
@@ -411,6 +435,9 @@ help:
 	@echo "... Core/Src/sysmem.obj"
 	@echo "... Core/Src/sysmem.i"
 	@echo "... Core/Src/sysmem.s"
+	@echo "... Core/Src/system_stm32f4xx.obj"
+	@echo "... Core/Src/system_stm32f4xx.i"
+	@echo "... Core/Src/system_stm32f4xx.s"
 	@echo "... FATFS/App/fatfs.obj"
 	@echo "... FATFS/App/fatfs.i"
 	@echo "... FATFS/App/fatfs.s"

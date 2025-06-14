@@ -14,6 +14,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/NSE2025_VALVE.dir/Core/Src/syscalls.c.obj.d"
   "CMakeFiles/NSE2025_VALVE.dir/Core/Src/sysmem.c.obj"
   "CMakeFiles/NSE2025_VALVE.dir/Core/Src/sysmem.c.obj.d"
+  "CMakeFiles/NSE2025_VALVE.dir/Core/Src/system_stm32f4xx.c.obj"
+  "CMakeFiles/NSE2025_VALVE.dir/Core/Src/system_stm32f4xx.c.obj.d"
   "CMakeFiles/NSE2025_VALVE.dir/FATFS/App/fatfs.c.obj"
   "CMakeFiles/NSE2025_VALVE.dir/FATFS/App/fatfs.c.obj.d"
   "CMakeFiles/NSE2025_VALVE.dir/FATFS/Target/user_diskio.c.obj"

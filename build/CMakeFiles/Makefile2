@@ -54,10 +54,10 @@ RM = /opt/homebrew/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE
+CMAKE_SOURCE_DIR = /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build
+CMAKE_BINARY_DIR = /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build
 
 #=============================================================================
 # Directory level rules for the build root directory
@@ -111,14 +111,14 @@ CMakeFiles/NSE2025_VALVE.dir/all: cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir
 CMakeFiles/NSE2025_VALVE.dir/all: cmake/stm32cubemx/CMakeFiles/FatFs.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSE2025_VALVE.dir/build.make CMakeFiles/NSE2025_VALVE.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSE2025_VALVE.dir/build.make CMakeFiles/NSE2025_VALVE.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build/CMakeFiles --progress-num=5,6,7,8,9,10,11,12,13,14,15 "Built target NSE2025_VALVE"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/CMakeFiles --progress-num=5,6,7,8,9,10,11,12,13,14,15,16 "Built target NSE2025_VALVE"
 .PHONY : CMakeFiles/NSE2025_VALVE.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/NSE2025_VALVE.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build/CMakeFiles 35
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/CMakeFiles 37
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/NSE2025_VALVE.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/CMakeFiles 0
 .PHONY : CMakeFiles/NSE2025_VALVE.dir/rule
 
 # Convenience name for target.
@@ -128,7 +128,7 @@ NSE2025_VALVE: CMakeFiles/NSE2025_VALVE.dir/rule
 # codegen rule for target.
 CMakeFiles/NSE2025_VALVE.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSE2025_VALVE.dir/build.make CMakeFiles/NSE2025_VALVE.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build/CMakeFiles --progress-num=5,6,7,8,9,10,11,12,13,14,15 "Finished codegen for target NSE2025_VALVE"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/CMakeFiles --progress-num=5,6,7,8,9,10,11,12,13,14,15,16 "Finished codegen for target NSE2025_VALVE"
 .PHONY : CMakeFiles/NSE2025_VALVE.dir/codegen
 
 # clean rule for target.
@@ -143,14 +143,14 @@ CMakeFiles/NSE2025_VALVE.dir/clean:
 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/all:
 	$(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/depend
 	$(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build/CMakeFiles --progress-num=16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35 "Built target STM32_Drivers"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/CMakeFiles --progress-num=17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37 "Built target STM32_Drivers"
 .PHONY : cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/all
 
 # Build rule for subdir invocation for target.
 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build/CMakeFiles 20
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/CMakeFiles 21
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/CMakeFiles 0
 .PHONY : cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/rule
 
 # Convenience name for target.
@@ -160,7 +160,7 @@ STM32_Drivers: cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/rule
 # codegen rule for target.
 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build/CMakeFiles --progress-num=16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35 "Finished codegen for target STM32_Drivers"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/CMakeFiles --progress-num=17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37 "Finished codegen for target STM32_Drivers"
 .PHONY : cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/codegen
 
 # clean rule for target.
@@ -175,14 +175,14 @@ cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/clean:
 cmake/stm32cubemx/CMakeFiles/FatFs.dir/all:
 	$(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/FatFs.dir/build.make cmake/stm32cubemx/CMakeFiles/FatFs.dir/depend
 	$(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/FatFs.dir/build.make cmake/stm32cubemx/CMakeFiles/FatFs.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build/CMakeFiles --progress-num=1,2,3,4 "Built target FatFs"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/CMakeFiles --progress-num=1,2,3,4 "Built target FatFs"
 .PHONY : cmake/stm32cubemx/CMakeFiles/FatFs.dir/all
 
 # Build rule for subdir invocation for target.
 cmake/stm32cubemx/CMakeFiles/FatFs.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build/CMakeFiles 4
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/CMakeFiles 4
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 cmake/stm32cubemx/CMakeFiles/FatFs.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/CMakeFiles 0
 .PHONY : cmake/stm32cubemx/CMakeFiles/FatFs.dir/rule
 
 # Convenience name for target.
@@ -192,7 +192,7 @@ FatFs: cmake/stm32cubemx/CMakeFiles/FatFs.dir/rule
 # codegen rule for target.
 cmake/stm32cubemx/CMakeFiles/FatFs.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/FatFs.dir/build.make cmake/stm32cubemx/CMakeFiles/FatFs.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build/CMakeFiles --progress-num=1,2,3,4 "Finished codegen for target FatFs"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/CMakeFiles --progress-num=1,2,3,4 "Finished codegen for target FatFs"
 .PHONY : cmake/stm32cubemx/CMakeFiles/FatFs.dir/codegen
 
 # clean rule for target.

@@ -1,4 +1,4 @@
-# Install script for directory: /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/cmake/stm32cubemx
+# Install script for directory: /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/cmake/stm32cubemx
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -40,6 +40,6 @@ endif()
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
 if(CMAKE_INSTALL_LOCAL_ONLY)
-  file(WRITE "/Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build/cmake/stm32cubemx/install_local_manifest.txt"
+  file(WRITE "/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/cmake/stm32cubemx/install_local_manifest.txt"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
 endif()

@@ -57,10 +57,10 @@ RM = /opt/homebrew/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE
+CMAKE_SOURCE_DIR = /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build
+CMAKE_BINARY_DIR = /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -68,7 +68,7 @@ CMAKE_BINARY_DIR = /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Running CMake cache editor..."
-	/opt/ST/STM32CubeCLT_1.18.0/CMake/bin/ccmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/opt/homebrew/bin/ccmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -87,14 +87,14 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(CMAKE_COMMAND) -E cmake_progress_start /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build/CMakeFiles /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build/cmake/stm32cubemx//CMakeFiles/progress.marks
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 cmake/stm32cubemx/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build/CMakeFiles 0
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(CMAKE_COMMAND) -E cmake_progress_start /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/CMakeFiles /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/cmake/stm32cubemx//CMakeFiles/progress.marks
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 cmake/stm32cubemx/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 cmake/stm32cubemx/clean
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 cmake/stm32cubemx/clean
 .PHONY : clean
 
 # The main clean target
@@ -103,22 +103,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 cmake/stm32cubemx/preinstall
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 cmake/stm32cubemx/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 cmake/stm32cubemx/preinstall
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 cmake/stm32cubemx/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/rule:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/rule
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/rule
 .PHONY : cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/rule
 
 # Convenience name for target.
@@ -127,12 +127,12 @@ STM32_Drivers: cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/rule
 
 # fast build rule for target.
 STM32_Drivers/fast:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build
 .PHONY : STM32_Drivers/fast
 
 # Convenience name for target.
 cmake/stm32cubemx/CMakeFiles/FatFs.dir/rule:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 cmake/stm32cubemx/CMakeFiles/FatFs.dir/rule
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 cmake/stm32cubemx/CMakeFiles/FatFs.dir/rule
 .PHONY : cmake/stm32cubemx/CMakeFiles/FatFs.dir/rule
 
 # Convenience name for target.
@@ -141,39 +141,15 @@ FatFs: cmake/stm32cubemx/CMakeFiles/FatFs.dir/rule
 
 # fast build rule for target.
 FatFs/fast:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/FatFs.dir/build.make cmake/stm32cubemx/CMakeFiles/FatFs.dir/build
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/FatFs.dir/build.make cmake/stm32cubemx/CMakeFiles/FatFs.dir/build
 .PHONY : FatFs/fast
-
-__/__/Core/Src/system_stm32f4xx.obj: __/__/Core/Src/system_stm32f4xx.c.obj
-.PHONY : __/__/Core/Src/system_stm32f4xx.obj
-
-# target to build an object file
-__/__/Core/Src/system_stm32f4xx.c.obj:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Core/Src/system_stm32f4xx.c.obj
-.PHONY : __/__/Core/Src/system_stm32f4xx.c.obj
-
-__/__/Core/Src/system_stm32f4xx.i: __/__/Core/Src/system_stm32f4xx.c.i
-.PHONY : __/__/Core/Src/system_stm32f4xx.i
-
-# target to preprocess a source file
-__/__/Core/Src/system_stm32f4xx.c.i:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Core/Src/system_stm32f4xx.c.i
-.PHONY : __/__/Core/Src/system_stm32f4xx.c.i
-
-__/__/Core/Src/system_stm32f4xx.s: __/__/Core/Src/system_stm32f4xx.c.s
-.PHONY : __/__/Core/Src/system_stm32f4xx.s
-
-# target to generate assembly for a file
-__/__/Core/Src/system_stm32f4xx.c.s:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Core/Src/system_stm32f4xx.c.s
-.PHONY : __/__/Core/Src/system_stm32f4xx.c.s
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.obj: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c.obj
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.obj
 
 # target to build an object file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c.obj:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c.obj
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c.obj
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c.obj
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.i: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c.i
@@ -181,7 +157,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.i: __/__/Drivers/STM32F4xx_
 
 # target to preprocess a source file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c.i:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c.i
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c.i
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c.i
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.s: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c.s
@@ -189,7 +165,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.s: __/__/Drivers/STM32F4xx_
 
 # target to generate assembly for a file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c.s:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c.s
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c.s
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c.s
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.obj: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c.obj
@@ -197,7 +173,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.obj: __/__/Drivers/S
 
 # target to build an object file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c.obj:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c.obj
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c.obj
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c.obj
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.i: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c.i
@@ -205,7 +181,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.i: __/__/Drivers/STM
 
 # target to preprocess a source file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c.i:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c.i
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c.i
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c.i
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.s: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c.s
@@ -213,7 +189,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.s: __/__/Drivers/STM
 
 # target to generate assembly for a file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c.s:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c.s
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c.s
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c.s
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.obj: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c.obj
@@ -221,7 +197,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.obj: __/__/Drivers/STM3
 
 # target to build an object file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c.obj:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c.obj
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c.obj
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c.obj
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.i: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c.i
@@ -229,7 +205,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.i: __/__/Drivers/STM32F
 
 # target to preprocess a source file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c.i:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c.i
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c.i
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c.i
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.s: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c.s
@@ -237,7 +213,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.s: __/__/Drivers/STM32F
 
 # target to generate assembly for a file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c.s:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c.s
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c.s
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c.s
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.obj: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c.obj
@@ -245,7 +221,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.obj: __/__/Drivers/S
 
 # target to build an object file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c.obj:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c.obj
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c.obj
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c.obj
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.i: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c.i
@@ -253,7 +229,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.i: __/__/Drivers/STM
 
 # target to preprocess a source file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c.i:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c.i
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c.i
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c.i
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.s: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c.s
@@ -261,7 +237,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.s: __/__/Drivers/STM
 
 # target to generate assembly for a file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c.s:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c.s
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c.s
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c.s
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.obj: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.c.obj
@@ -269,7 +245,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.obj: __/__/Drivers/STM
 
 # target to build an object file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.c.obj:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.c.obj
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.c.obj
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.c.obj
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.i: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.c.i
@@ -277,7 +253,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.i: __/__/Drivers/STM32
 
 # target to preprocess a source file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.c.i:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.c.i
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.c.i
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.c.i
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.s: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.c.s
@@ -285,7 +261,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.s: __/__/Drivers/STM32
 
 # target to generate assembly for a file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.c.s:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.c.s
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.c.s
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_exti.c.s
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.obj: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.c.obj
@@ -293,7 +269,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.obj: __/__/Drivers/ST
 
 # target to build an object file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.c.obj:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.c.obj
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.c.obj
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.c.obj
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.i: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.c.i
@@ -301,7 +277,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.i: __/__/Drivers/STM3
 
 # target to preprocess a source file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.c.i:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.c.i
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.c.i
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.c.i
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.s: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.c.s
@@ -309,7 +285,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.s: __/__/Drivers/STM3
 
 # target to generate assembly for a file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.c.s:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.c.s
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.c.s
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.c.s
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.obj: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c.obj
@@ -317,7 +293,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.obj: __/__/Drivers
 
 # target to build an object file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c.obj:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c.obj
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c.obj
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c.obj
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.i: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c.i
@@ -325,7 +301,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.i: __/__/Drivers/S
 
 # target to preprocess a source file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c.i:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c.i
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c.i
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c.i
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.s: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c.s
@@ -333,7 +309,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.s: __/__/Drivers/S
 
 # target to generate assembly for a file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c.s:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c.s
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c.s
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c.s
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ramfunc.obj: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ramfunc.c.obj
@@ -341,7 +317,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ramfunc.obj: __/__/Dr
 
 # target to build an object file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ramfunc.c.obj:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ramfunc.c.obj
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ramfunc.c.obj
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ramfunc.c.obj
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ramfunc.i: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ramfunc.c.i
@@ -349,7 +325,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ramfunc.i: __/__/Driv
 
 # target to preprocess a source file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ramfunc.c.i:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ramfunc.c.i
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ramfunc.c.i
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ramfunc.c.i
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ramfunc.s: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ramfunc.c.s
@@ -357,7 +333,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ramfunc.s: __/__/Driv
 
 # target to generate assembly for a file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ramfunc.c.s:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ramfunc.c.s
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ramfunc.c.s
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ramfunc.c.s
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.obj: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c.obj
@@ -365,7 +341,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.obj: __/__/Drivers/STM
 
 # target to build an object file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c.obj:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c.obj
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c.obj
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c.obj
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.i: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c.i
@@ -373,7 +349,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.i: __/__/Drivers/STM32
 
 # target to preprocess a source file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c.i:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c.i
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c.i
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c.i
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.s: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c.s
@@ -381,7 +357,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.s: __/__/Drivers/STM32
 
 # target to generate assembly for a file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c.s:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c.s
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c.s
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c.s
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.obj: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.c.obj
@@ -389,7 +365,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.obj: __/__/Drivers/STM3
 
 # target to build an object file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.c.obj:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.c.obj
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.c.obj
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.c.obj
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.i: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.c.i
@@ -397,7 +373,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.i: __/__/Drivers/STM32F
 
 # target to preprocess a source file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.c.i:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.c.i
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.c.i
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.c.i
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.s: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.c.s
@@ -405,7 +381,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.s: __/__/Drivers/STM32F
 
 # target to generate assembly for a file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.c.s:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.c.s
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.c.s
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.c.s
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c_ex.obj: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c_ex.c.obj
@@ -413,7 +389,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c_ex.obj: __/__/Drivers/S
 
 # target to build an object file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c_ex.c.obj:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c_ex.c.obj
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c_ex.c.obj
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c_ex.c.obj
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c_ex.i: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c_ex.c.i
@@ -421,7 +397,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c_ex.i: __/__/Drivers/STM
 
 # target to preprocess a source file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c_ex.c.i:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c_ex.c.i
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c_ex.c.i
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c_ex.c.i
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c_ex.s: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c_ex.c.s
@@ -429,7 +405,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c_ex.s: __/__/Drivers/STM
 
 # target to generate assembly for a file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c_ex.c.s:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c_ex.c.s
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c_ex.c.s
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c_ex.c.s
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.obj: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c.obj
@@ -437,7 +413,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.obj: __/__/Drivers/STM3
 
 # target to build an object file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c.obj:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c.obj
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c.obj
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c.obj
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.i: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c.i
@@ -445,7 +421,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.i: __/__/Drivers/STM32F
 
 # target to preprocess a source file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c.i:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c.i
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c.i
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c.i
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.s: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c.s
@@ -453,7 +429,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.s: __/__/Drivers/STM32F
 
 # target to generate assembly for a file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c.s:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c.s
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c.s
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c.s
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.obj: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c.obj
@@ -461,7 +437,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.obj: __/__/Drivers/S
 
 # target to build an object file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c.obj:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c.obj
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c.obj
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c.obj
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.i: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c.i
@@ -469,7 +445,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.i: __/__/Drivers/STM
 
 # target to preprocess a source file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c.i:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c.i
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c.i
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c.i
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.s: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c.s
@@ -477,7 +453,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.s: __/__/Drivers/STM
 
 # target to generate assembly for a file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c.s:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c.s
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c.s
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c.s
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.obj: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c.obj
@@ -485,7 +461,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.obj: __/__/Drivers/STM3
 
 # target to build an object file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c.obj:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c.obj
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c.obj
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c.obj
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.i: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c.i
@@ -493,7 +469,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.i: __/__/Drivers/STM32F
 
 # target to preprocess a source file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c.i:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c.i
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c.i
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c.i
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.s: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c.s
@@ -501,7 +477,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.s: __/__/Drivers/STM32F
 
 # target to generate assembly for a file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c.s:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c.s
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c.s
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c.s
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.obj: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c.obj
@@ -509,7 +485,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.obj: __/__/Drivers/S
 
 # target to build an object file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c.obj:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c.obj
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c.obj
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c.obj
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.i: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c.i
@@ -517,7 +493,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.i: __/__/Drivers/STM
 
 # target to preprocess a source file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c.i:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c.i
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c.i
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c.i
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.s: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c.s
@@ -525,15 +501,63 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.s: __/__/Drivers/STM
 
 # target to generate assembly for a file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c.s:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c.s
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c.s
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c.s
+
+__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc.obj: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc.c.obj
+.PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc.obj
+
+# target to build an object file
+__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc.c.obj:
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc.c.obj
+.PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc.c.obj
+
+__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc.i: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc.c.i
+.PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc.i
+
+# target to preprocess a source file
+__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc.c.i:
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc.c.i
+.PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc.c.i
+
+__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc.s: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc.c.s
+.PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc.s
+
+# target to generate assembly for a file
+__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc.c.s:
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc.c.s
+.PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc.c.s
+
+__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc_ex.obj: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc_ex.c.obj
+.PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc_ex.obj
+
+# target to build an object file
+__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc_ex.c.obj:
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc_ex.c.obj
+.PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc_ex.c.obj
+
+__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc_ex.i: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc_ex.c.i
+.PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc_ex.i
+
+# target to preprocess a source file
+__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc_ex.c.i:
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc_ex.c.i
+.PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc_ex.c.i
+
+__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc_ex.s: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc_ex.c.s
+.PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc_ex.s
+
+# target to generate assembly for a file
+__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc_ex.c.s:
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc_ex.c.s
+.PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc_ex.c.s
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.obj: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c.obj
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.obj
 
 # target to build an object file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c.obj:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c.obj
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c.obj
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c.obj
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.i: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c.i
@@ -541,7 +565,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.i: __/__/Drivers/STM32F
 
 # target to preprocess a source file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c.i:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c.i
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c.i
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c.i
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.s: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c.s
@@ -549,7 +573,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.s: __/__/Drivers/STM32F
 
 # target to generate assembly for a file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c.s:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c.s
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c.s
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c.s
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.obj: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c.obj
@@ -557,7 +581,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.obj: __/__/Drivers/STM3
 
 # target to build an object file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c.obj:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c.obj
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c.obj
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c.obj
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.i: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c.i
@@ -565,7 +589,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.i: __/__/Drivers/STM32F
 
 # target to preprocess a source file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c.i:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c.i
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c.i
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c.i
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.s: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c.s
@@ -573,7 +597,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.s: __/__/Drivers/STM32F
 
 # target to generate assembly for a file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c.s:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c.s
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c.s
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c.s
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.obj: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c.obj
@@ -581,7 +605,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.obj: __/__/Drivers/S
 
 # target to build an object file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c.obj:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c.obj
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c.obj
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c.obj
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.i: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c.i
@@ -589,7 +613,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.i: __/__/Drivers/STM
 
 # target to preprocess a source file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c.i:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c.i
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c.i
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c.i
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.s: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c.s
@@ -597,7 +621,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.s: __/__/Drivers/STM
 
 # target to generate assembly for a file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c.s:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c.s
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c.s
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c.s
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.obj: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c.obj
@@ -605,7 +629,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.obj: __/__/Drivers/STM
 
 # target to build an object file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c.obj:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c.obj
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c.obj
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c.obj
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.i: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c.i
@@ -613,7 +637,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.i: __/__/Drivers/STM32
 
 # target to preprocess a source file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c.i:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c.i
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c.i
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c.i
 
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.s: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c.s
@@ -621,7 +645,7 @@ __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.s: __/__/Drivers/STM32
 
 # target to generate assembly for a file
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c.s:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c.s
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c.s
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c.s
 
 __/__/Middlewares/Third_Party/FatFs/src/diskio.obj: __/__/Middlewares/Third_Party/FatFs/src/diskio.c.obj
@@ -629,7 +653,7 @@ __/__/Middlewares/Third_Party/FatFs/src/diskio.obj: __/__/Middlewares/Third_Part
 
 # target to build an object file
 __/__/Middlewares/Third_Party/FatFs/src/diskio.c.obj:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/FatFs.dir/build.make cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/diskio.c.obj
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/FatFs.dir/build.make cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/diskio.c.obj
 .PHONY : __/__/Middlewares/Third_Party/FatFs/src/diskio.c.obj
 
 __/__/Middlewares/Third_Party/FatFs/src/diskio.i: __/__/Middlewares/Third_Party/FatFs/src/diskio.c.i
@@ -637,7 +661,7 @@ __/__/Middlewares/Third_Party/FatFs/src/diskio.i: __/__/Middlewares/Third_Party/
 
 # target to preprocess a source file
 __/__/Middlewares/Third_Party/FatFs/src/diskio.c.i:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/FatFs.dir/build.make cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/diskio.c.i
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/FatFs.dir/build.make cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/diskio.c.i
 .PHONY : __/__/Middlewares/Third_Party/FatFs/src/diskio.c.i
 
 __/__/Middlewares/Third_Party/FatFs/src/diskio.s: __/__/Middlewares/Third_Party/FatFs/src/diskio.c.s
@@ -645,7 +669,7 @@ __/__/Middlewares/Third_Party/FatFs/src/diskio.s: __/__/Middlewares/Third_Party/
 
 # target to generate assembly for a file
 __/__/Middlewares/Third_Party/FatFs/src/diskio.c.s:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/FatFs.dir/build.make cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/diskio.c.s
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/FatFs.dir/build.make cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/diskio.c.s
 .PHONY : __/__/Middlewares/Third_Party/FatFs/src/diskio.c.s
 
 __/__/Middlewares/Third_Party/FatFs/src/ff.obj: __/__/Middlewares/Third_Party/FatFs/src/ff.c.obj
@@ -653,7 +677,7 @@ __/__/Middlewares/Third_Party/FatFs/src/ff.obj: __/__/Middlewares/Third_Party/Fa
 
 # target to build an object file
 __/__/Middlewares/Third_Party/FatFs/src/ff.c.obj:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/FatFs.dir/build.make cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/ff.c.obj
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/FatFs.dir/build.make cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/ff.c.obj
 .PHONY : __/__/Middlewares/Third_Party/FatFs/src/ff.c.obj
 
 __/__/Middlewares/Third_Party/FatFs/src/ff.i: __/__/Middlewares/Third_Party/FatFs/src/ff.c.i
@@ -661,7 +685,7 @@ __/__/Middlewares/Third_Party/FatFs/src/ff.i: __/__/Middlewares/Third_Party/FatF
 
 # target to preprocess a source file
 __/__/Middlewares/Third_Party/FatFs/src/ff.c.i:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/FatFs.dir/build.make cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/ff.c.i
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/FatFs.dir/build.make cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/ff.c.i
 .PHONY : __/__/Middlewares/Third_Party/FatFs/src/ff.c.i
 
 __/__/Middlewares/Third_Party/FatFs/src/ff.s: __/__/Middlewares/Third_Party/FatFs/src/ff.c.s
@@ -669,7 +693,7 @@ __/__/Middlewares/Third_Party/FatFs/src/ff.s: __/__/Middlewares/Third_Party/FatF
 
 # target to generate assembly for a file
 __/__/Middlewares/Third_Party/FatFs/src/ff.c.s:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/FatFs.dir/build.make cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/ff.c.s
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/FatFs.dir/build.make cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/ff.c.s
 .PHONY : __/__/Middlewares/Third_Party/FatFs/src/ff.c.s
 
 __/__/Middlewares/Third_Party/FatFs/src/ff_gen_drv.obj: __/__/Middlewares/Third_Party/FatFs/src/ff_gen_drv.c.obj
@@ -677,7 +701,7 @@ __/__/Middlewares/Third_Party/FatFs/src/ff_gen_drv.obj: __/__/Middlewares/Third_
 
 # target to build an object file
 __/__/Middlewares/Third_Party/FatFs/src/ff_gen_drv.c.obj:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/FatFs.dir/build.make cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/ff_gen_drv.c.obj
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/FatFs.dir/build.make cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/ff_gen_drv.c.obj
 .PHONY : __/__/Middlewares/Third_Party/FatFs/src/ff_gen_drv.c.obj
 
 __/__/Middlewares/Third_Party/FatFs/src/ff_gen_drv.i: __/__/Middlewares/Third_Party/FatFs/src/ff_gen_drv.c.i
@@ -685,7 +709,7 @@ __/__/Middlewares/Third_Party/FatFs/src/ff_gen_drv.i: __/__/Middlewares/Third_Pa
 
 # target to preprocess a source file
 __/__/Middlewares/Third_Party/FatFs/src/ff_gen_drv.c.i:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/FatFs.dir/build.make cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/ff_gen_drv.c.i
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/FatFs.dir/build.make cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/ff_gen_drv.c.i
 .PHONY : __/__/Middlewares/Third_Party/FatFs/src/ff_gen_drv.c.i
 
 __/__/Middlewares/Third_Party/FatFs/src/ff_gen_drv.s: __/__/Middlewares/Third_Party/FatFs/src/ff_gen_drv.c.s
@@ -693,7 +717,7 @@ __/__/Middlewares/Third_Party/FatFs/src/ff_gen_drv.s: __/__/Middlewares/Third_Pa
 
 # target to generate assembly for a file
 __/__/Middlewares/Third_Party/FatFs/src/ff_gen_drv.c.s:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/FatFs.dir/build.make cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/ff_gen_drv.c.s
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/FatFs.dir/build.make cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/ff_gen_drv.c.s
 .PHONY : __/__/Middlewares/Third_Party/FatFs/src/ff_gen_drv.c.s
 
 __/__/Middlewares/Third_Party/FatFs/src/option/syscall.obj: __/__/Middlewares/Third_Party/FatFs/src/option/syscall.c.obj
@@ -701,7 +725,7 @@ __/__/Middlewares/Third_Party/FatFs/src/option/syscall.obj: __/__/Middlewares/Th
 
 # target to build an object file
 __/__/Middlewares/Third_Party/FatFs/src/option/syscall.c.obj:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/FatFs.dir/build.make cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/option/syscall.c.obj
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/FatFs.dir/build.make cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/option/syscall.c.obj
 .PHONY : __/__/Middlewares/Third_Party/FatFs/src/option/syscall.c.obj
 
 __/__/Middlewares/Third_Party/FatFs/src/option/syscall.i: __/__/Middlewares/Third_Party/FatFs/src/option/syscall.c.i
@@ -709,7 +733,7 @@ __/__/Middlewares/Third_Party/FatFs/src/option/syscall.i: __/__/Middlewares/Thir
 
 # target to preprocess a source file
 __/__/Middlewares/Third_Party/FatFs/src/option/syscall.c.i:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/FatFs.dir/build.make cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/option/syscall.c.i
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/FatFs.dir/build.make cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/option/syscall.c.i
 .PHONY : __/__/Middlewares/Third_Party/FatFs/src/option/syscall.c.i
 
 __/__/Middlewares/Third_Party/FatFs/src/option/syscall.s: __/__/Middlewares/Third_Party/FatFs/src/option/syscall.c.s
@@ -717,7 +741,7 @@ __/__/Middlewares/Third_Party/FatFs/src/option/syscall.s: __/__/Middlewares/Thir
 
 # target to generate assembly for a file
 __/__/Middlewares/Third_Party/FatFs/src/option/syscall.c.s:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/FatFs.dir/build.make cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/option/syscall.c.s
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/FatFs.dir/build.make cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/option/syscall.c.s
 .PHONY : __/__/Middlewares/Third_Party/FatFs/src/option/syscall.c.s
 
 # Help Target
@@ -730,9 +754,6 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... FatFs"
 	@echo "... STM32_Drivers"
-	@echo "... __/__/Core/Src/system_stm32f4xx.obj"
-	@echo "... __/__/Core/Src/system_stm32f4xx.i"
-	@echo "... __/__/Core/Src/system_stm32f4xx.s"
 	@echo "... __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.obj"
 	@echo "... __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.i"
 	@echo "... __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.s"
@@ -778,6 +799,12 @@ help:
 	@echo "... __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.obj"
 	@echo "... __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.i"
 	@echo "... __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.s"
+	@echo "... __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc.obj"
+	@echo "... __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc.i"
+	@echo "... __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc.s"
+	@echo "... __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc_ex.obj"
+	@echo "... __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc_ex.i"
+	@echo "... __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc_ex.s"
 	@echo "... __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.obj"
 	@echo "... __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.i"
 	@echo "... __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.s"
@@ -813,6 +840,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

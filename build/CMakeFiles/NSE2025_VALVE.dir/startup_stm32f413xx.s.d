@@ -1,0 +1,2 @@
+CMakeFiles/NSE2025_VALVE.dir/startup_stm32f413xx.s.obj: \
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/startup_stm32f413xx.s

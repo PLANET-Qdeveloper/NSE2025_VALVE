@@ -35,7 +35,7 @@ rule C_COMPILER__NSE2025_VALVE_unscanned_Debug
 # Rule for linking C executable.
 
 rule C_EXECUTABLE_LINKER__NSE2025_VALVE_Debug
-  command = $PRE_LINK && /opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $FLAGS -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard  -T "/Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/STM32F413XX_FLASH.ld" --specs=nano.specs -Wl,-Map=NSE2025_VALVE.map -Wl,--gc-sections -Wl,--start-group -lc -lm -Wl,--end-group -Wl,--print-memory-usage $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
+  command = $PRE_LINK && /opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $FLAGS -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard  -T "/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/STM32F413XX_FLASH.ld" --specs=nano.specs -Wl,-Map=NSE2025_VALVE.map -Wl,--gc-sections -Wl,--start-group -lc -lm -Wl,--end-group -Wl,--print-memory-usage $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
   description = Linking C executable $TARGET_FILE
   restat = $RESTAT
 
@@ -72,7 +72,7 @@ rule C_COMPILER__FatFs_unscanned_Debug
 # Rule for re-running cmake.
 
 rule RERUN_CMAKE
-  command = /opt/homebrew/bin/cmake --regenerate-during-build -S/Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE -B/Users/a81802/Documents/Programs/stm32_projects/1.18/NSE2025_VALVE/build/Debug
+  command = /opt/homebrew/bin/cmake --regenerate-during-build -S/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE -B/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/Debug
   description = Re-running CMake...
   generator = 1
 

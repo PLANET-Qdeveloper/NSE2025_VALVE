@@ -73,4 +73,5 @@ CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj: \
  /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Inc/servo.h \
  /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Inc/main.h \
  /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Middlewares/Third_Party/FatFs/src/diskio.h \
- /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Inc/fatfs_sd.h
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Inc/fatfs_sd.h \
+ /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Inc/MAX6675.h

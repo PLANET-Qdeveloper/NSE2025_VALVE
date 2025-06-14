@@ -144,6 +144,30 @@ FatFs/fast:
 	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/FatFs.dir/build.make cmake/stm32cubemx/CMakeFiles/FatFs.dir/build
 .PHONY : FatFs/fast
 
+__/__/Core/Src/system_stm32f4xx.obj: __/__/Core/Src/system_stm32f4xx.c.obj
+.PHONY : __/__/Core/Src/system_stm32f4xx.obj
+
+# target to build an object file
+__/__/Core/Src/system_stm32f4xx.c.obj:
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Core/Src/system_stm32f4xx.c.obj
+.PHONY : __/__/Core/Src/system_stm32f4xx.c.obj
+
+__/__/Core/Src/system_stm32f4xx.i: __/__/Core/Src/system_stm32f4xx.c.i
+.PHONY : __/__/Core/Src/system_stm32f4xx.i
+
+# target to preprocess a source file
+__/__/Core/Src/system_stm32f4xx.c.i:
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Core/Src/system_stm32f4xx.c.i
+.PHONY : __/__/Core/Src/system_stm32f4xx.c.i
+
+__/__/Core/Src/system_stm32f4xx.s: __/__/Core/Src/system_stm32f4xx.c.s
+.PHONY : __/__/Core/Src/system_stm32f4xx.s
+
+# target to generate assembly for a file
+__/__/Core/Src/system_stm32f4xx.c.s:
+	cd /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build && $(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/build.make cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Core/Src/system_stm32f4xx.c.s
+.PHONY : __/__/Core/Src/system_stm32f4xx.c.s
+
 __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.obj: __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c.obj
 .PHONY : __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.obj
 
@@ -754,6 +778,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... FatFs"
 	@echo "... STM32_Drivers"
+	@echo "... __/__/Core/Src/system_stm32f4xx.obj"
+	@echo "... __/__/Core/Src/system_stm32f4xx.i"
+	@echo "... __/__/Core/Src/system_stm32f4xx.s"
 	@echo "... __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.obj"
 	@echo "... __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.i"
 	@echo "... __/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.s"

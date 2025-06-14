@@ -21,15 +21,21 @@ set(MX_Include_Dirs
 )
 
 # STM32CubeMX generated application sources
-file(GLOB MX_Application_Src
-    ${CMAKE_SOURCE_DIR}/FATFS/Target/*.c
-    ${CMAKE_SOURCE_DIR}/FATFS/App/*.c
-    ${CMAKE_SOURCE_DIR}/Core/Src/*.c
+set(MX_Application_Src
+    ${CMAKE_SOURCE_DIR}/FATFS/Target/user_diskio.c
+    ${CMAKE_SOURCE_DIR}/FATFS/App/fatfs.c
+    ${CMAKE_SOURCE_DIR}/Core/Src/main.c
+    ${CMAKE_SOURCE_DIR}/Core/Src/stm32f4xx_it.c
+    ${CMAKE_SOURCE_DIR}/Core/Src/stm32f4xx_hal_msp.c
+    ${CMAKE_SOURCE_DIR}/Core/Src/sysmem.c
+    ${CMAKE_SOURCE_DIR}/Core/Src/syscalls.c
     ${CMAKE_SOURCE_DIR}/startup_stm32f413xx.s
+    ${CMAKE_SOURCE_DIR}/Core/Src/MAX6675.c
 )
 
 # STM32 HAL/LL Drivers
 set(STM32_Drivers_Src
+    ${CMAKE_SOURCE_DIR}/Core/Src/system_stm32f4xx.c
     ${CMAKE_SOURCE_DIR}/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c
     ${CMAKE_SOURCE_DIR}/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c
     ${CMAKE_SOURCE_DIR}/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.c

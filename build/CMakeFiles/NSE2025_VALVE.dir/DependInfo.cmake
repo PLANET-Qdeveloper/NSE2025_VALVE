@@ -33,6 +33,7 @@ set(CMAKE_ASM_TARGET_INCLUDE_PATH
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/MAX6675.c" "CMakeFiles/NSE2025_VALVE.dir/Core/Src/MAX6675.c.obj" "gcc" "CMakeFiles/NSE2025_VALVE.dir/Core/Src/MAX6675.c.obj.d"
   "/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/fatfs_sd.c" "CMakeFiles/NSE2025_VALVE.dir/Core/Src/fatfs_sd.c.obj" "gcc" "CMakeFiles/NSE2025_VALVE.dir/Core/Src/fatfs_sd.c.obj.d"
   "/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/main.c" "CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj" "gcc" "CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj.d"
   "/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/servo.c" "CMakeFiles/NSE2025_VALVE.dir/Core/Src/servo.c.obj" "gcc" "CMakeFiles/NSE2025_VALVE.dir/Core/Src/servo.c.obj.d"
@@ -40,7 +41,6 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/stm32f4xx_it.c" "CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_it.c.obj" "gcc" "CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_it.c.obj.d"
   "/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/syscalls.c" "CMakeFiles/NSE2025_VALVE.dir/Core/Src/syscalls.c.obj" "gcc" "CMakeFiles/NSE2025_VALVE.dir/Core/Src/syscalls.c.obj.d"
   "/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/sysmem.c" "CMakeFiles/NSE2025_VALVE.dir/Core/Src/sysmem.c.obj" "gcc" "CMakeFiles/NSE2025_VALVE.dir/Core/Src/sysmem.c.obj.d"
-  "/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/system_stm32f4xx.c" "CMakeFiles/NSE2025_VALVE.dir/Core/Src/system_stm32f4xx.c.obj" "gcc" "CMakeFiles/NSE2025_VALVE.dir/Core/Src/system_stm32f4xx.c.obj.d"
   "/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/FATFS/App/fatfs.c" "CMakeFiles/NSE2025_VALVE.dir/FATFS/App/fatfs.c.obj" "gcc" "CMakeFiles/NSE2025_VALVE.dir/FATFS/App/fatfs.c.obj.d"
   "/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/FATFS/Target/user_diskio.c" "CMakeFiles/NSE2025_VALVE.dir/FATFS/Target/user_diskio.c.obj" "gcc" "CMakeFiles/NSE2025_VALVE.dir/FATFS/Target/user_diskio.c.obj.d"
   )

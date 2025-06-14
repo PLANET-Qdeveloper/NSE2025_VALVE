@@ -155,6 +155,30 @@ FatFs/fast:
 	$(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/FatFs.dir/build.make cmake/stm32cubemx/CMakeFiles/FatFs.dir/build
 .PHONY : FatFs/fast
 
+Core/Src/MAX6675.obj: Core/Src/MAX6675.c.obj
+.PHONY : Core/Src/MAX6675.obj
+
+# target to build an object file
+Core/Src/MAX6675.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSE2025_VALVE.dir/build.make CMakeFiles/NSE2025_VALVE.dir/Core/Src/MAX6675.c.obj
+.PHONY : Core/Src/MAX6675.c.obj
+
+Core/Src/MAX6675.i: Core/Src/MAX6675.c.i
+.PHONY : Core/Src/MAX6675.i
+
+# target to preprocess a source file
+Core/Src/MAX6675.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSE2025_VALVE.dir/build.make CMakeFiles/NSE2025_VALVE.dir/Core/Src/MAX6675.c.i
+.PHONY : Core/Src/MAX6675.c.i
+
+Core/Src/MAX6675.s: Core/Src/MAX6675.c.s
+.PHONY : Core/Src/MAX6675.s
+
+# target to generate assembly for a file
+Core/Src/MAX6675.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSE2025_VALVE.dir/build.make CMakeFiles/NSE2025_VALVE.dir/Core/Src/MAX6675.c.s
+.PHONY : Core/Src/MAX6675.c.s
+
 Core/Src/fatfs_sd.obj: Core/Src/fatfs_sd.c.obj
 .PHONY : Core/Src/fatfs_sd.obj
 
@@ -323,30 +347,6 @@ Core/Src/sysmem.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSE2025_VALVE.dir/build.make CMakeFiles/NSE2025_VALVE.dir/Core/Src/sysmem.c.s
 .PHONY : Core/Src/sysmem.c.s
 
-Core/Src/system_stm32f4xx.obj: Core/Src/system_stm32f4xx.c.obj
-.PHONY : Core/Src/system_stm32f4xx.obj
-
-# target to build an object file
-Core/Src/system_stm32f4xx.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSE2025_VALVE.dir/build.make CMakeFiles/NSE2025_VALVE.dir/Core/Src/system_stm32f4xx.c.obj
-.PHONY : Core/Src/system_stm32f4xx.c.obj
-
-Core/Src/system_stm32f4xx.i: Core/Src/system_stm32f4xx.c.i
-.PHONY : Core/Src/system_stm32f4xx.i
-
-# target to preprocess a source file
-Core/Src/system_stm32f4xx.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSE2025_VALVE.dir/build.make CMakeFiles/NSE2025_VALVE.dir/Core/Src/system_stm32f4xx.c.i
-.PHONY : Core/Src/system_stm32f4xx.c.i
-
-Core/Src/system_stm32f4xx.s: Core/Src/system_stm32f4xx.c.s
-.PHONY : Core/Src/system_stm32f4xx.s
-
-# target to generate assembly for a file
-Core/Src/system_stm32f4xx.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSE2025_VALVE.dir/build.make CMakeFiles/NSE2025_VALVE.dir/Core/Src/system_stm32f4xx.c.s
-.PHONY : Core/Src/system_stm32f4xx.c.s
-
 FATFS/App/fatfs.obj: FATFS/App/fatfs.c.obj
 .PHONY : FATFS/App/fatfs.obj
 
@@ -414,6 +414,9 @@ help:
 	@echo "... FatFs"
 	@echo "... NSE2025_VALVE"
 	@echo "... STM32_Drivers"
+	@echo "... Core/Src/MAX6675.obj"
+	@echo "... Core/Src/MAX6675.i"
+	@echo "... Core/Src/MAX6675.s"
 	@echo "... Core/Src/fatfs_sd.obj"
 	@echo "... Core/Src/fatfs_sd.i"
 	@echo "... Core/Src/fatfs_sd.s"
@@ -435,9 +438,6 @@ help:
 	@echo "... Core/Src/sysmem.obj"
 	@echo "... Core/Src/sysmem.i"
 	@echo "... Core/Src/sysmem.s"
-	@echo "... Core/Src/system_stm32f4xx.obj"
-	@echo "... Core/Src/system_stm32f4xx.i"
-	@echo "... Core/Src/system_stm32f4xx.s"
 	@echo "... FATFS/App/fatfs.obj"
 	@echo "... FATFS/App/fatfs.i"
 	@echo "... FATFS/App/fatfs.s"

@@ -72,136 +72,10 @@ include CMakeFiles/NSE2025_VALVE.dir/flags.make
 CMakeFiles/NSE2025_VALVE.dir/codegen:
 .PHONY : CMakeFiles/NSE2025_VALVE.dir/codegen
 
-CMakeFiles/NSE2025_VALVE.dir/Core/Src/fatfs_sd.c.obj: CMakeFiles/NSE2025_VALVE.dir/flags.make
-CMakeFiles/NSE2025_VALVE.dir/Core/Src/fatfs_sd.c.obj: /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/fatfs_sd.c
-CMakeFiles/NSE2025_VALVE.dir/Core/Src/fatfs_sd.c.obj: CMakeFiles/NSE2025_VALVE.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/NSE2025_VALVE.dir/Core/Src/fatfs_sd.c.obj"
-	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/NSE2025_VALVE.dir/Core/Src/fatfs_sd.c.obj -MF CMakeFiles/NSE2025_VALVE.dir/Core/Src/fatfs_sd.c.obj.d -o CMakeFiles/NSE2025_VALVE.dir/Core/Src/fatfs_sd.c.obj -c /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/fatfs_sd.c
-
-CMakeFiles/NSE2025_VALVE.dir/Core/Src/fatfs_sd.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/NSE2025_VALVE.dir/Core/Src/fatfs_sd.c.i"
-	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/fatfs_sd.c > CMakeFiles/NSE2025_VALVE.dir/Core/Src/fatfs_sd.c.i
-
-CMakeFiles/NSE2025_VALVE.dir/Core/Src/fatfs_sd.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/NSE2025_VALVE.dir/Core/Src/fatfs_sd.c.s"
-	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/fatfs_sd.c -o CMakeFiles/NSE2025_VALVE.dir/Core/Src/fatfs_sd.c.s
-
-CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj: CMakeFiles/NSE2025_VALVE.dir/flags.make
-CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj: /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/main.c
-CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj: CMakeFiles/NSE2025_VALVE.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj"
-	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj -MF CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj.d -o CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj -c /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/main.c
-
-CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.i"
-	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/main.c > CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.i
-
-CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.s"
-	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/main.c -o CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.s
-
-CMakeFiles/NSE2025_VALVE.dir/Core/Src/servo.c.obj: CMakeFiles/NSE2025_VALVE.dir/flags.make
-CMakeFiles/NSE2025_VALVE.dir/Core/Src/servo.c.obj: /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/servo.c
-CMakeFiles/NSE2025_VALVE.dir/Core/Src/servo.c.obj: CMakeFiles/NSE2025_VALVE.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/NSE2025_VALVE.dir/Core/Src/servo.c.obj"
-	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/NSE2025_VALVE.dir/Core/Src/servo.c.obj -MF CMakeFiles/NSE2025_VALVE.dir/Core/Src/servo.c.obj.d -o CMakeFiles/NSE2025_VALVE.dir/Core/Src/servo.c.obj -c /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/servo.c
-
-CMakeFiles/NSE2025_VALVE.dir/Core/Src/servo.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/NSE2025_VALVE.dir/Core/Src/servo.c.i"
-	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/servo.c > CMakeFiles/NSE2025_VALVE.dir/Core/Src/servo.c.i
-
-CMakeFiles/NSE2025_VALVE.dir/Core/Src/servo.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/NSE2025_VALVE.dir/Core/Src/servo.c.s"
-	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/servo.c -o CMakeFiles/NSE2025_VALVE.dir/Core/Src/servo.c.s
-
-CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_hal_msp.c.obj: CMakeFiles/NSE2025_VALVE.dir/flags.make
-CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_hal_msp.c.obj: /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/stm32f4xx_hal_msp.c
-CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_hal_msp.c.obj: CMakeFiles/NSE2025_VALVE.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_hal_msp.c.obj"
-	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_hal_msp.c.obj -MF CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_hal_msp.c.obj.d -o CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_hal_msp.c.obj -c /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/stm32f4xx_hal_msp.c
-
-CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_hal_msp.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_hal_msp.c.i"
-	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/stm32f4xx_hal_msp.c > CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_hal_msp.c.i
-
-CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_hal_msp.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_hal_msp.c.s"
-	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/stm32f4xx_hal_msp.c -o CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_hal_msp.c.s
-
-CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_it.c.obj: CMakeFiles/NSE2025_VALVE.dir/flags.make
-CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_it.c.obj: /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/stm32f4xx_it.c
-CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_it.c.obj: CMakeFiles/NSE2025_VALVE.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_it.c.obj"
-	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_it.c.obj -MF CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_it.c.obj.d -o CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_it.c.obj -c /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/stm32f4xx_it.c
-
-CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_it.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_it.c.i"
-	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/stm32f4xx_it.c > CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_it.c.i
-
-CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_it.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_it.c.s"
-	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/stm32f4xx_it.c -o CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_it.c.s
-
-CMakeFiles/NSE2025_VALVE.dir/Core/Src/syscalls.c.obj: CMakeFiles/NSE2025_VALVE.dir/flags.make
-CMakeFiles/NSE2025_VALVE.dir/Core/Src/syscalls.c.obj: /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/syscalls.c
-CMakeFiles/NSE2025_VALVE.dir/Core/Src/syscalls.c.obj: CMakeFiles/NSE2025_VALVE.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object CMakeFiles/NSE2025_VALVE.dir/Core/Src/syscalls.c.obj"
-	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/NSE2025_VALVE.dir/Core/Src/syscalls.c.obj -MF CMakeFiles/NSE2025_VALVE.dir/Core/Src/syscalls.c.obj.d -o CMakeFiles/NSE2025_VALVE.dir/Core/Src/syscalls.c.obj -c /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/syscalls.c
-
-CMakeFiles/NSE2025_VALVE.dir/Core/Src/syscalls.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/NSE2025_VALVE.dir/Core/Src/syscalls.c.i"
-	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/syscalls.c > CMakeFiles/NSE2025_VALVE.dir/Core/Src/syscalls.c.i
-
-CMakeFiles/NSE2025_VALVE.dir/Core/Src/syscalls.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/NSE2025_VALVE.dir/Core/Src/syscalls.c.s"
-	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/syscalls.c -o CMakeFiles/NSE2025_VALVE.dir/Core/Src/syscalls.c.s
-
-CMakeFiles/NSE2025_VALVE.dir/Core/Src/sysmem.c.obj: CMakeFiles/NSE2025_VALVE.dir/flags.make
-CMakeFiles/NSE2025_VALVE.dir/Core/Src/sysmem.c.obj: /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/sysmem.c
-CMakeFiles/NSE2025_VALVE.dir/Core/Src/sysmem.c.obj: CMakeFiles/NSE2025_VALVE.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building C object CMakeFiles/NSE2025_VALVE.dir/Core/Src/sysmem.c.obj"
-	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/NSE2025_VALVE.dir/Core/Src/sysmem.c.obj -MF CMakeFiles/NSE2025_VALVE.dir/Core/Src/sysmem.c.obj.d -o CMakeFiles/NSE2025_VALVE.dir/Core/Src/sysmem.c.obj -c /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/sysmem.c
-
-CMakeFiles/NSE2025_VALVE.dir/Core/Src/sysmem.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/NSE2025_VALVE.dir/Core/Src/sysmem.c.i"
-	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/sysmem.c > CMakeFiles/NSE2025_VALVE.dir/Core/Src/sysmem.c.i
-
-CMakeFiles/NSE2025_VALVE.dir/Core/Src/sysmem.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/NSE2025_VALVE.dir/Core/Src/sysmem.c.s"
-	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/sysmem.c -o CMakeFiles/NSE2025_VALVE.dir/Core/Src/sysmem.c.s
-
-CMakeFiles/NSE2025_VALVE.dir/Core/Src/system_stm32f4xx.c.obj: CMakeFiles/NSE2025_VALVE.dir/flags.make
-CMakeFiles/NSE2025_VALVE.dir/Core/Src/system_stm32f4xx.c.obj: /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/system_stm32f4xx.c
-CMakeFiles/NSE2025_VALVE.dir/Core/Src/system_stm32f4xx.c.obj: CMakeFiles/NSE2025_VALVE.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building C object CMakeFiles/NSE2025_VALVE.dir/Core/Src/system_stm32f4xx.c.obj"
-	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/NSE2025_VALVE.dir/Core/Src/system_stm32f4xx.c.obj -MF CMakeFiles/NSE2025_VALVE.dir/Core/Src/system_stm32f4xx.c.obj.d -o CMakeFiles/NSE2025_VALVE.dir/Core/Src/system_stm32f4xx.c.obj -c /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/system_stm32f4xx.c
-
-CMakeFiles/NSE2025_VALVE.dir/Core/Src/system_stm32f4xx.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/NSE2025_VALVE.dir/Core/Src/system_stm32f4xx.c.i"
-	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/system_stm32f4xx.c > CMakeFiles/NSE2025_VALVE.dir/Core/Src/system_stm32f4xx.c.i
-
-CMakeFiles/NSE2025_VALVE.dir/Core/Src/system_stm32f4xx.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/NSE2025_VALVE.dir/Core/Src/system_stm32f4xx.c.s"
-	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/system_stm32f4xx.c -o CMakeFiles/NSE2025_VALVE.dir/Core/Src/system_stm32f4xx.c.s
-
-CMakeFiles/NSE2025_VALVE.dir/FATFS/App/fatfs.c.obj: CMakeFiles/NSE2025_VALVE.dir/flags.make
-CMakeFiles/NSE2025_VALVE.dir/FATFS/App/fatfs.c.obj: /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/FATFS/App/fatfs.c
-CMakeFiles/NSE2025_VALVE.dir/FATFS/App/fatfs.c.obj: CMakeFiles/NSE2025_VALVE.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building C object CMakeFiles/NSE2025_VALVE.dir/FATFS/App/fatfs.c.obj"
-	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/NSE2025_VALVE.dir/FATFS/App/fatfs.c.obj -MF CMakeFiles/NSE2025_VALVE.dir/FATFS/App/fatfs.c.obj.d -o CMakeFiles/NSE2025_VALVE.dir/FATFS/App/fatfs.c.obj -c /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/FATFS/App/fatfs.c
-
-CMakeFiles/NSE2025_VALVE.dir/FATFS/App/fatfs.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/NSE2025_VALVE.dir/FATFS/App/fatfs.c.i"
-	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/FATFS/App/fatfs.c > CMakeFiles/NSE2025_VALVE.dir/FATFS/App/fatfs.c.i
-
-CMakeFiles/NSE2025_VALVE.dir/FATFS/App/fatfs.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/NSE2025_VALVE.dir/FATFS/App/fatfs.c.s"
-	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/FATFS/App/fatfs.c -o CMakeFiles/NSE2025_VALVE.dir/FATFS/App/fatfs.c.s
-
 CMakeFiles/NSE2025_VALVE.dir/FATFS/Target/user_diskio.c.obj: CMakeFiles/NSE2025_VALVE.dir/flags.make
 CMakeFiles/NSE2025_VALVE.dir/FATFS/Target/user_diskio.c.obj: /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/FATFS/Target/user_diskio.c
 CMakeFiles/NSE2025_VALVE.dir/FATFS/Target/user_diskio.c.obj: CMakeFiles/NSE2025_VALVE.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building C object CMakeFiles/NSE2025_VALVE.dir/FATFS/Target/user_diskio.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/NSE2025_VALVE.dir/FATFS/Target/user_diskio.c.obj"
 	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/NSE2025_VALVE.dir/FATFS/Target/user_diskio.c.obj -MF CMakeFiles/NSE2025_VALVE.dir/FATFS/Target/user_diskio.c.obj.d -o CMakeFiles/NSE2025_VALVE.dir/FATFS/Target/user_diskio.c.obj -c /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/FATFS/Target/user_diskio.c
 
 CMakeFiles/NSE2025_VALVE.dir/FATFS/Target/user_diskio.c.i: cmake_force
@@ -212,9 +86,93 @@ CMakeFiles/NSE2025_VALVE.dir/FATFS/Target/user_diskio.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/NSE2025_VALVE.dir/FATFS/Target/user_diskio.c.s"
 	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/FATFS/Target/user_diskio.c -o CMakeFiles/NSE2025_VALVE.dir/FATFS/Target/user_diskio.c.s
 
+CMakeFiles/NSE2025_VALVE.dir/FATFS/App/fatfs.c.obj: CMakeFiles/NSE2025_VALVE.dir/flags.make
+CMakeFiles/NSE2025_VALVE.dir/FATFS/App/fatfs.c.obj: /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/FATFS/App/fatfs.c
+CMakeFiles/NSE2025_VALVE.dir/FATFS/App/fatfs.c.obj: CMakeFiles/NSE2025_VALVE.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/NSE2025_VALVE.dir/FATFS/App/fatfs.c.obj"
+	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/NSE2025_VALVE.dir/FATFS/App/fatfs.c.obj -MF CMakeFiles/NSE2025_VALVE.dir/FATFS/App/fatfs.c.obj.d -o CMakeFiles/NSE2025_VALVE.dir/FATFS/App/fatfs.c.obj -c /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/FATFS/App/fatfs.c
+
+CMakeFiles/NSE2025_VALVE.dir/FATFS/App/fatfs.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/NSE2025_VALVE.dir/FATFS/App/fatfs.c.i"
+	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/FATFS/App/fatfs.c > CMakeFiles/NSE2025_VALVE.dir/FATFS/App/fatfs.c.i
+
+CMakeFiles/NSE2025_VALVE.dir/FATFS/App/fatfs.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/NSE2025_VALVE.dir/FATFS/App/fatfs.c.s"
+	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/FATFS/App/fatfs.c -o CMakeFiles/NSE2025_VALVE.dir/FATFS/App/fatfs.c.s
+
+CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj: CMakeFiles/NSE2025_VALVE.dir/flags.make
+CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj: /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/main.c
+CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj: CMakeFiles/NSE2025_VALVE.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj"
+	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj -MF CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj.d -o CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj -c /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/main.c
+
+CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.i"
+	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/main.c > CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.i
+
+CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.s"
+	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/main.c -o CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.s
+
+CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_it.c.obj: CMakeFiles/NSE2025_VALVE.dir/flags.make
+CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_it.c.obj: /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/stm32f4xx_it.c
+CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_it.c.obj: CMakeFiles/NSE2025_VALVE.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_it.c.obj"
+	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_it.c.obj -MF CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_it.c.obj.d -o CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_it.c.obj -c /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/stm32f4xx_it.c
+
+CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_it.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_it.c.i"
+	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/stm32f4xx_it.c > CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_it.c.i
+
+CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_it.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_it.c.s"
+	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/stm32f4xx_it.c -o CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_it.c.s
+
+CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_hal_msp.c.obj: CMakeFiles/NSE2025_VALVE.dir/flags.make
+CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_hal_msp.c.obj: /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/stm32f4xx_hal_msp.c
+CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_hal_msp.c.obj: CMakeFiles/NSE2025_VALVE.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_hal_msp.c.obj"
+	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_hal_msp.c.obj -MF CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_hal_msp.c.obj.d -o CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_hal_msp.c.obj -c /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/stm32f4xx_hal_msp.c
+
+CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_hal_msp.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_hal_msp.c.i"
+	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/stm32f4xx_hal_msp.c > CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_hal_msp.c.i
+
+CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_hal_msp.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_hal_msp.c.s"
+	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/stm32f4xx_hal_msp.c -o CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_hal_msp.c.s
+
+CMakeFiles/NSE2025_VALVE.dir/Core/Src/sysmem.c.obj: CMakeFiles/NSE2025_VALVE.dir/flags.make
+CMakeFiles/NSE2025_VALVE.dir/Core/Src/sysmem.c.obj: /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/sysmem.c
+CMakeFiles/NSE2025_VALVE.dir/Core/Src/sysmem.c.obj: CMakeFiles/NSE2025_VALVE.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object CMakeFiles/NSE2025_VALVE.dir/Core/Src/sysmem.c.obj"
+	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/NSE2025_VALVE.dir/Core/Src/sysmem.c.obj -MF CMakeFiles/NSE2025_VALVE.dir/Core/Src/sysmem.c.obj.d -o CMakeFiles/NSE2025_VALVE.dir/Core/Src/sysmem.c.obj -c /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/sysmem.c
+
+CMakeFiles/NSE2025_VALVE.dir/Core/Src/sysmem.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/NSE2025_VALVE.dir/Core/Src/sysmem.c.i"
+	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/sysmem.c > CMakeFiles/NSE2025_VALVE.dir/Core/Src/sysmem.c.i
+
+CMakeFiles/NSE2025_VALVE.dir/Core/Src/sysmem.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/NSE2025_VALVE.dir/Core/Src/sysmem.c.s"
+	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/sysmem.c -o CMakeFiles/NSE2025_VALVE.dir/Core/Src/sysmem.c.s
+
+CMakeFiles/NSE2025_VALVE.dir/Core/Src/syscalls.c.obj: CMakeFiles/NSE2025_VALVE.dir/flags.make
+CMakeFiles/NSE2025_VALVE.dir/Core/Src/syscalls.c.obj: /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/syscalls.c
+CMakeFiles/NSE2025_VALVE.dir/Core/Src/syscalls.c.obj: CMakeFiles/NSE2025_VALVE.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building C object CMakeFiles/NSE2025_VALVE.dir/Core/Src/syscalls.c.obj"
+	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/NSE2025_VALVE.dir/Core/Src/syscalls.c.obj -MF CMakeFiles/NSE2025_VALVE.dir/Core/Src/syscalls.c.obj.d -o CMakeFiles/NSE2025_VALVE.dir/Core/Src/syscalls.c.obj -c /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/syscalls.c
+
+CMakeFiles/NSE2025_VALVE.dir/Core/Src/syscalls.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/NSE2025_VALVE.dir/Core/Src/syscalls.c.i"
+	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/syscalls.c > CMakeFiles/NSE2025_VALVE.dir/Core/Src/syscalls.c.i
+
+CMakeFiles/NSE2025_VALVE.dir/Core/Src/syscalls.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/NSE2025_VALVE.dir/Core/Src/syscalls.c.s"
+	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/syscalls.c -o CMakeFiles/NSE2025_VALVE.dir/Core/Src/syscalls.c.s
+
 CMakeFiles/NSE2025_VALVE.dir/startup_stm32f413xx.s.obj: CMakeFiles/NSE2025_VALVE.dir/flags.make
 CMakeFiles/NSE2025_VALVE.dir/startup_stm32f413xx.s.obj: /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/startup_stm32f413xx.s
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building ASM object CMakeFiles/NSE2025_VALVE.dir/startup_stm32f413xx.s.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building ASM object CMakeFiles/NSE2025_VALVE.dir/startup_stm32f413xx.s.obj"
 	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(ASM_DEFINES) $(ASM_INCLUDES) $(ASM_FLAGS) -o CMakeFiles/NSE2025_VALVE.dir/startup_stm32f413xx.s.obj -c /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/startup_stm32f413xx.s
 
 CMakeFiles/NSE2025_VALVE.dir/startup_stm32f413xx.s.i: cmake_force
@@ -225,22 +183,65 @@ CMakeFiles/NSE2025_VALVE.dir/startup_stm32f413xx.s.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling ASM source to assembly CMakeFiles/NSE2025_VALVE.dir/startup_stm32f413xx.s.s"
 	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(ASM_DEFINES) $(ASM_INCLUDES) $(ASM_FLAGS) -S /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/startup_stm32f413xx.s -o CMakeFiles/NSE2025_VALVE.dir/startup_stm32f413xx.s.s
 
+CMakeFiles/NSE2025_VALVE.dir/Core/Src/MAX6675.c.obj: CMakeFiles/NSE2025_VALVE.dir/flags.make
+CMakeFiles/NSE2025_VALVE.dir/Core/Src/MAX6675.c.obj: /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/MAX6675.c
+CMakeFiles/NSE2025_VALVE.dir/Core/Src/MAX6675.c.obj: CMakeFiles/NSE2025_VALVE.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building C object CMakeFiles/NSE2025_VALVE.dir/Core/Src/MAX6675.c.obj"
+	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/NSE2025_VALVE.dir/Core/Src/MAX6675.c.obj -MF CMakeFiles/NSE2025_VALVE.dir/Core/Src/MAX6675.c.obj.d -o CMakeFiles/NSE2025_VALVE.dir/Core/Src/MAX6675.c.obj -c /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/MAX6675.c
+
+CMakeFiles/NSE2025_VALVE.dir/Core/Src/MAX6675.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/NSE2025_VALVE.dir/Core/Src/MAX6675.c.i"
+	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/MAX6675.c > CMakeFiles/NSE2025_VALVE.dir/Core/Src/MAX6675.c.i
+
+CMakeFiles/NSE2025_VALVE.dir/Core/Src/MAX6675.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/NSE2025_VALVE.dir/Core/Src/MAX6675.c.s"
+	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/MAX6675.c -o CMakeFiles/NSE2025_VALVE.dir/Core/Src/MAX6675.c.s
+
+CMakeFiles/NSE2025_VALVE.dir/Core/Src/fatfs_sd.c.obj: CMakeFiles/NSE2025_VALVE.dir/flags.make
+CMakeFiles/NSE2025_VALVE.dir/Core/Src/fatfs_sd.c.obj: /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/fatfs_sd.c
+CMakeFiles/NSE2025_VALVE.dir/Core/Src/fatfs_sd.c.obj: CMakeFiles/NSE2025_VALVE.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building C object CMakeFiles/NSE2025_VALVE.dir/Core/Src/fatfs_sd.c.obj"
+	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/NSE2025_VALVE.dir/Core/Src/fatfs_sd.c.obj -MF CMakeFiles/NSE2025_VALVE.dir/Core/Src/fatfs_sd.c.obj.d -o CMakeFiles/NSE2025_VALVE.dir/Core/Src/fatfs_sd.c.obj -c /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/fatfs_sd.c
+
+CMakeFiles/NSE2025_VALVE.dir/Core/Src/fatfs_sd.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/NSE2025_VALVE.dir/Core/Src/fatfs_sd.c.i"
+	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/fatfs_sd.c > CMakeFiles/NSE2025_VALVE.dir/Core/Src/fatfs_sd.c.i
+
+CMakeFiles/NSE2025_VALVE.dir/Core/Src/fatfs_sd.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/NSE2025_VALVE.dir/Core/Src/fatfs_sd.c.s"
+	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/fatfs_sd.c -o CMakeFiles/NSE2025_VALVE.dir/Core/Src/fatfs_sd.c.s
+
+CMakeFiles/NSE2025_VALVE.dir/Core/Src/servo.c.obj: CMakeFiles/NSE2025_VALVE.dir/flags.make
+CMakeFiles/NSE2025_VALVE.dir/Core/Src/servo.c.obj: /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/servo.c
+CMakeFiles/NSE2025_VALVE.dir/Core/Src/servo.c.obj: CMakeFiles/NSE2025_VALVE.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building C object CMakeFiles/NSE2025_VALVE.dir/Core/Src/servo.c.obj"
+	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/NSE2025_VALVE.dir/Core/Src/servo.c.obj -MF CMakeFiles/NSE2025_VALVE.dir/Core/Src/servo.c.obj.d -o CMakeFiles/NSE2025_VALVE.dir/Core/Src/servo.c.obj -c /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/servo.c
+
+CMakeFiles/NSE2025_VALVE.dir/Core/Src/servo.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/NSE2025_VALVE.dir/Core/Src/servo.c.i"
+	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/servo.c > CMakeFiles/NSE2025_VALVE.dir/Core/Src/servo.c.i
+
+CMakeFiles/NSE2025_VALVE.dir/Core/Src/servo.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/NSE2025_VALVE.dir/Core/Src/servo.c.s"
+	/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/servo.c -o CMakeFiles/NSE2025_VALVE.dir/Core/Src/servo.c.s
+
 # Object files for target NSE2025_VALVE
 NSE2025_VALVE_OBJECTS = \
-"CMakeFiles/NSE2025_VALVE.dir/Core/Src/fatfs_sd.c.obj" \
-"CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj" \
-"CMakeFiles/NSE2025_VALVE.dir/Core/Src/servo.c.obj" \
-"CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_hal_msp.c.obj" \
-"CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_it.c.obj" \
-"CMakeFiles/NSE2025_VALVE.dir/Core/Src/syscalls.c.obj" \
-"CMakeFiles/NSE2025_VALVE.dir/Core/Src/sysmem.c.obj" \
-"CMakeFiles/NSE2025_VALVE.dir/Core/Src/system_stm32f4xx.c.obj" \
-"CMakeFiles/NSE2025_VALVE.dir/FATFS/App/fatfs.c.obj" \
 "CMakeFiles/NSE2025_VALVE.dir/FATFS/Target/user_diskio.c.obj" \
-"CMakeFiles/NSE2025_VALVE.dir/startup_stm32f413xx.s.obj"
+"CMakeFiles/NSE2025_VALVE.dir/FATFS/App/fatfs.c.obj" \
+"CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj" \
+"CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_it.c.obj" \
+"CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_hal_msp.c.obj" \
+"CMakeFiles/NSE2025_VALVE.dir/Core/Src/sysmem.c.obj" \
+"CMakeFiles/NSE2025_VALVE.dir/Core/Src/syscalls.c.obj" \
+"CMakeFiles/NSE2025_VALVE.dir/startup_stm32f413xx.s.obj" \
+"CMakeFiles/NSE2025_VALVE.dir/Core/Src/MAX6675.c.obj" \
+"CMakeFiles/NSE2025_VALVE.dir/Core/Src/fatfs_sd.c.obj" \
+"CMakeFiles/NSE2025_VALVE.dir/Core/Src/servo.c.obj"
 
 # External object files for target NSE2025_VALVE
 NSE2025_VALVE_EXTERNAL_OBJECTS = \
+"/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Core/Src/system_stm32f4xx.c.obj" \
 "/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c.obj" \
 "/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c.obj" \
 "/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.c.obj" \
@@ -267,17 +268,18 @@ NSE2025_VALVE_EXTERNAL_OBJECTS = \
 "/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/ff_gen_drv.c.obj" \
 "/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/option/syscall.c.obj"
 
-NSE2025_VALVE.elf: CMakeFiles/NSE2025_VALVE.dir/Core/Src/fatfs_sd.c.obj
-NSE2025_VALVE.elf: CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj
-NSE2025_VALVE.elf: CMakeFiles/NSE2025_VALVE.dir/Core/Src/servo.c.obj
-NSE2025_VALVE.elf: CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_hal_msp.c.obj
-NSE2025_VALVE.elf: CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_it.c.obj
-NSE2025_VALVE.elf: CMakeFiles/NSE2025_VALVE.dir/Core/Src/syscalls.c.obj
-NSE2025_VALVE.elf: CMakeFiles/NSE2025_VALVE.dir/Core/Src/sysmem.c.obj
-NSE2025_VALVE.elf: CMakeFiles/NSE2025_VALVE.dir/Core/Src/system_stm32f4xx.c.obj
-NSE2025_VALVE.elf: CMakeFiles/NSE2025_VALVE.dir/FATFS/App/fatfs.c.obj
 NSE2025_VALVE.elf: CMakeFiles/NSE2025_VALVE.dir/FATFS/Target/user_diskio.c.obj
+NSE2025_VALVE.elf: CMakeFiles/NSE2025_VALVE.dir/FATFS/App/fatfs.c.obj
+NSE2025_VALVE.elf: CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj
+NSE2025_VALVE.elf: CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_it.c.obj
+NSE2025_VALVE.elf: CMakeFiles/NSE2025_VALVE.dir/Core/Src/stm32f4xx_hal_msp.c.obj
+NSE2025_VALVE.elf: CMakeFiles/NSE2025_VALVE.dir/Core/Src/sysmem.c.obj
+NSE2025_VALVE.elf: CMakeFiles/NSE2025_VALVE.dir/Core/Src/syscalls.c.obj
 NSE2025_VALVE.elf: CMakeFiles/NSE2025_VALVE.dir/startup_stm32f413xx.s.obj
+NSE2025_VALVE.elf: CMakeFiles/NSE2025_VALVE.dir/Core/Src/MAX6675.c.obj
+NSE2025_VALVE.elf: CMakeFiles/NSE2025_VALVE.dir/Core/Src/fatfs_sd.c.obj
+NSE2025_VALVE.elf: CMakeFiles/NSE2025_VALVE.dir/Core/Src/servo.c.obj
+NSE2025_VALVE.elf: cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Core/Src/system_stm32f4xx.c.obj
 NSE2025_VALVE.elf: cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c.obj
 NSE2025_VALVE.elf: cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c.obj
 NSE2025_VALVE.elf: cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir/__/__/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.c.obj

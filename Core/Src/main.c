@@ -29,6 +29,7 @@
 #include "diskio.h"
 #include "ff.h"
 #include "fatfs_sd.h"
+#include "MAX6675.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -48,17 +49,14 @@
 
 /* Private variables ---------------------------------------------------------*/
 I2C_HandleTypeDef hi2c1;
-I2C_HandleTypeDef hi2c2;
 I2C_HandleTypeDef hi2c3;
 
 RTC_HandleTypeDef hrtc;
 
 SPI_HandleTypeDef hspi1;
 SPI_HandleTypeDef hspi2;
-SPI_HandleTypeDef hspi3;
 
 TIM_HandleTypeDef htim1;
-TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim3;
 
 UART_HandleTypeDef huart5;
@@ -73,20 +71,18 @@ volatile uint8_t Timer1, Timer2; /* 1ms Timer Counter for SD card operations */
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_I2C1_Init(void);
-static void MX_I2C2_Init(void);
 static void MX_I2C3_Init(void);
 static void MX_SPI1_Init(void);
 static void MX_SPI2_Init(void);
-static void MX_SPI3_Init(void);
 static void MX_TIM3_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_TIM1_Init(void);
-static void MX_TIM2_Init(void);
 static void MX_RTC_Init(void);
 static void MX_UART5_Init(void);
 /* USER CODE BEGIN PFP */
 int _write(int file, char *ptr, int len);
+void get_datetime_filename(char *filename, size_t max_len);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -94,12 +90,12 @@ int _write(int file, char *ptr, int len);
 FATFS fs;
 FIL fil;
 FRESULT fresult;
-char buffer[1024];
-char buffer2[1024];
+char buffer[128];
 UINT br, bw;
 unsigned int servo_rise = 0;
 FATFS *pfs;
 uint32_t fre_clust, tot_size, fre_size;
+MAX6675_Temp_t temperature;
 
 // printf関数をUART経由で出力するためのリダイレクト
 int _write(int file, char *ptr, int len)
@@ -255,17 +251,14 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_I2C1_Init();
-  MX_I2C2_Init();
   MX_I2C3_Init();
   MX_SPI1_Init();
   MX_SPI2_Init();
-  MX_SPI3_Init();
   MX_TIM3_Init();
   MX_USART1_UART_Init();
   MX_USART2_UART_Init();
   MX_FATFS_Init();
   MX_TIM1_Init();
-  MX_TIM2_Init();
   MX_RTC_Init();
   MX_UART5_Init();
   /* USER CODE BEGIN 2 */
@@ -357,21 +350,6 @@ int main(void)
     printf("Free size: %15lu B\n", fre_size * 1024);
   }
 
-  if (f_open(&fil, "file1.txt", FA_CREATE_ALWAYS | FA_WRITE) == FR_OK)
-  {
-    strcpy(buffer, "qwertyuiop\n");
-    f_write(&fil, buffer, strlen(buffer), &bw);
-    f_close(&fil);
-  }
-
-  if (f_open(&fil, "file1.txt", FA_READ) == FR_OK)
-  {
-    printf("file1 open.\n");
-    f_read(&fil, buffer2, f_size(&fil), &br);
-    printf("%s", buffer2);
-    f_close(&fil);
-  }
-
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -388,28 +366,57 @@ int main(void)
     */
 
     // 以下初回動作確認用プログラム（LiftOff信号でサーボ開けて、EmmergencyStop信号でNOS開く）
-    if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10))
+    // if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10))
+    // {
+    //   servo_rise = HAL_GetTick() + 30000;
+    // }
+    // if (servo_rise > HAL_GetTick())
+    // {
+    //   servo_set_angle(0); // 0度に設定
+    // }
+    // else
+    // {
+    //   servo_set_angle(270); // 270度に設定
+    // }
+
+    // if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_9) == GPIO_PIN_SET)
+    // {
+    //   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, GPIO_PIN_RESET);
+    // }
+    // else
+    // {
+    //   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, GPIO_PIN_SET);
+    // }
+
+    // MAX6675から温度を読み取る
+    temperature = Max6675_Read_Temp(&hspi2);
+
+    // ファイルに温度データを書き込む
+    FRESULT res = f_open(&fil, "test.txt", FA_CREATE_ALWAYS | FA_WRITE);
+    printf("ファイルを開けました (エラーコード: %d)\r\n", res);
+    if (res == FR_OK)
     {
-      servo_rise = HAL_GetTick() + 30000;
-    }
-    if (servo_rise > HAL_GetTick())
-    {
-      servo_set_angle(0); // 0度に設定
+      // データをバッファに書き込む
+      sprintf(buffer, "温度: %.2f°C, 時刻: %lu\r\n",
+              temperature.temp_int + (temperature.temp_dec * 0.25f),
+              HAL_GetTick());
+
+      // ファイルに書き込む
+      if (f_write(&fil, buffer, strlen(buffer), &bw) != FR_OK)
+      {
+        printf("書き込みエラー\r\n");
+      }
+
+      // ファイルを閉じる
+      f_close(&fil);
     }
     else
     {
-      servo_set_angle(270); // 270度に設定
+      printf("ファイルを開けませんでした (エラーコード: %d)\r\n", res);
+      printf("ファイル名: %s\r\n", "test.txt");
     }
 
-    if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_9) == GPIO_PIN_SET)
-    {
-      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, GPIO_PIN_RESET);
-    }
-    else
-    {
-      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, GPIO_PIN_SET);
-    }
-
+    HAL_Delay(1000); // 1秒待機
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -489,39 +496,6 @@ static void MX_I2C1_Init(void)
   /* USER CODE BEGIN I2C1_Init 2 */
 
   /* USER CODE END I2C1_Init 2 */
-}
-
-/**
- * @brief I2C2 Initialization Function
- * @param None
- * @retval None
- */
-static void MX_I2C2_Init(void)
-{
-
-  /* USER CODE BEGIN I2C2_Init 0 */
-
-  /* USER CODE END I2C2_Init 0 */
-
-  /* USER CODE BEGIN I2C2_Init 1 */
-
-  /* USER CODE END I2C2_Init 1 */
-  hi2c2.Instance = I2C2;
-  hi2c2.Init.ClockSpeed = 100000;
-  hi2c2.Init.DutyCycle = I2C_DUTYCYCLE_2;
-  hi2c2.Init.OwnAddress1 = 0;
-  hi2c2.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
-  hi2c2.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
-  hi2c2.Init.OwnAddress2 = 0;
-  hi2c2.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
-  hi2c2.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
-  if (HAL_I2C_Init(&hi2c2) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN I2C2_Init 2 */
-
-  /* USER CODE END I2C2_Init 2 */
 }
 
 /**
@@ -666,43 +640,6 @@ static void MX_SPI2_Init(void)
 }
 
 /**
- * @brief SPI3 Initialization Function
- * @param None
- * @retval None
- */
-static void MX_SPI3_Init(void)
-{
-
-  /* USER CODE BEGIN SPI3_Init 0 */
-
-  /* USER CODE END SPI3_Init 0 */
-
-  /* USER CODE BEGIN SPI3_Init 1 */
-
-  /* USER CODE END SPI3_Init 1 */
-  /* SPI3 parameter configuration*/
-  hspi3.Instance = SPI3;
-  hspi3.Init.Mode = SPI_MODE_MASTER;
-  hspi3.Init.Direction = SPI_DIRECTION_2LINES;
-  hspi3.Init.DataSize = SPI_DATASIZE_8BIT;
-  hspi3.Init.CLKPolarity = SPI_POLARITY_LOW;
-  hspi3.Init.CLKPhase = SPI_PHASE_1EDGE;
-  hspi3.Init.NSS = SPI_NSS_SOFT;
-  hspi3.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
-  hspi3.Init.FirstBit = SPI_FIRSTBIT_MSB;
-  hspi3.Init.TIMode = SPI_TIMODE_DISABLE;
-  hspi3.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
-  hspi3.Init.CRCPolynomial = 10;
-  if (HAL_SPI_Init(&hspi3) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN SPI3_Init 2 */
-
-  /* USER CODE END SPI3_Init 2 */
-}
-
-/**
  * @brief TIM1 Initialization Function
  * @param None
  * @retval None
@@ -745,50 +682,6 @@ static void MX_TIM1_Init(void)
   /* USER CODE BEGIN TIM1_Init 2 */
 
   /* USER CODE END TIM1_Init 2 */
-}
-
-/**
- * @brief TIM2 Initialization Function
- * @param None
- * @retval None
- */
-static void MX_TIM2_Init(void)
-{
-
-  /* USER CODE BEGIN TIM2_Init 0 */
-
-  /* USER CODE END TIM2_Init 0 */
-
-  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
-  TIM_MasterConfigTypeDef sMasterConfig = {0};
-
-  /* USER CODE BEGIN TIM2_Init 1 */
-
-  /* USER CODE END TIM2_Init 1 */
-  htim2.Instance = TIM2;
-  htim2.Init.Prescaler = 0;
-  htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim2.Init.Period = 4294967295;
-  htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
-  if (HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
-  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-  if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN TIM2_Init 2 */
-
-  /* USER CODE END TIM2_Init 2 */
 }
 
 /**
@@ -951,7 +844,6 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
-  __HAL_RCC_GPIOD_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_RESET);
@@ -969,7 +861,26 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+// 日時を含むファイル名を生成する関数
+void get_datetime_filename(char *filename, size_t max_len)
+{
+  RTC_TimeTypeDef time;
+  RTC_DateTypeDef date;
+  char datetime_str[32];
 
+  // RTCから現在の日時を取得
+  HAL_RTC_GetTime(&hrtc, &time, RTC_FORMAT_BIN);
+  HAL_RTC_GetDate(&hrtc, &date, RTC_FORMAT_BIN);
+
+  // 日時文字列を生成 (YYYYMMDD_HHMMSS.txt形式)
+  snprintf(datetime_str, sizeof(datetime_str), "%04d%02d%02d_%02d%02d%02d.csv",
+           date.Year + 2000, date.Month, date.Date,
+           time.Hours, time.Minutes, time.Seconds);
+
+  // ファイル名をコピー
+  strncpy(filename, datetime_str, max_len - 1);
+  filename[max_len - 1] = '\0';
+}
 /* USER CODE END 4 */
 
 /**

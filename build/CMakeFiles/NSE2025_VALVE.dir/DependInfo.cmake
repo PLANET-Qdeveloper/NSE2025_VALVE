@@ -21,19 +21,20 @@ set(CMAKE_TARGET_DEFINITIONS_ASM
 
 # The include file search paths:
 set(CMAKE_ASM_TARGET_INCLUDE_PATH
-  "/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/FATFS/Target"
-  "/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/FATFS/App"
   "/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Inc"
   "/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc"
-  "/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy"
-  "/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Middlewares/Third_Party/FatFs/src"
   "/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/CMSIS/Device/ST/STM32F4xx/Include"
   "/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/CMSIS/Include"
+  "/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/FATFS/Target"
+  "/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/FATFS/App"
+  "/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy"
+  "/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Middlewares/Third_Party/FatFs/src"
   )
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/MAX6675.c" "CMakeFiles/NSE2025_VALVE.dir/Core/Src/MAX6675.c.obj" "gcc" "CMakeFiles/NSE2025_VALVE.dir/Core/Src/MAX6675.c.obj.d"
+  "/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/MAX31855.c" "CMakeFiles/NSE2025_VALVE.dir/Core/Src/MAX31855.c.obj" "gcc" "CMakeFiles/NSE2025_VALVE.dir/Core/Src/MAX31855.c.obj.d"
+  "/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/MCP3425.c" "CMakeFiles/NSE2025_VALVE.dir/Core/Src/MCP3425.c.obj" "gcc" "CMakeFiles/NSE2025_VALVE.dir/Core/Src/MCP3425.c.obj.d"
   "/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/fatfs_sd.c" "CMakeFiles/NSE2025_VALVE.dir/Core/Src/fatfs_sd.c.obj" "gcc" "CMakeFiles/NSE2025_VALVE.dir/Core/Src/fatfs_sd.c.obj.d"
   "/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/main.c" "CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj" "gcc" "CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj.d"
   "/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Src/servo.c" "CMakeFiles/NSE2025_VALVE.dir/Core/Src/servo.c.obj" "gcc" "CMakeFiles/NSE2025_VALVE.dir/Core/Src/servo.c.obj.d"

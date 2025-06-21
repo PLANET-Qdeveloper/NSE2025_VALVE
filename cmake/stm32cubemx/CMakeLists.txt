@@ -30,7 +30,6 @@ set(MX_Application_Src
     ${CMAKE_SOURCE_DIR}/Core/Src/sysmem.c
     ${CMAKE_SOURCE_DIR}/Core/Src/syscalls.c
     ${CMAKE_SOURCE_DIR}/startup_stm32f413xx.s
-    ${CMAKE_SOURCE_DIR}/Core/Src/MAX6675.c
 )
 
 # STM32 HAL/LL Drivers
@@ -76,8 +75,7 @@ set(MX_LINK_DIRS
 # Project static libraries
 set(MX_LINK_LIBS 
     STM32_Drivers
-    FatFs
-	
+    FatFs	
 )
 # Interface library for includes and symbols
 add_library(stm32cubemx INTERFACE)

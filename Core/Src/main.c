@@ -29,8 +29,8 @@
 #include "diskio.h"
 #include "ff.h"
 #include "fatfs_sd.h"
-#include "MAX6675.h"
 #include "MAX31855.h"
+#include "MCP3425.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -66,13 +66,22 @@ UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
 volatile uint8_t Timer1, Timer2; /* 1ms Timer Counter for SD card operations */
+#define MAX_DATA_POINTS 10
+typedef struct
+{
+  uint32_t timestamp;
+  float temperature;
+  float pressure;
+} SensorData_t;
+
+SensorData_t sensor_data[MAX_DATA_POINTS];
+uint16_t data_count = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_I2C1_Init(void);
-static void MX_I2C3_Init(void);
 static void MX_SPI1_Init(void);
 static void MX_SPI2_Init(void);
 static void MX_TIM3_Init(void);
@@ -81,6 +90,7 @@ static void MX_USART2_UART_Init(void);
 static void MX_TIM1_Init(void);
 static void MX_RTC_Init(void);
 static void MX_UART5_Init(void);
+static void MX_I2C3_Init(void);
 /* USER CODE BEGIN PFP */
 int _write(int file, char *ptr, int len);
 void get_datetime_filename(char *filename, size_t max_len);
@@ -96,7 +106,6 @@ UINT br, bw;
 unsigned int servo_rise = 0;
 FATFS *pfs;
 uint32_t fre_clust, tot_size, fre_size;
-MAX6675_Temp_t temperature;
 
 // printf関数をUART経由で出力するためのリダイレクト
 int _write(int file, char *ptr, int len)
@@ -252,7 +261,6 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_I2C1_Init();
-  MX_I2C3_Init();
   MX_SPI1_Init();
   MX_SPI2_Init();
   MX_TIM3_Init();
@@ -262,10 +270,10 @@ int main(void)
   MX_TIM1_Init();
   MX_RTC_Init();
   MX_UART5_Init();
+  MX_I2C3_Init();
   /* USER CODE BEGIN 2 */
   // 初期設定
   servo_init();
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, GPIO_PIN_SET);
 
   /*
   //NOS動作用プログラム5秒間開く（動作確認済み）
@@ -357,64 +365,65 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    /*
-    //以下サーボ動作用プログラム0度から270度を10秒おきに回転する（動作確認済み）
-    servo_set_angle(0);  // 0度に設定
-    HAL_Delay(10000);
 
-    servo_set_angle(270); // 270度に設定
-    HAL_Delay(10000);
-    */
+    float temperature = Max31855_Read_Temp(&hspi2);
+    float pressure = MCP3425_Read_Pressure(&hi2c1);
 
-    // 以下初回動作確認用プログラム（LiftOff信号でサーボ開けて、EmmergencyStop信号でNOS開く）
-    // if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10))
-    // {
-    //   servo_rise = HAL_GetTick() + 30000;
-    // }
-    // if (servo_rise > HAL_GetTick())
-    // {
-    //   servo_set_angle(0); // 0度に設定
-    // }
-    // else
-    // {
-    //   servo_set_angle(270); // 270度に設定
-    // }
-
-    // if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_9) == GPIO_PIN_SET)
-    // {
-    //   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, GPIO_PIN_RESET);
-    // }
-    // else
-    // {
-    //   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, GPIO_PIN_SET);
-    // }
-
-    // MAX6675から温度を読み取る
-    temperature = Max6675_Read_Temp(&hspi2);
-
-    // ファイルに温度データを書き込む
-    FRESULT res = f_open(&fil, "test.txt", FA_CREATE_ALWAYS | FA_WRITE);
-    printf("ファイルを開けました (エラーコード: %d)\r\n", res);
-    if (res == FR_OK)
+    // データを配列に保存
+    if (data_count < MAX_DATA_POINTS)
     {
-      // データをバッファに書き込む
-      sprintf(buffer, "温度: %.2f°C, 時刻: %lu\r\n",
-              temperature.temp_int + (temperature.temp_dec * 0.25f),
-              HAL_GetTick());
-
-      // ファイルに書き込む
-      if (f_write(&fil, buffer, strlen(buffer), &bw) != FR_OK)
-      {
-        printf("書き込みエラー\r\n");
-      }
-
-      // ファイルを閉じる
-      f_close(&fil);
+      sensor_data[data_count].timestamp = HAL_GetTick();
+      sensor_data[data_count].temperature = temperature;
+      sensor_data[data_count].pressure = pressure;
+      data_count++;
     }
-    else
+
+    // 10回のデータが集まったら保存
+    if (data_count >= MAX_DATA_POINTS)
     {
-      printf("ファイルを開けませんでした (エラーコード: %d)\r\n", res);
-      printf("ファイル名: %s\r\n", "test.txt");
+      // 日時を含むファイル名を生成
+      // char filename[32];
+      // get_datetime_filename(filename, sizeof(filename));
+
+      // ファイルにセンサーデータを書き込む
+      FRESULT res = f_open(&fil, "sensor_data.csv", FA_CREATE_ALWAYS | FA_WRITE);
+      printf("ファイルを開けました (エラーコード: %d)\r\n", res);
+      if (res == FR_OK)
+      {
+        // CSVヘッダーを書き込む
+        sprintf(buffer, "時刻,温度(°C),圧力(Pa)\r\n");
+        if (f_write(&fil, buffer, strlen(buffer), &bw) != FR_OK)
+        {
+          printf("ヘッダー書き込みエラー\r\n");
+        }
+
+        // 10個のデータをCSV形式で書き込む
+        for (int i = 0; i < MAX_DATA_POINTS; i++)
+        {
+          sprintf(buffer, "%lu,%.2f,%.2f\r\n",
+                  sensor_data[i].timestamp,
+                  sensor_data[i].temperature,
+                  sensor_data[i].pressure);
+
+          if (f_write(&fil, buffer, strlen(buffer), &bw) != FR_OK)
+          {
+            printf("データ書き込みエラー\r\n");
+            break;
+          }
+        }
+
+        // ファイルを閉じる
+        f_close(&fil);
+        printf("10個のセンサーデータを保存しました\r\n");
+
+        // データカウントをリセット
+        data_count = 0;
+      }
+      else
+      {
+        printf("ファイルを開けませんでした (エラーコード: %d)\r\n", res);
+        // printf("ファイル名: %s\r\n", filename);
+      }
     }
 
     HAL_Delay(1000); // 1秒待機
@@ -626,7 +635,7 @@ static void MX_SPI2_Init(void)
   hspi2.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi2.Init.CLKPhase = SPI_PHASE_1EDGE;
   hspi2.Init.NSS = SPI_NSS_SOFT;
-  hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
+  hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_128;
   hspi2.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi2.Init.TIMode = SPI_TIMODE_DISABLE;
   hspi2.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
@@ -635,6 +644,10 @@ static void MX_SPI2_Init(void)
   {
     Error_Handler();
   }
+
+  // MAX31855用のCSピンを初期状態（HIGH）に設定
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_SET);
+  printf("SPI2初期化完了 - CSピンをHIGHに設定\r\n");
   /* USER CODE BEGIN SPI2_Init 2 */
 
   /* USER CODE END SPI2_Init 2 */
@@ -845,9 +858,13 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
+  __HAL_RCC_GPIOD_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_SET);
 
   /*Configure GPIO pin : PA4 */
   GPIO_InitStruct.Pin = GPIO_PIN_4;
@@ -855,6 +872,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PB12 */
+  GPIO_InitStruct.Pin = GPIO_PIN_12;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /* USER CODE BEGIN MX_GPIO_Init_2 */
 
@@ -873,12 +897,10 @@ void get_datetime_filename(char *filename, size_t max_len)
   HAL_RTC_GetTime(&hrtc, &time, RTC_FORMAT_BIN);
   HAL_RTC_GetDate(&hrtc, &date, RTC_FORMAT_BIN);
 
-  // 日時文字列を生成 (YYYYMMDD_HHMMSS.txt形式)
   snprintf(datetime_str, sizeof(datetime_str), "%04d%02d%02d_%02d%02d%02d.csv",
            date.Year + 2000, date.Month, date.Date,
            time.Hours, time.Minutes, time.Seconds);
 
-  // ファイル名をコピー
   strncpy(filename, datetime_str, max_len - 1);
   filename[max_len - 1] = '\0';
 }

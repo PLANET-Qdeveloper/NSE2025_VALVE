@@ -1,7 +1,9 @@
 file(REMOVE_RECURSE
   "NSE2025_VALVE.map"
-  "CMakeFiles/NSE2025_VALVE.dir/Core/Src/MAX6675.c.obj"
-  "CMakeFiles/NSE2025_VALVE.dir/Core/Src/MAX6675.c.obj.d"
+  "CMakeFiles/NSE2025_VALVE.dir/Core/Src/MAX31855.c.obj"
+  "CMakeFiles/NSE2025_VALVE.dir/Core/Src/MAX31855.c.obj.d"
+  "CMakeFiles/NSE2025_VALVE.dir/Core/Src/MCP3425.c.obj"
+  "CMakeFiles/NSE2025_VALVE.dir/Core/Src/MCP3425.c.obj.d"
   "CMakeFiles/NSE2025_VALVE.dir/Core/Src/fatfs_sd.c.obj"
   "CMakeFiles/NSE2025_VALVE.dir/Core/Src/fatfs_sd.c.obj.d"
   "CMakeFiles/NSE2025_VALVE.dir/Core/Src/main.c.obj"

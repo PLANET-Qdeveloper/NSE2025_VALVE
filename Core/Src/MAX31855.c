@@ -1,24 +1,17 @@
 /**
  ******************************************************************************
  * @file    MAX31855.c
- * @brief   This file provides code for the configuration
- *          of the MAX31855 instances.
- ******************************************************************************
- * @attention
- *
- * Copyright (c) 2021 SimpleMethod
- * All rights reserved.
- *
- * This software is licensed under terms that can be found in the LICENSE file
- * in the root directory of this software component.
- * If no LICENSE file comes with this software, it is provided AS-IS.
- *
+ * @brief   MAX31855温度センサーのドライバー
+ * @author  Your Name
+ * @date    YYYY-MM-DD
  ******************************************************************************
  */
 
 /* Includes ------------------------------------------------------------------*/
 #include "MAX31855.h"
 #include "main.h"
+#include <stdio.h>
+#include <stdint.h>
 
 /* Private typedef -----------------------------------------------------------*/
 
@@ -33,149 +26,95 @@
 /* Private functions --------------------------------------------------------*/
 
 /**
- * @brief  MAX31855の初期化
- * @param  MAX31855 MAX31855の状態ハンドル
- * @param  hspi SPIハンドル
- * @param  GPIOx NSSピンのGPIOポート
- * @param  GPIO_Pin NSSピンの番号
- * @retval HAL_StatusTypeDef 初期化結果
+ * @brief MAX31855から温度を取得する関数
+ * @param hspi SPIハンドルへのポインタ
+ * @retval 温度値（°C）、エラー時は-999.0fまたは-1.0f
  */
-HAL_StatusTypeDef MAX31855_Init(MAX31855_StateHandle *MAX31855, SPI_HandleTypeDef *hspi, GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin)
+float Max31855_Read_Temp(SPI_HandleTypeDef *hspi)
 {
-	if (MAX31855 == NULL || hspi == NULL || GPIOx == NULL)
-	{
-		return HAL_ERROR;
-	}
+    uint8_t rx[4] = {0};
+    uint8_t dummy[4] = {0x00, 0x00, 0x00, 0x00};
+    HAL_StatusTypeDef status;
 
-	MAX31855->hspi = hspi;
-	MAX31855->nss.pin = GPIO_Pin;
-	MAX31855->nss.port = GPIOx;
-	MAX31855_SetNSSState(MAX31855, GPIO_PIN_SET);
+    // CS LOW to start communication
+    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_RESET);
 
-	return HAL_OK;
-}
+    // Small delay for CS setup time
+    HAL_Delay(1);
 
-/**
- * @brief  故障状態の取得
- * @param  MAX31855 MAX31855の状態ハンドル
- * @retval uint8_t 故障コード
- */
-uint8_t MAX31855_GetFault(MAX31855_StateHandle *MAX31855)
-{
-	if (MAX31855 == NULL)
-	{
-		return MAX31855_ERROR_COMM;
-	}
+    // SPI communication with 4 bytes (32-bit data)
+    status = HAL_SPI_TransmitReceive(hspi, dummy, rx, 4, 1000);
 
-	if (MAX31855->ocFault)
-	{
-		return MAX31855_ERROR_OC;
-	}
-	else if (MAX31855->scgFault)
-	{
-		return MAX31855_ERROR_SCG;
-	}
-	else if (MAX31855->scvFault)
-	{
-		return MAX31855_ERROR_SCV;
-	}
+    // CS HIGH to end communication
+    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_SET);
 
-	return MAX31855_OK;
-}
+    // Check SPI communication status
+    if (status != HAL_OK)
+    {
+        printf("SPI通信失敗 Status: %d\r\n", status);
+        return -999.0f; // SPI communication error
+    }
 
-/**
- * @brief  データの読み取り
- * @param  MAX31855 MAX31855の状態ハンドル
- * @retval HAL_StatusTypeDef 読み取り結果
- */
-HAL_StatusTypeDef MAX31855_ReadData(MAX31855_StateHandle *MAX31855)
-{
-	if (MAX31855 == NULL)
-	{
-		return HAL_ERROR;
-	}
+    // Debug: Print raw data (4 bytes)
+    printf("Raw Data: 0x%02X%02X%02X%02X\r\n", rx[0], rx[1], rx[2], rx[3]);
 
-	uint8_t payload[4];
-	int32_t frame;
+    // 32ビットデータを組み立て
+    uint32_t data = ((uint32_t)rx[0] << 24) | ((uint32_t)rx[1] << 16) |
+                    ((uint32_t)rx[2] << 8) | rx[3];
 
-	MAX31855_SetNSSState(MAX31855, GPIO_PIN_RESET);
-	HAL_StatusTypeDef status = HAL_SPI_Receive(MAX31855->hspi, payload, 4, 1000);
-	MAX31855_SetNSSState(MAX31855, GPIO_PIN_SET);
+    // デバッグ: 32ビットデータの詳細表示
+    printf("32-bit Data: 0x%08lX\r\n", (unsigned long)data);
+    printf("D31:D18 (Thermocouple): 0x%04lX\r\n", (unsigned long)((data >> 18) & 0x3FFF));
+    printf("D17 (Reserved): %ld\r\n", (unsigned long)((data >> 17) & 0x01));
+    printf("D16 (Fault): %ld\r\n", (unsigned long)((data >> 16) & 0x01));
+    printf("D15:D4 (Reference): 0x%03lX\r\n", (unsigned long)((data >> 4) & 0x0FFF));
+    printf("D3 (Reserved): %ld\r\n", (unsigned long)((data >> 3) & 0x01));
+    printf("D2 (SCV): %ld, D1 (SCG): %ld, D0 (OC): %ld\r\n",
+           (unsigned long)((data >> 2) & 0x01), (unsigned long)((data >> 1) & 0x01), (unsigned long)(data & 0x01));
 
-	if (status != HAL_OK)
-	{
-		return status;
-	}
+    // フォルトビットのチェック（D16: 総合フォルト）
+    if (data & 0x00010000) // D16: フォルトビット
+    {
+        printf("フォルト検出:");
+        if (data & 0x04) printf(" SCV(Short to VCC)");  // D2
+        if (data & 0x02) printf(" SCG(Short to GND)");  // D1
+        if (data & 0x01) printf(" OC(Open Circuit)");   // D0
+        printf("\r\n");
+        
+        return -1.0f; // フォルトエラー
+    }
 
-	// 故障フラグのリセット
-	MAX31855->scvFault = 0;
-	MAX31855->scgFault = 0;
-	MAX31855->ocFault = 0;
-	MAX31855->fault = 0;
+    // サーモカップル温度データの抽出（D31:D18の14ビット、符号付き、0.25°C単位）
+    int16_t thermocouple_temp = (int16_t)((data >> 18) & 0x3FFF);
+    
+    // 符号ビットの処理（14ビットの符号ビット）
+    if (thermocouple_temp & 0x2000) // 負の値の場合
+    {
+        thermocouple_temp |= 0xC000; // 符号拡張（16ビットに拡張）
+    }
 
-	// データの組み立て
-	frame = ((int32_t)payload[0] << 24) |
-			((int32_t)payload[1] << 16) |
-			((int32_t)payload[2] << 8) |
-			((int32_t)payload[3]);
+    // リファレンス温度データの抽出（D15:D4の12ビット、符号付き、0.0625°C単位）
+    int16_t reference_temp = (int16_t)((data >> 4) & 0x0FFF);
+    
+    // 符号ビットの処理（12ビットの符号ビット）
+    if (reference_temp & 0x0800) // 負の値の場合
+    {
+        reference_temp |= 0xF000; // 符号拡張（16ビットに拡張）
+    }
 
-	// 故障フラグのチェック
-	if (frame & 0x00000004)
-		MAX31855->scvFault = 1;
-	if (frame & 0x00000002)
-		MAX31855->scgFault = 1;
-	if (frame & 0x00000001)
-		MAX31855->ocFault = 1;
-	if (frame & 0x00010000)
-		MAX31855->fault = 1;
+    // 温度が有効範囲内かチェック（-270°C から +1800°C）
+    if (thermocouple_temp < -1080 || thermocouple_temp > 7200) // 0.25°C単位での範囲チェック
+    {
+        printf("無効な温度データ検出: %d (範囲外)\r\n", thermocouple_temp);
+        return -999.0f; // Invalid temperature data
+    }
 
-	return HAL_OK;
-}
+    // 温度を0.25°C単位から実際の温度に変換
+    float temperature = (float)thermocouple_temp * 0.25f;
+    float ref_temperature = (float)reference_temp * 0.0625f;
 
-/**
- * @brief  NSSピンの状態設定
- * @param  MAX31855 MAX31855の状態ハンドル
- * @param  state 設定する状態
- * @retval None
- */
-void MAX31855_SetNSSState(MAX31855_StateHandle *MAX31855, GPIO_PinState state)
-{
-	if (MAX31855 != NULL)
-	{
-		HAL_GPIO_WritePin(MAX31855->nss.port, MAX31855->nss.pin, state);
-	}
-}
+    // デバッグ出力
+    printf("Thermocouple: %.2f°C, Reference: %.4f°C\r\n", temperature, ref_temperature);
 
-/**
- * @brief  MAX31855からのデータ読み取り（I2C経由）
- * @param  hi2c I2Cハンドル
- * @retval float 読み取った電圧値（V）、エラー時は-1.0
- */
-float MAX31855_ReadData(I2C_HandleTypeDef *hi2c)
-{
-	if (hi2c == NULL)
-	{
-		return -1.0f;
-	}
-
-	uint8_t config = 0x90; // ワンショット | 16ビット | ゲイン=1
-	uint8_t data[2];
-	int16_t raw;
-	float voltage;
-
-	if (HAL_I2C_Master_Transmit(hi2c, 0x68 << 1, &config, 1, HAL_MAX_DELAY) != HAL_OK)
-	{
-		return -1.0f;
-	}
-
-	HAL_Delay(100); // 変換完了待ち
-
-	if (HAL_I2C_Master_Receive(hi2c, 0x68 << 1, data, 2, HAL_MAX_DELAY) == HAL_OK)
-	{
-		raw = (int16_t)((data[0] << 8) | data[1]);
-		voltage = 2.047f * raw / 32767.0f * 2; // ±2.048V フルスケール（ゲイン = 1）
-		return voltage;
-	}
-
-	return -1.0f; // 読み取り失敗
+    return temperature;
 }

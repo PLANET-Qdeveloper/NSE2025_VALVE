@@ -68,7 +68,7 @@ CMAKE_BINARY_DIR = /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/bui
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Running CMake cache editor..."
-	/opt/homebrew/bin/ccmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/opt/ST/STM32CubeCLT_1.18.0/CMake/bin/ccmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -155,29 +155,53 @@ FatFs/fast:
 	$(MAKE) $(MAKESILENT) -f cmake/stm32cubemx/CMakeFiles/FatFs.dir/build.make cmake/stm32cubemx/CMakeFiles/FatFs.dir/build
 .PHONY : FatFs/fast
 
-Core/Src/MAX6675.obj: Core/Src/MAX6675.c.obj
-.PHONY : Core/Src/MAX6675.obj
+Core/Src/MAX31855.obj: Core/Src/MAX31855.c.obj
+.PHONY : Core/Src/MAX31855.obj
 
 # target to build an object file
-Core/Src/MAX6675.c.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSE2025_VALVE.dir/build.make CMakeFiles/NSE2025_VALVE.dir/Core/Src/MAX6675.c.obj
-.PHONY : Core/Src/MAX6675.c.obj
+Core/Src/MAX31855.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSE2025_VALVE.dir/build.make CMakeFiles/NSE2025_VALVE.dir/Core/Src/MAX31855.c.obj
+.PHONY : Core/Src/MAX31855.c.obj
 
-Core/Src/MAX6675.i: Core/Src/MAX6675.c.i
-.PHONY : Core/Src/MAX6675.i
+Core/Src/MAX31855.i: Core/Src/MAX31855.c.i
+.PHONY : Core/Src/MAX31855.i
 
 # target to preprocess a source file
-Core/Src/MAX6675.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSE2025_VALVE.dir/build.make CMakeFiles/NSE2025_VALVE.dir/Core/Src/MAX6675.c.i
-.PHONY : Core/Src/MAX6675.c.i
+Core/Src/MAX31855.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSE2025_VALVE.dir/build.make CMakeFiles/NSE2025_VALVE.dir/Core/Src/MAX31855.c.i
+.PHONY : Core/Src/MAX31855.c.i
 
-Core/Src/MAX6675.s: Core/Src/MAX6675.c.s
-.PHONY : Core/Src/MAX6675.s
+Core/Src/MAX31855.s: Core/Src/MAX31855.c.s
+.PHONY : Core/Src/MAX31855.s
 
 # target to generate assembly for a file
-Core/Src/MAX6675.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSE2025_VALVE.dir/build.make CMakeFiles/NSE2025_VALVE.dir/Core/Src/MAX6675.c.s
-.PHONY : Core/Src/MAX6675.c.s
+Core/Src/MAX31855.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSE2025_VALVE.dir/build.make CMakeFiles/NSE2025_VALVE.dir/Core/Src/MAX31855.c.s
+.PHONY : Core/Src/MAX31855.c.s
+
+Core/Src/MCP3425.obj: Core/Src/MCP3425.c.obj
+.PHONY : Core/Src/MCP3425.obj
+
+# target to build an object file
+Core/Src/MCP3425.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSE2025_VALVE.dir/build.make CMakeFiles/NSE2025_VALVE.dir/Core/Src/MCP3425.c.obj
+.PHONY : Core/Src/MCP3425.c.obj
+
+Core/Src/MCP3425.i: Core/Src/MCP3425.c.i
+.PHONY : Core/Src/MCP3425.i
+
+# target to preprocess a source file
+Core/Src/MCP3425.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSE2025_VALVE.dir/build.make CMakeFiles/NSE2025_VALVE.dir/Core/Src/MCP3425.c.i
+.PHONY : Core/Src/MCP3425.c.i
+
+Core/Src/MCP3425.s: Core/Src/MCP3425.c.s
+.PHONY : Core/Src/MCP3425.s
+
+# target to generate assembly for a file
+Core/Src/MCP3425.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/NSE2025_VALVE.dir/build.make CMakeFiles/NSE2025_VALVE.dir/Core/Src/MCP3425.c.s
+.PHONY : Core/Src/MCP3425.c.s
 
 Core/Src/fatfs_sd.obj: Core/Src/fatfs_sd.c.obj
 .PHONY : Core/Src/fatfs_sd.obj
@@ -414,9 +438,12 @@ help:
 	@echo "... FatFs"
 	@echo "... NSE2025_VALVE"
 	@echo "... STM32_Drivers"
-	@echo "... Core/Src/MAX6675.obj"
-	@echo "... Core/Src/MAX6675.i"
-	@echo "... Core/Src/MAX6675.s"
+	@echo "... Core/Src/MAX31855.obj"
+	@echo "... Core/Src/MAX31855.i"
+	@echo "... Core/Src/MAX31855.s"
+	@echo "... Core/Src/MCP3425.obj"
+	@echo "... Core/Src/MCP3425.i"
+	@echo "... Core/Src/MCP3425.s"
 	@echo "... Core/Src/fatfs_sd.obj"
 	@echo "... Core/Src/fatfs_sd.i"
 	@echo "... Core/Src/fatfs_sd.s"

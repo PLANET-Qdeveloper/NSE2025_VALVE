@@ -6,7 +6,21 @@
   "C_Cpp.intelliSenseEngine": "default",
   "clangd.enable": false,
   "files.associations": {
-    "main.h": "c"
+    "main.h": "c",
+    "*.tcc": "c",
+    "charconv": "c",
+    "chrono": "c",
+    "expected": "c",
+    "optional": "c",
+    "format": "c",
+    "ratio": "c",
+    "system_error": "c",
+    "array": "c",
+    "functional": "c",
+    "regex": "c",
+    "tuple": "c",
+    "type_traits": "c",
+    "utility": "c"
   },
   "cmake.configureSettings": {
     "CMAKE_BUILD_TYPE": "Debug"

@@ -1,0 +1,43 @@
+{
+  "tasks": [
+    {
+      "label": "cmake: configure",
+      "type": "shell",
+      "command": "cmake",
+      "args": [
+        "-B",
+        "build",
+        "-S",
+        ".",
+        "-DCMAKE_BUILD_TYPE=Debug",
+        "-DCMAKE_TOOLCHAIN_FILE=cmake/gcc-arm-none-eabi.cmake"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "PATH": "/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin:${env:PATH}"
+        }
+      },
+      "problemMatcher": []
+    },
+    {
+      "type": "shell",
+      "label": "cmake: build",
+      "dependsOn": "cmake: configure",
+      "command": "cmake",
+      "args": ["--build", "build"],
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "PATH": "/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin:${env:PATH}"
+        }
+      },
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    }
+  ],
+  "version": "2.0.0"
+}

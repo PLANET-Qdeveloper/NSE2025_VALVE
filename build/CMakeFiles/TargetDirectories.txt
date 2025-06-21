@@ -1,0 +1,7 @@
+/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/CMakeFiles/NSE2025_VALVE.dir
+/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/CMakeFiles/edit_cache.dir
+/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/CMakeFiles/rebuild_cache.dir
+/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir
+/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/cmake/stm32cubemx/CMakeFiles/FatFs.dir
+/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/cmake/stm32cubemx/CMakeFiles/edit_cache.dir
+/Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/build/cmake/stm32cubemx/CMakeFiles/rebuild_cache.dir

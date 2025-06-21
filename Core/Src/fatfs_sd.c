@@ -75,20 +75,20 @@ static uint8_t SD_ReadyWait(void)
 
   do
   {
-    /* 0xFF値が受信されるまでSPI通信 */
+    /* 0xFF 値が受信されるまで SPI 通信 */
     res = SPI_RxByte();
   } while ((res != 0xFF) && Timer2);
 
   return res;
 }
 
-/* 電源オン */
+/* 電源投入 */
 static void SD_PowerOn(void)
 {
   uint8_t cmd_arg[6];
   uint32_t Count = 0x1FFF;
 
-  /* Deselect状態でSPIメッセージを送信して待機状態にする */
+  /* Deselect 状態で SPI メッセージを送信して待機状態にする */
   DESELECT();
 
   for (int i = 0; i < 10; i++)
@@ -98,7 +98,6 @@ static void SD_PowerOn(void)
 
   /* SPI チップセレクト */
   SELECT();
-
   /* 初期 GO_IDLE_STATE 状態遷移 */
   cmd_arg[0] = (CMD0 | 0x40);
   cmd_arg[1] = 0;
@@ -125,7 +124,7 @@ static void SD_PowerOn(void)
   PowerFlag = 1;
 }
 
-/* 電源オフ */
+/* 電源切断 */
 static void SD_PowerOff(void)
 {
   PowerFlag = 0;
@@ -152,7 +151,7 @@ static bool SD_RxDataBlock(BYTE *buff, UINT btr)
     token = SPI_RxByte();
   } while ((token == 0xFF) && Timer1);
 
-  /* 0xFE以外のToken受信時エラー処理 */
+  /* 0xFE 以外 Token 受信時 エラー処理 */
   if (token != 0xFE)
     return FALSE;
 
@@ -162,8 +161,7 @@ static bool SD_RxDataBlock(BYTE *buff, UINT btr)
     SPI_RxBytePtr(buff++);
     SPI_RxBytePtr(buff++);
   } while (btr -= 2);
-
-  SPI_RxByte(); /* CRC無視 */
+  SPI_RxByte(); /* CRC 無視 */
   SPI_RxByte();
 
   return TRUE;
@@ -188,14 +186,14 @@ static bool SD_TxDataBlock(const BYTE *buff, BYTE token)
   {
     wc = 0;
 
-    /* 512バイトデータ送信 */
+    /* 512 バイト データ送信 */
     do
     {
       SPI_TxByte(*buff++);
       SPI_TxByte(*buff++);
     } while (--wc);
 
-    SPI_RxByte(); /* CRC無視 */
+    SPI_RxByte(); /* CRC 無視 */
     SPI_RxByte();
 
     /* データ応答受信 */
@@ -210,7 +208,7 @@ static bool SD_TxDataBlock(const BYTE *buff, BYTE token)
       i++;
     }
 
-    /* SPI受信バッファクリア */
+    /* SPI 受信バッファ Clear */
     while (SPI_RxByte() == 0)
       ;
   }
@@ -222,13 +220,12 @@ static bool SD_TxDataBlock(const BYTE *buff, BYTE token)
 }
 #endif /* _READONLY */
 
-/* CMDパケット送信 */
+/* CMD パケット送信 */
 static BYTE SD_SendCmd(BYTE cmd, DWORD arg)
 {
   uint8_t crc, res;
 
-  /* SDカード待機 */
-  if (SD_ReadyWait() != 0xFF)
+  /* SDカード待機 */ if (SD_ReadyWait() != 0xFF)
     return 0xFF;
 
   /* コマンドパケット送信 */
@@ -238,18 +235,17 @@ static BYTE SD_SendCmd(BYTE cmd, DWORD arg)
   SPI_TxByte((BYTE)(arg >> 8));  /* Argument[15..8] */
   SPI_TxByte((BYTE)arg);         /* Argument[7..0] */
 
-  /* コマンド別CRC準備 */
+  /* コマンド別 CRC 準備 */
   crc = 0;
   if (cmd == CMD0)
     crc = 0x95; /* CRC for CMD0(0) */
-
   if (cmd == CMD8)
     crc = 0x87; /* CRC for CMD8(0x1AA) */
 
-  /* CRC送信 */
+  /* CRC 送信 */
   SPI_TxByte(crc);
 
-  /* CMD12 Stop Readingコマンドの場合は応答バイト1つを破棄する */
+  /* CMD12 Stop Reading コマンドの場合は応答バイト一つを捨てる */
   if (cmd == CMD12)
     SPI_RxByte();
 
@@ -264,8 +260,8 @@ static BYTE SD_SendCmd(BYTE cmd, DWORD arg)
 }
 
 /*-----------------------------------------------------------------------
-  fatfsで使用されるグローバル関数
-  user_diskio.cファイルで使用される
+  fatfsで使用されるGlobal関数群
+  user_diskio.c ファイルで使用される
 -----------------------------------------------------------------------*/
 
 /* SDカード初期化 */
@@ -273,7 +269,7 @@ DSTATUS SD_disk_initialize(BYTE drv)
 {
   uint8_t n, type, ocr[4];
 
-  /* 1種類のドライブのみサポート */
+  /* 一種類のドライブのみサポート */
   if (drv)
     return STA_NOINIT;
 
@@ -281,22 +277,21 @@ DSTATUS SD_disk_initialize(BYTE drv)
   if (Stat & STA_NODISK)
     return Stat;
 
-  /* SDカード電源オン */
+  /* SDカード Power On */
   SD_PowerOn();
 
-  /* SPI通信のためチップセレクト */
+  /* SPI 通信のため Chip Select */
   SELECT();
 
   /* SDカードタイプ変数初期化 */
   type = 0;
 
-  /* Idle状態進入 */
-  if (SD_SendCmd(CMD0, 0) == 1)
+  /* Idle 状態移行 */ if (SD_SendCmd(CMD0, 0) == 1)
   {
-    /* タイマー1秒設定 */
+    /* タイマー 1秒設定 */
     Timer1 = 100;
 
-    /* SDインターフェース動作条件確認 */
+    /* SD インターフェース動作条件確認 */
     if (SD_SendCmd(CMD8, 0x1AA) == 1)
     {
       /* SDC Ver2+ */
@@ -304,10 +299,9 @@ DSTATUS SD_disk_initialize(BYTE drv)
       {
         ocr[n] = SPI_RxByte();
       }
-
       if (ocr[2] == 0x01 && ocr[3] == 0xAA)
       {
-        /* 2.7-3.6V電圧範囲動作 */
+        /* 2.7-3.6V 電圧範囲動作 */
         do
         {
           if (SD_SendCmd(CMD55, 0) <= 1 && SD_SendCmd(CMD41, 1UL << 30) == 0)
@@ -344,7 +338,6 @@ DSTATUS SD_disk_initialize(BYTE drv)
             break; /* CMD1 */
         }
       } while (Timer1);
-
       if (!Timer1 || SD_SendCmd(CMD16, 512) != 0)
       {
         /* ブロック長選択 */
@@ -354,10 +347,9 @@ DSTATUS SD_disk_initialize(BYTE drv)
   }
 
   CardType = type;
-
   DESELECT();
 
-  SPI_RxByte(); /* Idle状態遷移 (Release DO) */
+  SPI_RxByte(); /* Idle 状態遷移 (Release DO) */
 
   if (type)
   {
@@ -392,10 +384,9 @@ DRESULT SD_disk_read(BYTE pdrv, BYTE *buff, DWORD sector, UINT count)
     return RES_NOTRDY;
 
   if (!(CardType & 4))
-    sector *= 512; /* 指定sectorをByteアドレッシング単位に変更 */
+    sector *= 512; /* 指定 sector を Byte addressing 単位に変更 */
 
   SELECT();
-
   if (count == 1)
   {
     /* シングルブロック読み取り */
@@ -404,7 +395,7 @@ DRESULT SD_disk_read(BYTE pdrv, BYTE *buff, DWORD sector, UINT count)
   }
   else
   {
-    /* マルチブロック読み取り */
+    /* 複数ブロック読み取り */
     if (SD_SendCmd(CMD18, sector) == 0)
     {
       do
@@ -415,13 +406,13 @@ DRESULT SD_disk_read(BYTE pdrv, BYTE *buff, DWORD sector, UINT count)
         buff += 512;
       } while (--count);
 
-      /* STOP_TRANSMISSION、すべてのブロックを読み取った後、送信中止要求 */
+      /* STOP_TRANSMISSION, 全ブロックを読み取った後、送信停止要求 */
       SD_SendCmd(CMD12, 0);
     }
   }
 
   DESELECT();
-  SPI_RxByte(); /* Idle状態(Release DO) */
+  SPI_RxByte(); /* Idle 状態(Release DO) */
 
   return count ? RES_ERROR : RES_OK;
 }
@@ -438,9 +429,8 @@ DRESULT SD_disk_write(BYTE pdrv, const BYTE *buff, DWORD sector, UINT count)
 
   if (Stat & STA_PROTECT)
     return RES_WRPRT;
-
   if (!(CardType & 4))
-    sector *= 512; /* 指定sectorをByteアドレッシング単位に変更 */
+    sector *= 512; /* 指定 sector を Byte addressing 単位に変更 */
 
   SELECT();
 
@@ -452,7 +442,7 @@ DRESULT SD_disk_write(BYTE pdrv, const BYTE *buff, DWORD sector, UINT count)
   }
   else
   {
-    /* マルチブロック書き込み */
+    /* 複数ブロック書き込み */
     if (CardType & 2)
     {
       SD_SendCmd(CMD55, 0);
@@ -483,7 +473,7 @@ DRESULT SD_disk_write(BYTE pdrv, const BYTE *buff, DWORD sector, UINT count)
 }
 #endif /* _READONLY */
 
-/* その他の関数 */
+/* その他関数 */
 DRESULT SD_disk_ioctl(BYTE drv, BYTE ctrl, void *buff)
 {
   DRESULT res;
@@ -526,7 +516,7 @@ DRESULT SD_disk_ioctl(BYTE drv, BYTE ctrl, void *buff)
     switch (ctrl)
     {
     case GET_SECTOR_COUNT:
-      /* SDカード内セクタ数 (DWORD) */
+      /* SDカード内 Sectorの個数 (DWORD) */
       if ((SD_SendCmd(CMD9, 0) == 0) && SD_RxDataBlock(csd, 16))
       {
         if ((csd[0] >> 6) == 1)
@@ -560,19 +550,18 @@ DRESULT SD_disk_ioctl(BYTE drv, BYTE ctrl, void *buff)
       break;
 
     case MMC_GET_CSD:
-      /* CSD情報受信 (16 bytes) */
+      /* CSD 情報受信 (16 bytes) */
       if (SD_SendCmd(CMD9, 0) == 0 && SD_RxDataBlock(ptr, 16))
         res = RES_OK;
       break;
 
     case MMC_GET_CID:
-      /* CID情報受信 (16 bytes) */
+      /* CID 情報受信 (16 bytes) */
       if (SD_SendCmd(CMD10, 0) == 0 && SD_RxDataBlock(ptr, 16))
         res = RES_OK;
       break;
-
     case MMC_GET_OCR:
-      /* OCR情報受信 (4 bytes) */
+      /* OCR 情報受信 (4 bytes) */
       if (SD_SendCmd(CMD58, 0) == 0)
       {
         for (n = 0; n < 4; n++)

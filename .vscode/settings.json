@@ -1,0 +1,34 @@
+{
+  "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+  "cmake.configureOnOpen": true,
+  "cmake.exportCompileCommandsFile": true,
+  "cmake.buildBeforeRun": true,
+  "C_Cpp.intelliSenseEngine": "default",
+  "clangd.enable": false,
+  "files.associations": {
+    "main.h": "c",
+    "*.tcc": "c",
+    "charconv": "c",
+    "chrono": "c",
+    "expected": "c",
+    "optional": "c",
+    "format": "c",
+    "ratio": "c",
+    "system_error": "c",
+    "array": "c",
+    "functional": "c",
+    "regex": "c",
+    "tuple": "c",
+    "type_traits": "c",
+    "utility": "c"
+  },
+  "cmake.configureSettings": {
+    "CMAKE_BUILD_TYPE": "Debug"
+  },
+  "cmake.buildPreset": "Debug",
+  "cmake.configurePreset": "Debug",
+  "cmake.showBuildPreset": true,
+  "cmake.showConfigurePreset": true,
+  "cortex-debug.gdbPath": "/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gdb",
+  "cortex-debug.armToolchainPath": "/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32"
+}

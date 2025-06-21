@@ -18,19 +18,11 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "fatfs.h"
+
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include <stdio.h>
-#include <string.h>
-#include "servo.h"
-#include "fatfs.h"
-#include "diskio.h"
-#include "ff.h"
-#include "fatfs_sd.h"
-#include "MAX31855.h"
-#include "MCP3425.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/

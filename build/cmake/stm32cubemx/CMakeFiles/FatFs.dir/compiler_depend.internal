@@ -3,7 +3,6 @@
 
 cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/diskio.c.obj
  /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Middlewares/Third_Party/FatFs/src/diskio.c
- /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Inc/main.h
  /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Inc/stm32f4xx_hal_conf.h
  /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f413xx.h
  /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h
@@ -65,7 +64,6 @@ cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/d
 
 cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/ff.c.obj
  /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Middlewares/Third_Party/FatFs/src/ff.c
- /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Inc/main.h
  /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Inc/stm32f4xx_hal_conf.h
  /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f413xx.h
  /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h
@@ -127,7 +125,6 @@ cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/f
 
 cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/ff_gen_drv.c.obj
  /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Middlewares/Third_Party/FatFs/src/ff_gen_drv.c
- /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Inc/main.h
  /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Inc/stm32f4xx_hal_conf.h
  /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f413xx.h
  /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h
@@ -189,7 +186,6 @@ cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/f
 
 cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/option/syscall.c.obj
  /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Middlewares/Third_Party/FatFs/src/option/syscall.c
- /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Inc/main.h
  /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Inc/stm32f4xx_hal_conf.h
  /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f413xx.h
  /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h

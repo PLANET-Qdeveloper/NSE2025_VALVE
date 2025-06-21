@@ -3,7 +3,6 @@ cmake/stm32cubemx/CMakeFiles/FatFs.dir/__/__/Middlewares/Third_Party/FatFs/src/f
  /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Middlewares/Third_Party/FatFs/src/ff.h \
  /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Middlewares/Third_Party/FatFs/src/integer.h \
  /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/FATFS/Target/ffconf.h \
- /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Inc/main.h \
  /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
  /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Core/Inc/stm32f4xx_hal_conf.h \
  /Users/a81802/STM32CubeIDE/workspace_1.18.0/NSE2025_VALVE/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h \

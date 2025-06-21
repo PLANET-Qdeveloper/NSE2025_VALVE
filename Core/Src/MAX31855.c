@@ -37,7 +37,7 @@ float Max31855_Read_Temp(SPI_HandleTypeDef *hspi)
     HAL_StatusTypeDef status;
 
     // CS LOW to start communication
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(MAX31855_CS_PORT, MAX31855_CS_PIN, GPIO_PIN_RESET);
 
     // Small delay for CS setup time
     HAL_Delay(1);
@@ -46,7 +46,7 @@ float Max31855_Read_Temp(SPI_HandleTypeDef *hspi)
     status = HAL_SPI_TransmitReceive(hspi, dummy, rx, 4, 1000);
 
     // CS HIGH to end communication
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(MAX31855_CS_PORT, MAX31855_CS_PIN, GPIO_PIN_SET);
 
     // Check SPI communication status
     if (status != HAL_OK)
@@ -76,17 +76,20 @@ float Max31855_Read_Temp(SPI_HandleTypeDef *hspi)
     if (data & 0x00010000) // D16: フォルトビット
     {
         printf("フォルト検出:");
-        if (data & 0x04) printf(" SCV(Short to VCC)");  // D2
-        if (data & 0x02) printf(" SCG(Short to GND)");  // D1
-        if (data & 0x01) printf(" OC(Open Circuit)");   // D0
+        if (data & 0x04)
+            printf(" SCV(Short to VCC)"); // D2
+        if (data & 0x02)
+            printf(" SCG(Short to GND)"); // D1
+        if (data & 0x01)
+            printf(" OC(Open Circuit)"); // D0
         printf("\r\n");
-        
+
         return -1.0f; // フォルトエラー
     }
 
     // サーモカップル温度データの抽出（D31:D18の14ビット、符号付き、0.25°C単位）
     int16_t thermocouple_temp = (int16_t)((data >> 18) & 0x3FFF);
-    
+
     // 符号ビットの処理（14ビットの符号ビット）
     if (thermocouple_temp & 0x2000) // 負の値の場合
     {
@@ -95,7 +98,7 @@ float Max31855_Read_Temp(SPI_HandleTypeDef *hspi)
 
     // リファレンス温度データの抽出（D15:D4の12ビット、符号付き、0.0625°C単位）
     int16_t reference_temp = (int16_t)((data >> 4) & 0x0FFF);
-    
+
     // 符号ビットの処理（12ビットの符号ビット）
     if (reference_temp & 0x0800) // 負の値の場合
     {

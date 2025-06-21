@@ -11,6 +11,10 @@
 #include "main.h" // SPI_HandleTypeDefの定義を含む
 
 // ------------------------- Defines -------------------------
+// GPIO設定（Chip Select用）
+#define MAX31855_CS_PORT GPIOB
+#define MAX31855_CS_PIN GPIO_PIN_12
+
 // エラー状態の定義（データシート準拠）
 #define THERMOCOUPLE_OPEN 0x01        // サーモカップルオープン (D0)
 #define THERMOCOUPLE_SHORT_GND 0x02   // GNDショート (D1)

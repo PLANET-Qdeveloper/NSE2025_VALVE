@@ -15,7 +15,7 @@
       "options": {
         "cwd": "${workspaceFolder}",
         "env": {
-          "PATH": "/Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin:${env:PATH}"
+          "PATH": "/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin:${env:PATH}"
         }
       },
       "problemMatcher": []
@@ -29,7 +29,7 @@
       "options": {
         "cwd": "${workspaceFolder}",
         "env": {
-          "PATH": "/Applications/ArmGNUToolchain/14.2.rel1/arm-none-eabi/bin:${env:PATH}"
+          "PATH": "/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin:${env:PATH}"
         }
       },
       "problemMatcher": [],

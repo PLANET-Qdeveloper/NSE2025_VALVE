@@ -33,7 +33,6 @@
 float Max31855_Read_Temp(SPI_HandleTypeDef *hspi)
 {
     uint8_t rx[4] = {0};
-    uint8_t dummy[4] = {0x00, 0x00, 0x00, 0x00};
     HAL_StatusTypeDef status;
 
     // CS LOW to start communication
@@ -42,8 +41,8 @@ float Max31855_Read_Temp(SPI_HandleTypeDef *hspi)
     // Small delay for CS setup time
     HAL_Delay(1);
 
-    // SPI communication with 4 bytes (32-bit data)
-    status = HAL_SPI_TransmitReceive(hspi, dummy, rx, 4, 1000);
+    // SPI communication with 4 bytes (32-bit data) - receive only
+    status = HAL_SPI_Receive(hspi, rx, 4, 10000);
 
     // CS HIGH to end communication
     HAL_GPIO_WritePin(MAX31855_CS_PORT, MAX31855_CS_PIN, GPIO_PIN_SET);

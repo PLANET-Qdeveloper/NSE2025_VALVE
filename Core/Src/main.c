@@ -24,6 +24,7 @@
 /* USER CODE BEGIN Includes */
 #include <string.h>
 #include <stdio.h>
+#include <inttypes.h>
 #include "fatfs_sd.h"
 #include "MAX31855.h"
 #include "MCP3425.h"
@@ -323,8 +324,8 @@ int main(void)
 
         for (int i = 0; i < MAX_DATA_POINTS; i++)
         {
-          sprintf(buffer, "%u,%.2f,%.2f\r\n",
-                  sensor_data[i].timestamp,
+          sprintf(buffer, "%lu,%.2f,%.2f\r\n",
+                  (unsigned long)sensor_data[i].timestamp,
                   sensor_data[i].temperature,
                   sensor_data[i].pressure);
 

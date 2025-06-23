@@ -323,7 +323,7 @@ int main(void)
 
         for (int i = 0; i < MAX_DATA_POINTS; i++)
         {
-          sprintf(buffer, "%lu,%.2f,%.2f\r\n",
+          sprintf(buffer, "%u,%.2f,%.2f\r\n",
                   sensor_data[i].timestamp,
                   sensor_data[i].temperature,
                   sensor_data[i].pressure);

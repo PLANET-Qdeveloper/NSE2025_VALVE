@@ -23,7 +23,6 @@
 /*-----------------------------------------------------------------------------/
 / Additional user header to be used
 /-----------------------------------------------------------------------------*/
-#include "main.h"
 #include "stm32f4xx_hal.h"
 
 /*-----------------------------------------------------------------------------/
@@ -81,7 +80,7 @@
 / Locale and Namespace Configurations
 /-----------------------------------------------------------------------------*/
 
-#define _CODE_PAGE 1
+#define _CODE_PAGE 850
 /* This option specifies the OEM code page to be used on the target system.
 /  Incorrect setting of the code page can cause a file open failure.
 /

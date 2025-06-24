@@ -18,17 +18,11 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "fatfs.h"
+
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include <string.h>
-#include <stdio.h>
-#include <inttypes.h>
-#include "fatfs_sd.h"
-#include "MAX31855.h"
-#include "MCP3425.h"
-#include "servo.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -64,7 +58,7 @@ UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
 volatile uint8_t Timer1, Timer2; /* 1ms Timer Counter for SD card operations */
-#define MAX_DATA_POINTS 20
+#define MAX_DATA_POINTS 10
 typedef struct
 {
   uint32_t timestamp;
@@ -112,6 +106,121 @@ int _write(int file, char *ptr, int len)
   HAL_UART_Transmit(&huart5, (uint8_t *)ptr, len, HAL_MAX_DELAY);
   return len;
 }
+
+// SDカードのセクター内容をデバッグ出力する関数
+void debug_sector_content(DWORD sector)
+{
+  BYTE sector_buffer[512];
+  DRESULT res;
+
+  printf("\n=== Sector %lu Debug Info ===\n", sector);
+
+  res = SD_disk_read(0, sector_buffer, sector, 1);
+  if (res != RES_OK)
+  {
+    printf("Error reading sector %lu: %d\n", sector, res);
+    return;
+  }
+
+  // ブートシグネチャチェック (0x55AA at offset 510-511)
+  WORD signature = (sector_buffer[511] << 8) | sector_buffer[510];
+  printf("Boot signature (0x55AA): 0x%04X %s\n", signature,
+         (signature == 0xAA55) ? "OK" : "INVALID");
+
+  // ジャンプ命令チェック
+  printf("Jump instruction: 0x%02X 0x%02X 0x%02X\n",
+         sector_buffer[0], sector_buffer[1], sector_buffer[2]);
+
+  // ファイルシステムタイプ文字列チェック (offset 54)
+  printf("FS Type (54): ");
+  for (int i = 54; i < 62; i++)
+  {
+    printf("%c", (sector_buffer[i] >= 32 && sector_buffer[i] < 127) ? sector_buffer[i] : '.');
+  }
+  printf("\n");
+
+  // FAT32ファイルシステムタイプ文字列チェック (offset 82)
+  printf("FS Type32 (82): ");
+  for (int i = 82; i < 90; i++)
+  {
+    printf("%c", (sector_buffer[i] >= 32 && sector_buffer[i] < 127) ? sector_buffer[i] : '.');
+  }
+  printf("\n");
+
+  // MBRパーティションテーブル情報 (sector 0の場合)
+  if (sector == 0)
+  {
+    printf("\n--- MBR Partition Table ---\n");
+    for (int i = 0; i < 4; i++)
+    {
+      BYTE *pte = sector_buffer + 446 + (i * 16);
+      BYTE system_id = pte[4];
+      DWORD start_lba = (pte[11] << 24) | (pte[10] << 16) | (pte[9] << 8) | pte[8];
+      DWORD size_sectors = (pte[15] << 24) | (pte[14] << 16) | (pte[13] << 8) | pte[12];
+
+      printf("Partition %d: System=0x%02X, Start=%lu, Size=%lu\n",
+             i + 1, system_id, start_lba, size_sectors);
+    }
+  }
+
+  // 最初の32バイトをhex dump
+  printf("\nFirst 32 bytes (hex):\n");
+  for (int i = 0; i < 32; i++)
+  {
+    if (i % 16 == 0)
+      printf("%04X: ", i);
+    printf("%02X ", sector_buffer[i]);
+    if (i % 16 == 15)
+      printf("\n");
+  }
+  printf("\n");
+}
+
+// check_fs関数の動作をシミュレートする関数
+BYTE debug_check_fs(DWORD sector)
+{
+  BYTE sector_buffer[512];
+  DRESULT res;
+
+  res = SD_disk_read(0, sector_buffer, sector, 1);
+  if (res != RES_OK)
+  {
+    printf("Disk error reading sector %lu\n", sector);
+    return 4; // Disk error
+  }
+
+  // ブートレコードシグネチャチェック
+  WORD signature = (sector_buffer[511] << 8) | sector_buffer[510];
+  if (signature != 0xAA55)
+  {
+    printf("Invalid boot signature: 0x%04X\n", signature);
+    return 3; // Not a BS
+  }
+
+  // ジャンプ命令チェック
+  if (sector_buffer[0] == 0xE9 || (sector_buffer[0] == 0xEB && sector_buffer[2] == 0x90))
+  {
+    // FAT文字列チェック (offset 54)
+    DWORD fat_str = (sector_buffer[56] << 16) | (sector_buffer[55] << 8) | sector_buffer[54];
+    if ((fat_str & 0xFFFFFF) == 0x544146)
+    { // "FAT"
+      printf("Found FAT filesystem at sector %lu\n", sector);
+      return 0; // FAT
+    }
+
+    // FAT32文字列チェック (offset 82)
+    DWORD fat32_str = (sector_buffer[85] << 24) | (sector_buffer[84] << 16) |
+                      (sector_buffer[83] << 8) | sector_buffer[82];
+    if (fat32_str == 0x33544146)
+    { // "FAT3"
+      printf("Found FAT32 filesystem at sector %lu\n", sector);
+      return 0; // FAT
+    }
+  }
+
+  printf("Valid boot sector but not FAT at sector %lu\n", sector);
+  return 2; // Valid BS but not FAT
+}
 /* USER CODE END 0 */
 
 /**
@@ -153,119 +262,106 @@ int main(void)
   MX_TIM1_Init();
   MX_RTC_Init();
   MX_UART5_Init();
-  MX_I2C3_Init(); /* USER CODE BEGIN 2 */
+  MX_I2C3_Init();
+  /* USER CODE BEGIN 2 */
+  // 初期設定
   servo_init();
 
-  // SDカードとファイルシステムの初期化
-  printf("SDカード初期化を開始します...\r\n");
+  /*
+  //NOS動作用プログラム5秒間開く（動作確認済み）
+  HAL_GPIO_WritePin(GPIOA,GPIO_PIN_11,GPIO_PIN_RESET);
+  HAL_Delay(3000);
+  HAL_GPIO_WritePin(GPIOA,GPIO_PIN_11,GPIO_PIN_SET);
+  */
 
-  DSTATUS disk_status = SD_disk_initialize(0);
-  printf("SDカード初期化結果: %d\r\n", disk_status);
+  // SDカードの詳細デバッグ情報を出力
+  printf("\n=== SD Card Debug Analysis ===\n");
 
-  if (disk_status != 0)
+  // SDカード初期化状態確認
+  DSTATUS sd_status = SD_disk_status(0);
+  printf("SD Status: 0x%02X\n", sd_status);
+
+  if (!(sd_status & STA_NOINIT))
   {
-    printf("SDカード初期化エラー - 状態: 0x%02X\r\n", disk_status);
-    if (disk_status & STA_NOINIT)
-      printf("- 初期化されていません\r\n");
-    if (disk_status & STA_NODISK)
-      printf("- SDカードが挿入されていません\r\n");
-    if (disk_status & STA_PROTECT)
-      printf("- 書き込み保護されています\r\n");
-  }
+    // セクター0 (MBR) の内容を確認
+    debug_sector_content(0);
 
-  FRESULT mount_result = f_mount(&fs, "", 1);
-  printf("ファイルシステムマウント結果: %d\r\n", mount_result);
+    // check_fs関数の動作をシミュレート
+    printf("\n=== check_fs simulation ===\n");
+    BYTE fmt0 = debug_check_fs(0);
+    printf("check_fs(0) result: %d\n", fmt0);
 
-  if (mount_result != FR_OK)
-  {
-    printf("マウントエラー詳細:\r\n");
-    switch (mount_result)
+    // パーティションテーブルから各パーティションの開始セクターを確認
+    BYTE sector_buffer[512];
+    if (SD_disk_read(0, sector_buffer, 0, 1) == RES_OK)
     {
-    case FR_INVALID_DRIVE:
-      printf("- 無効なドライブ\r\n");
-      break;
-    case FR_NOT_READY:
-      printf("- ドライブが準備できていません\r\n");
-      break;
-    case FR_NO_FILESYSTEM:
-      printf("- ファイルシステムが見つかりません\r\n");
-      break;
-    default:
-      printf("- その他のエラー: %d\r\n", mount_result);
-      break;
+      printf("\n=== Checking partitions ===\n");
+      for (int i = 0; i < 4; i++)
+      {
+        BYTE *pte = sector_buffer + 446 + (i * 16);
+        BYTE system_id = pte[4];
+        DWORD start_lba = (pte[11] << 24) | (pte[10] << 16) | (pte[9] << 8) | pte[8];
+
+        if (system_id != 0 && start_lba != 0)
+        {
+          printf("Checking partition %d at sector %lu:\n", i + 1, start_lba);
+          debug_sector_content(start_lba);
+          BYTE fmt_part = debug_check_fs(start_lba);
+          printf("check_fs(%lu) result: %d\n", start_lba, fmt_part);
+        }
+      }
     }
-    // フォーマットを試行
-    printf("SDカードのフォーマットを試行します...\r\n");
-    BYTE work[_MAX_SS];
-    FRESULT format_result = f_mkfs("", FM_FAT32, 0, work, sizeof(work));
-    printf("フォーマット結果: %d\r\n", format_result);
-
-    if (format_result == FR_OK)
-    {
-      mount_result = f_mount(&fs, "", 1);
-      printf("再マウント結果: %d\r\n", mount_result);
-    }
-  }
-
-  // RTCの状態確認と初期設定
-  RTC_TimeTypeDef current_time;
-  RTC_DateTypeDef current_date;
-  HAL_RTC_GetTime(&hrtc, &current_time, RTC_FORMAT_BIN);
-  HAL_RTC_GetDate(&hrtc, &current_date, RTC_FORMAT_BIN);
-
-  printf("現在のRTC設定: %04d/%02d/%02d %02d:%02d:%02d\r\n",
-         current_date.Year + 2000, current_date.Month, current_date.Date,
-         current_time.Hours, current_time.Minutes, current_time.Seconds);
-
-  // RTCが初期化されていない場合、デフォルト値を設定
-  if (current_date.Year == 0 || current_date.Month == 0 || current_date.Date == 0)
-  {
-    printf("RTCが初期化されていません。デフォルト値を設定します。\r\n");
-    RTC_TimeTypeDef default_time = {0};
-    RTC_DateTypeDef default_date = {0};
-
-    default_time.Hours = 12;
-    default_time.Minutes = 0;
-    default_time.Seconds = 0;
-    default_time.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
-    default_time.StoreOperation = RTC_STOREOPERATION_RESET;
-
-    default_date.WeekDay = RTC_WEEKDAY_MONDAY;
-    default_date.Month = 1;
-    default_date.Date = 1;
-    default_date.Year = 25; // 2025年
-
-    HAL_RTC_SetTime(&hrtc, &default_time, RTC_FORMAT_BIN);
-    HAL_RTC_SetDate(&hrtc, &default_date, RTC_FORMAT_BIN);
-    printf("RTCをデフォルト値に設定しました: 2025/01/01 12:00:00\r\n");
-  }
-
-  // SDカードの基本動作テスト
-  printf("SDカードの基本動作テストを実行します...\r\n");
-  FRESULT test_result = f_open(&fil, "test.txt", FA_CREATE_ALWAYS | FA_WRITE);
-  if (test_result == FR_OK)
-  {
-    sprintf(buffer, "SDカードテスト成功\r\n");
-    f_write(&fil, buffer, strlen(buffer), &bw);
-    f_close(&fil);
-    printf("テストファイル作成成功\r\n");
-
-    // テストファイルを削除
-    f_unlink("test.txt");
-    printf("テストファイル削除完了\r\n");
   }
   else
   {
-    printf("テストファイル作成失敗: %d\r\n", test_result);
+    printf("SD card not initialized properly\n");
+  }
+
+  printf("\n=== End SD Debug ===\n");
+
+  // SDカードを明示的に初期化
+  printf("Initializing SD card...\n");
+  DSTATUS init_result = SD_disk_initialize(0);
+  printf("SD initialization result: 0x%02X\n", init_result);
+
+  if (init_result == 0)
+  {
+    printf("SD card initialized successfully\n");
+  }
+  else
+  {
+    printf("SD card initialization failed\n");
+  }
+
+  fresult = f_mount(&fs, "/", 0);
+  if (fresult == FR_OK)
+  {
+    printf("SD CARD mounted successfully.\n");
+  }
+  else
+  {
+    printf("ERROR : SD CARD mounted failed.\n");
+  }
+
+  if (f_getfree("", &fre_clust, &pfs) == FR_OK)
+  {
+    tot_size = (pfs->n_fatent - 2) * pfs->csize * 0.5;
+    printf("Total size: %15lu B\n", tot_size * 1024);
+    fre_size = fre_clust * pfs->csize * 0.5;
+    printf("Free size: %15lu B\n", fre_size * 1024);
   }
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
-  /* USER CODE BEGIN WHILE */ while (1)
+  /* USER CODE BEGIN WHILE */
+  while (1)
   {
+
     float temperature = Max31855_Read_Temp(&hspi2);
-    float pressure = MCP3425_Read_Pressure(&hi2c1); // データを配列に保存
+    float pressure = MCP3425_Read_Pressure(&hi2c1);
+
+    // データを配列に保存
     if (data_count < MAX_DATA_POINTS)
     {
       sensor_data[data_count].timestamp = HAL_GetTick();
@@ -273,55 +369,27 @@ int main(void)
       sensor_data[data_count].pressure = pressure;
       data_count++;
     }
+
+    // 10回のデータが集まったら保存
     if (data_count >= MAX_DATA_POINTS)
     {
-      // ディスクの状態を確認
-      DSTATUS disk_status = SD_disk_status(0);
-      printf("ディスクステータス: 0x%02X\r\n", disk_status);
+      // 日時を含むファイル名を生成
+      // char filename[32];
+      // get_datetime_filename(filename, sizeof(filename));
 
-      if (disk_status != 0)
-      {
-        printf("ディスクエラーが発生しています\r\n");
-        if (disk_status & STA_NOINIT)
-          printf("- ディスクが初期化されていません\r\n");
-        if (disk_status & STA_NODISK)
-          printf("- ディスクが見つかりません\r\n");
-        if (disk_status & STA_PROTECT)
-          printf("- ディスクが書き込み保護されています\r\n");
-
-        // ディスクの再初期化を試行
-        printf("ディスクの再初期化を試行します...\r\n");
-        DSTATUS reinit_status = SD_disk_initialize(0);
-        printf("再初期化結果: 0x%02X\r\n", reinit_status);
-
-        if (reinit_status == 0)
-        {
-          // ファイルシステムの再マウント
-          f_mount(NULL, "", 0); // アンマウント
-          FRESULT remount_result = f_mount(&fs, "", 1);
-          printf("再マウント結果: %d\r\n", remount_result);
-        }
-      }
-
-      // 日時ベースのファイル名を生成
-      char filename[64];
-      get_datetime_filename(filename, sizeof(filename));
-
-      printf("ファイル名: %s (長さ: %d)\r\n", filename, strlen(filename));
-      printf("ファイルオープンを試行します...\r\n");
-
-      // まず簡単なファイル名でテスト
-      FRESULT res = f_open(&fil, filename, FA_CREATE_ALWAYS | FA_WRITE);
-      printf("ファイルオープン結果: %d\r\n", res);
-
+      // ファイルにセンサーデータを書き込む
+      FRESULT res = f_open(&fil, "sensor_data.csv", FA_CREATE_ALWAYS | FA_WRITE);
+      printf("ファイルを開けました (エラーコード: %d)\r\n", res);
       if (res == FR_OK)
       {
-        printf("ファイルオープン成功、データ書き込み開始\r\n");
-
+        // CSVヘッダーを書き込む
         sprintf(buffer, "時刻,温度(°C),圧力(Pa)\r\n");
-        FRESULT write_result = f_write(&fil, buffer, strlen(buffer), &bw);
-        printf("ヘッダー書き込み結果: %d (書き込みバイト数: %d)\r\n", write_result, bw);
+        if (f_write(&fil, buffer, strlen(buffer), &bw) != FR_OK)
+        {
+          printf("ヘッダー書き込みエラー\r\n");
+        }
 
+        // 10個のデータをCSV形式で書き込む
         for (int i = 0; i < MAX_DATA_POINTS; i++)
         {
           sprintf(buffer, "%lu,%.2f,%.2f\r\n",
@@ -329,78 +397,24 @@ int main(void)
                   sensor_data[i].temperature,
                   sensor_data[i].pressure);
 
-          write_result = f_write(&fil, buffer, strlen(buffer), &bw);
-          if (write_result != FR_OK)
+          if (f_write(&fil, buffer, strlen(buffer), &bw) != FR_OK)
           {
-            printf("データ書き込みエラー: %d (行: %d)\r\n", write_result, i);
+            printf("データ書き込みエラー\r\n");
             break;
           }
         }
 
-        FRESULT close_result = f_close(&fil);
-        printf("ファイルクローズ結果: %d\r\n", close_result);
+        // ファイルを閉じる
+        f_close(&fil);
+        printf("10個のセンサーデータを保存しました\r\n");
 
-        if (close_result == FR_OK && write_result == FR_OK)
-        {
-          printf("データファイル作成完了: %s\r\n", filename);
-        }
-
+        // データカウントをリセット
         data_count = 0;
       }
       else
       {
-        data_count = 0;
-        printf("ファイルオープンエラー: %d\r\n", res);
-
-        // エラーコードの詳細表示
-        switch (res)
-        {
-        case FR_DISK_ERR:
-          printf("- ディスクエラー\r\n");
-          break;
-        case FR_INT_ERR:
-          printf("- 内部エラー\r\n");
-          break;
-        case FR_NOT_READY:
-          printf("- ドライブが準備できていません\r\n");
-          break;
-        case FR_NO_FILE:
-          printf("- ファイルが見つかりません\r\n");
-          break;
-        case FR_NO_PATH:
-          printf("- パスが見つかりません\r\n");
-          break;
-        case FR_INVALID_NAME:
-          printf("- 無効なファイル名\r\n");
-          break;
-        case FR_DENIED:
-          printf("- アクセス拒否\r\n");
-          break;
-        case FR_EXIST:
-          printf("- ファイルが既に存在します\r\n");
-          break;
-        case FR_INVALID_OBJECT:
-          printf("- 無効なオブジェクト\r\n");
-          break;
-        case FR_WRITE_PROTECTED:
-          printf("- 書き込み保護\r\n");
-          break;
-        case FR_INVALID_DRIVE:
-          printf("- 無効なドライブ\r\n");
-          break;
-        case FR_NOT_ENABLED:
-          printf("- ワークエリアが設定されていません\r\n");
-          break;
-        case FR_NO_FILESYSTEM:
-          printf("- ファイルシステムなし\r\n");
-          break;
-        case FR_TIMEOUT:
-          printf("- タイムアウト\r\n");
-          break;
-        default:
-          printf("- 不明なエラー\r\n");
-          break;
-        }
+        printf("ファイルを開けませんでした (エラーコード: %d)\r\n", res);
+        // printf("ファイル名: %s\r\n", filename);
       }
     }
 
@@ -613,7 +627,7 @@ static void MX_SPI2_Init(void)
   hspi2.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi2.Init.CLKPhase = SPI_PHASE_1EDGE;
   hspi2.Init.NSS = SPI_NSS_SOFT;
-  hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_256;
+  hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_128;
   hspi2.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi2.Init.TIMode = SPI_TIMODE_DISABLE;
   hspi2.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
@@ -622,6 +636,10 @@ static void MX_SPI2_Init(void)
   {
     Error_Handler();
   }
+
+  // MAX31855用のCSピンを初期状態（HIGH）に設定
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_SET);
+  printf("SPI2初期化完了 - CSピンをHIGHに設定\r\n");
   /* USER CODE BEGIN SPI2_Init 2 */
 
   /* USER CODE END SPI2_Init 2 */
@@ -838,7 +856,7 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_SET);
 
   /*Configure GPIO pin : PA4 */
   GPIO_InitStruct.Pin = GPIO_PIN_4;
@@ -860,29 +878,23 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-// 日時を含むファイル名を生成する関数（8.3形式対応）
+// 日時を含むファイル名を生成する関数
 void get_datetime_filename(char *filename, size_t max_len)
 {
   RTC_TimeTypeDef time;
   RTC_DateTypeDef date;
-  static uint8_t file_counter = 0; // ファイル番号カウンタ
+  char datetime_str[32];
 
   // RTCから現在の日時を取得
   HAL_RTC_GetTime(&hrtc, &time, RTC_FORMAT_BIN);
   HAL_RTC_GetDate(&hrtc, &date, RTC_FORMAT_BIN);
 
-  // 8.3形式のファイル名を生成（例: DATA001.CSV）
-  snprintf(filename, max_len, "D%02d%02d%02d%02d.CSV",
-           date.Date, time.Hours, time.Minutes, time.Seconds);
+  snprintf(datetime_str, sizeof(datetime_str), "%04d%02d%02d_%02d%02d%02d.csv",
+           date.Year + 2000, date.Month, date.Date,
+           time.Hours, time.Minutes, time.Seconds);
 
-  // ファイル名の重複を避けるためカウンタを追加
-  file_counter++;
-  if (file_counter > 99)
-    file_counter = 1;
-
-  // より短い形式: Dyymmdd.CSV (例: D250623.CSV)
-  snprintf(filename, max_len, "D%02d%02d%02d.CSV",
-           date.Year, date.Month, date.Date);
+  strncpy(filename, datetime_str, max_len - 1);
+  filename[max_len - 1] = '\0';
 }
 /* USER CODE END 4 */
 

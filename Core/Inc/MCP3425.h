@@ -25,7 +25,8 @@ extern "C"
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "main.h"
+#include <stdint.h>
+#include "stm32f4xx_hal_i2c.h"
 
 /* Exported defines ----------------------------------------------------------*/
 #define MCP3425_OK 0
@@ -38,8 +39,15 @@ extern "C"
 #define MCP3425_LSB_SIZE 0.0000625f // 16-bit, PGA = 1 の場合
 #define MCP3425_FULL_SCALE 2.048f	// フルスケール電圧
 
+	// ------------------------- Types -------------------------
+	typedef struct
+	{
+		float processed_data; // 処理済み圧力値（Pa）
+		uint16_t raw_data;	  // 生データ
+	} MCP3425_Data_t;
+
 	/* Exported functions prototypes ---------------------------------------------*/
-	float MCP3425_Read_Pressure(I2C_HandleTypeDef *hi2c);
+	MCP3425_Data_t MCP3425_Read_Pressure(I2C_HandleTypeDef *hi2c);
 
 #ifdef __cplusplus
 }

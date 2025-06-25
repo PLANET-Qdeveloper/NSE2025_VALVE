@@ -38,14 +38,17 @@ extern "C"
 #define SERVO_MIN_ANGLE 0       // 最小角度（度）
 #define SERVO_MAX_ANGLE 270     // 最大角度（度）
 
+#define SERVO_OPEN_ANGLE 245
+#define SERVO_CLOSE_ANGLE 0
+#define SERVO_OPEN_TIME_MS 30000
+
     /* Exported macro ------------------------------------------------------------*/
 
     /* Exported functions prototypes ---------------------------------------------*/
-    void servo_init(void);
-    void servo_set_angle(uint16_t angle);
-    void servo_move_to_angle_smooth(uint16_t target_angle, uint32_t step_delay);
-    uint32_t servo_compute_pulse_us_from_angle(uint16_t angle);
-    uint32_t servo_compute_compare_from_us(uint32_t pulse_us);
+    void servo_init(TIM_HandleTypeDef *htim, uint32_t channel);
+    void servo_set_angle(TIM_HandleTypeDef *htim, uint32_t channel, uint16_t angle);
+    uint32_t servo_compute_pulse_us_from_angle(uint16_t angle, uint32_t min_pulse_us, uint32_t max_pulse_us, uint16_t max_angle);
+    uint32_t servo_compute_compare_from_us(uint32_t pulse_us, uint32_t prescaler, uint32_t period);
 
 #ifdef __cplusplus
 }

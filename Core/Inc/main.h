@@ -23,7 +23,8 @@
 #define __MAIN_H
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
 /* Includes ------------------------------------------------------------------*/
@@ -40,37 +41,52 @@ extern "C" {
 #include "diskio.h"
 #include "ff.h"
 #include "fatfs_sd.h"
-/* USER CODE END Includes */
+    /* USER CODE END Includes */
 
-/* Exported types ------------------------------------------------------------*/
-/* USER CODE BEGIN ET */
+    /* Exported types ------------------------------------------------------------*/
+    /* USER CODE BEGIN ET */
 
-/* USER CODE END ET */
+#define MAX_DATA_POINTS 20
 
-/* Exported constants --------------------------------------------------------*/
-/* USER CODE BEGIN EC */
+    typedef struct
+    {
+        uint32_t timestamp;
+        float temp_processed_data;  // 処理済み温度（摂氏）
+        float press_processed_data; // 処理済み圧力（Pa）
+    } DataBuffer_t;
 
-/* USER CODE END EC */
+    typedef struct
+    {
+        int16_t temperature;
+        uint16_t pressure;
+    } CommData_t;
 
-/* Exported macro ------------------------------------------------------------*/
-/* USER CODE BEGIN EM */
+    /* USER CODE END ET */
 
-/* USER CODE END EM */
+    /* Exported constants --------------------------------------------------------*/
+    /* USER CODE BEGIN EC */
 
-void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
+    /* USER CODE END EC */
 
-/* Exported functions prototypes ---------------------------------------------*/
-void Error_Handler(void);
+    /* Exported macro ------------------------------------------------------------*/
+    /* USER CODE BEGIN EM */
 
-/* USER CODE BEGIN EFP */
+    /* USER CODE END EM */
 
-/* USER CODE END EFP */
+    void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 
-/* Private defines -----------------------------------------------------------*/
+    /* Exported functions prototypes ---------------------------------------------*/
+    void Error_Handler(void);
 
-/* USER CODE BEGIN Private defines */
+    /* USER CODE BEGIN EFP */
 
-/* USER CODE END Private defines */
+    /* USER CODE END EFP */
+
+    /* Private defines -----------------------------------------------------------*/
+
+    /* USER CODE BEGIN Private defines */
+
+    /* USER CODE END Private defines */
 
 #ifdef __cplusplus
 }

@@ -29,7 +29,6 @@
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
-extern TIM_HandleTypeDef htim3; // main.cで定義されているタイマーハンドル
 
 /* Private function prototypes -----------------------------------------------*/
 
@@ -39,16 +38,16 @@ extern TIM_HandleTypeDef htim3; // main.cで定義されているタイマーハ
  * @brief  サーボモーターの初期化
  * @retval None
  */
-void servo_init(void)
+void servo_init(TIM_HandleTypeDef *htim, uint32_t channel)
 {
   // タイマークロックを有効化
   __HAL_RCC_TIM3_CLK_ENABLE();
 
   // PWM出力を開始
-  HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
+  HAL_TIM_PWM_Start(htim, channel);
 
   // 初期位置を0度に設定
-  servo_set_angle(SERVO_MIN_ANGLE);
+  servo_set_angle(htim, channel, 0);
 }
 
 /**
@@ -56,7 +55,7 @@ void servo_init(void)
  * @param  angle: 設定する角度（0-270度）
  * @retval None
  */
-void servo_set_angle(uint16_t angle)
+void servo_set_angle(TIM_HandleTypeDef *htim, uint32_t channel, uint16_t angle)
 {
   // 角度の範囲チェック
   if (angle > SERVO_MAX_ANGLE)
@@ -65,13 +64,15 @@ void servo_set_angle(uint16_t angle)
   }
 
   // 角度からパルス幅を計算
-  uint32_t pulse_us = servo_compute_pulse_us_from_angle(angle);
+  uint32_t pulse_us = servo_compute_pulse_us_from_angle(
+      angle, SERVO_MIN_PULSE_US, SERVO_MAX_PULSE_US, SERVO_MAX_ANGLE);
 
   // パルス幅からコンペア値を計算
-  uint32_t compare_value = servo_compute_compare_from_us(pulse_us);
+  uint32_t compare_value = servo_compute_compare_from_us(
+      pulse_us, 1, 1); // prescaler, periodは実際のタイマー設定値に合わせて修正
 
   // タイマーのコンペア値を設定
-  __HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_1, compare_value);
+  __HAL_TIM_SetCompare(htim, channel, compare_value);
 }
 
 /**
@@ -79,18 +80,18 @@ void servo_set_angle(uint16_t angle)
  * @param  angle: 角度（0-270度）
  * @retval パルス幅（マイクロ秒）
  */
-uint32_t servo_compute_pulse_us_from_angle(uint16_t angle)
+uint32_t servo_compute_pulse_us_from_angle(uint16_t angle, uint32_t min_pulse_us, uint32_t max_pulse_us, uint16_t max_angle)
 {
   // 角度の範囲チェック
-  if (angle > SERVO_MAX_ANGLE)
+  if (angle > max_angle)
   {
-    angle = SERVO_MAX_ANGLE;
+    angle = max_angle;
   }
 
   // 線形補間でパルス幅を計算
   // 0度 → 1000us, 270度 → 2000us
-  uint32_t pulse_us = SERVO_MIN_PULSE_US +
-                      ((uint32_t)angle * (SERVO_MAX_PULSE_US - SERVO_MIN_PULSE_US)) / SERVO_MAX_ANGLE;
+  uint32_t pulse_us = min_pulse_us +
+                      ((uint32_t)angle * (max_pulse_us - min_pulse_us)) / max_angle;
 
   return pulse_us;
 }
@@ -100,16 +101,6 @@ uint32_t servo_compute_pulse_us_from_angle(uint16_t angle)
  * @param  pulse_us: パルス幅（マイクロ秒）
  * @retval タイマーコンペア値
  */
-uint32_t servo_compute_compare_from_us(uint32_t pulse_us)
-{
-  // タイマーの設定に基づいてコンペア値を計算
-  // 仮定: タイマーが1MHzで動作している場合（1カウント = 1マイクロ秒）
-  // 実際のタイマー設定に合わせて調整が必要
-
-  // TIM3の設定を確認して適切な計算式を使用
-  // 例: APB1クロック84MHz、プリスケーラー84-1の場合、タイマークロックは1MHz
-  return pulse_us;
-}
 
 /**
  * @brief  サーボモーターを指定角度まで徐々に移動
@@ -117,7 +108,7 @@ uint32_t servo_compute_compare_from_us(uint32_t pulse_us)
  * @param  step_delay: ステップ間の遅延（ミリ秒）
  * @retval None
  */
-void servo_move_to_angle_smooth(uint16_t target_angle, uint32_t step_delay)
+void servo_move_to_angle_smooth(TIM_HandleTypeDef *htim, uint32_t channel, uint16_t target_angle, uint32_t step_delay)
 {
   // 現在の角度を取得（簡易実装のため、前回設定値を保持する変数が必要）
   static uint16_t current_angle = 0;
@@ -134,7 +125,7 @@ void servo_move_to_angle_smooth(uint16_t target_angle, uint32_t step_delay)
     // 角度を増加
     for (uint16_t angle = current_angle; angle <= target_angle; angle += 5)
     {
-      servo_set_angle(angle);
+      servo_set_angle(htim, channel, angle);
       HAL_Delay(step_delay);
     }
   }
@@ -143,7 +134,7 @@ void servo_move_to_angle_smooth(uint16_t target_angle, uint32_t step_delay)
     // 角度を減少
     for (uint16_t angle = current_angle; angle >= target_angle; angle -= 5)
     {
-      servo_set_angle(angle);
+      servo_set_angle(htim, channel, angle);
       HAL_Delay(step_delay);
       if (angle == 0)
         break; // アンダーフロー防止
@@ -151,6 +142,6 @@ void servo_move_to_angle_smooth(uint16_t target_angle, uint32_t step_delay)
   }
 
   // 最終的に正確な目標角度に設定
-  servo_set_angle(target_angle);
+  servo_set_angle(htim, channel, target_angle);
   current_angle = target_angle;
 }

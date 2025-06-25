@@ -5,10 +5,6 @@
  *      Author: meh
  */
 
-#define TRUE 1
-#define FALSE 0
-#define bool BYTE
-
 #include "stm32f4xx_hal.h"
 
 #include "diskio.h"
@@ -20,9 +16,6 @@ extern volatile uint16_t Timer1, Timer2; /* 1ms Timer Counter for SD card operat
 static volatile DSTATUS Stat = STA_NOINIT; /* ディスク状態フラグ */
 static uint8_t CardType;                   /* SDタイプ 0:MMC, 1:SDC, 2:Block addressing */
 static uint8_t PowerFlag = 0;              /* 電源状態フラグ */
-
-#define SD_CS_GPIO_Port GPIOA
-#define SD_CS_Pin GPIO_PIN_4
 
 /* SPI チップセレクト */
 static void SELECT(void)

@@ -30,7 +30,9 @@
 
 #define TRUE 1
 #define FALSE 0
+#ifndef bool
 #define bool BYTE
+#endif
 #define SD_CS_GPIO_Port GPIOA
 #define SD_CS_Pin GPIO_PIN_4
 

@@ -40,6 +40,9 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+
+/* USER CODE END PD */
+
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
 
@@ -58,18 +61,31 @@ TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim3;
 
-UART_HandleTypeDef huart1;
-UART_HandleTypeDef huart2;
 UART_HandleTypeDef huart5;
-
-volatile uint16_t Timer1, Timer2, Timer3;
+UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
-DataBuffer_t data_buffer[MAX_DATA_POINTS];
-CommData_t comm_data;
-uint16_t data_count = 0;
-uint8_t sensor_error_count = 0;
-bool is_servo_open = 0;
+// SDカード用タイマー変数
+volatile uint16_t Timer1, Timer2; /* 1ms Timer Counter for SD card operations */
+extern volatile uint8_t FatFsCnt; /* FatFs counter for SD card operations (defined in stm32f4xx_it.c) */
+
+// データ収集関連の変数
+static uint32_t data_count = 0;
+static uint32_t sensor_error_count = 0;
+
+// データバッファ
+static DataBuffer_t data_buffer[MAX_DATA_POINTS];
+static CommData_t comm_data;
+
+// サーボモーター制御関連の変数
+static uint32_t valve_operation_start_time = 0;
+static bool valve_operation_active = false;
+static bool button_pressed_last = false;
+
+// サーボモーター制御関数
+void valve_control_process(void);
+bool read_button_with_debounce(void);
+/* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
@@ -78,7 +94,6 @@ static void MX_I2C1_Init(void);
 static void MX_SPI1_Init(void);
 static void MX_SPI2_Init(void);
 static void MX_TIM3_Init(void);
-static void MX_USART1_UART_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_TIM1_Init(void);
 static void MX_RTC_Init(void);
@@ -140,7 +155,6 @@ int main(void)
   MX_SPI1_Init();
   MX_SPI2_Init();
   MX_TIM3_Init();
-  MX_USART1_UART_Init();
   MX_USART2_UART_Init();
   MX_FATFS_Init();
   MX_TIM1_Init();
@@ -149,6 +163,7 @@ int main(void)
   MX_I2C3_Init();
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
+  // サーボモーター初期化（PWM開始と初期位置設定も含む）
   servo_init(&htim3, TIM_CHANNEL_1);
   FRESULT mount_result = f_mount(&fs, "", 1);
 
@@ -207,6 +222,9 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    // サーボモーター制御処理
+    valve_control_process();
+
     // センサーデータ読み取り
     MAX31855_Data_t temperature = Max31855_Read_Temp(&hspi2);
     MCP3425_Data_t pressure = MCP3425_Read_Pressure(&hi2c1); // センサーデータの有効性をチェック（仮定：有効なデータの範囲チェック）
@@ -649,12 +667,12 @@ static void MX_TIM3_Init(void)
 
   /* USER CODE END TIM3_Init 1 */
   htim3.Instance = TIM3;
-  htim3.Init.Prescaler = 0;
+  htim3.Init.Prescaler = 9;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim3.Init.Period = 65535;
+  htim3.Init.Period = 15999;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  if (HAL_TIM_OC_Init(&htim3) != HAL_OK)
+  if (HAL_TIM_PWM_Init(&htim3) != HAL_OK)
   {
     Error_Handler();
   }
@@ -664,11 +682,11 @@ static void MX_TIM3_Init(void)
   {
     Error_Handler();
   }
-  sConfigOC.OCMode = TIM_OCMODE_TIMING;
+  sConfigOC.OCMode = TIM_OCMODE_PWM1;
   sConfigOC.Pulse = 0;
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-  if (HAL_TIM_OC_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
+  if (HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
   {
     Error_Handler();
   }
@@ -708,38 +726,6 @@ static void MX_UART5_Init(void)
   /* USER CODE BEGIN UART5_Init 2 */
 
   /* USER CODE END UART5_Init 2 */
-}
-
-/**
- * @brief USART1 Initialization Function
- * @param None
- * @retval None
- */
-static void MX_USART1_UART_Init(void)
-{
-
-  /* USER CODE BEGIN USART1_Init 0 */
-
-  /* USER CODE END USART1_Init 0 */
-
-  /* USER CODE BEGIN USART1_Init 1 */
-
-  /* USER CODE END USART1_Init 1 */
-  huart1.Instance = USART1;
-  huart1.Init.BaudRate = 115200;
-  huart1.Init.WordLength = UART_WORDLENGTH_8B;
-  huart1.Init.StopBits = UART_STOPBITS_1;
-  huart1.Init.Parity = UART_PARITY_NONE;
-  huart1.Init.Mode = UART_MODE_TX_RX;
-  huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  huart1.Init.OverSampling = UART_OVERSAMPLING_16;
-  if (HAL_UART_Init(&huart1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN USART1_Init 2 */
-
-  /* USER CODE END USART1_Init 2 */
 }
 
 /**
@@ -793,16 +779,22 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOD_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4 | GPIO_PIN_9, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin : PA4 */
-  GPIO_InitStruct.Pin = GPIO_PIN_4;
+  /*Configure GPIO pins : PA4 PA9 (Output pins) */
+  GPIO_InitStruct.Pin = GPIO_PIN_4 | GPIO_PIN_9;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PA10 (Button input) */
+  GPIO_InitStruct.Pin = GPIO_PIN_10;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pin : PB12 */
@@ -831,6 +823,72 @@ void get_datetime_filename(char *filename, size_t max_len)
   // 年月日時分を含むファイル名を生成
   snprintf(filename, max_len, "D%02d%02d%02d%02d%02d.CSV",
            date.Year, date.Month, date.Date, time.Hours, time.Minutes);
+}
+
+// チャタリング防止付きボタン読み取り
+bool read_button_with_debounce(void)
+{
+  static uint32_t last_read_time = 0;
+  uint32_t current_time = HAL_GetTick();
+
+  // デバウンス時間（100ms）をチェック
+  if (current_time - last_read_time < 100)
+  {
+    return false;
+  }
+
+  // ボタン状態を読み取り（プルアップなので押下時はLOW）
+  bool button_current = (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10) == GPIO_PIN_RESET);
+
+  // 前回の状態と比較して立ち上がりエッジを検出
+  if (button_current && !button_pressed_last)
+  {
+    last_read_time = current_time;
+    button_pressed_last = button_current;
+    return true;
+  }
+
+  button_pressed_last = button_current;
+  return false;
+}
+
+// サーボモーター制御処理
+void valve_control_process(void)
+{
+  uint32_t current_time = HAL_GetTick();
+
+  // バルブ動作中の処理
+  if (valve_operation_active)
+  {
+    // 30秒経過をチェック
+    if (current_time - valve_operation_start_time >= SERVO_OPEN_TIME_MS)
+    {
+      // バルブを閉じる
+      servo_close_valve(&htim3, TIM_CHANNEL_1);
+
+      // NOS バルブも閉じる（PA9をLOWに設定）
+      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_RESET);
+
+      valve_operation_active = false;
+      printf("Valve closed - operation complete\r\n");
+    }
+    return; // 動作中は新しい入力を受け付けない
+  }
+
+  // ボタン入力チェック
+  if (read_button_with_debounce())
+  {
+    // バルブを開く
+    servo_open_valve(&htim3, TIM_CHANNEL_1);
+
+    // NOS バルブも開く（PA9をHIGHに設定）
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_SET);
+
+    valve_operation_start_time = current_time;
+    valve_operation_active = true;
+
+    printf("Valve opened - will close in 30 seconds\r\n");
+  }
 }
 /* USER CODE END 4 */
 

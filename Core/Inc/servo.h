@@ -29,26 +29,38 @@ extern "C"
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include <stdbool.h> // bool型のサポート
 
 /* Exported types ------------------------------------------------------------*/
 
 /* Exported constants --------------------------------------------------------*/
-#define SERVO_MIN_PULSE_US 1000 // 最小パルス幅（マイクロ秒）
-#define SERVO_MAX_PULSE_US 2000 // 最大パルス幅（マイクロ秒）
-#define SERVO_MIN_ANGLE 0       // 最小角度（度）
-#define SERVO_MAX_ANGLE 270     // 最大角度（度）
+// サーボモーター PWM パルス幅設定
+#define SERVO_MIN_PULSE_US 1000 // 最小パルス幅（マイクロ秒）- 0度位置
+#define SERVO_MAX_PULSE_US 2000 // 最大パルス幅（マイクロ秒）- 270度位置
 
-#define SERVO_OPEN_ANGLE 245
-#define SERVO_CLOSE_ANGLE 0
-#define SERVO_OPEN_TIME_MS 30000
+// サーボモーター角度設定
+#define SERVO_MIN_ANGLE 0   // 最小角度（度）
+#define SERVO_MAX_ANGLE 270 // 最大角度（度）
+
+// バルブ制御用角度定義
+#define SERVO_OPEN_ANGLE 245 // バルブ開放角度（度）
+#define SERVO_CLOSE_ANGLE 0  // バルブ閉鎖角度（度）
+
+// バルブ動作時間
+#define SERVO_OPEN_TIME_MS 30000 // バルブ開放時間（30秒）
 
     /* Exported macro ------------------------------------------------------------*/
 
     /* Exported functions prototypes ---------------------------------------------*/
+
+    // 基本制御関数
     void servo_init(TIM_HandleTypeDef *htim, uint32_t channel);
     void servo_set_angle(TIM_HandleTypeDef *htim, uint32_t channel, uint16_t angle);
-    uint32_t servo_compute_pulse_us_from_angle(uint16_t angle, uint32_t min_pulse_us, uint32_t max_pulse_us, uint16_t max_angle);
-    uint32_t servo_compute_compare_from_us(uint32_t pulse_us, uint32_t prescaler, uint32_t period);
+    uint16_t servo_get_current_angle(void);
+
+    // バルブ制御専用関数
+    void servo_open_valve(TIM_HandleTypeDef *htim, uint32_t channel);
+    void servo_close_valve(TIM_HandleTypeDef *htim, uint32_t channel);
 
 #ifdef __cplusplus
 }

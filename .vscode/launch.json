@@ -6,7 +6,7 @@
       "type": "cortex-debug",
       "request": "launch",
       "servertype": "stlink",
-      "armToolchainPath": "/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gcc",
+      "armToolchainPath": "/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin",
       "interface": "swd",
       "runToEntryPoint": "main",
       "svdFile": "/opt/ST/STM32CubeCLT_1.18.0/STMicroelectronics_CMSIS_SVD/STM32F413.svd",

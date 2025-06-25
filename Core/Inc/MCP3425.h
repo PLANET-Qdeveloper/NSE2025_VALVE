@@ -26,7 +26,7 @@ extern "C"
 
 /* Includes ------------------------------------------------------------------*/
 #include <stdint.h>
-#include "stm32f4xx_hal_i2c.h"
+#include "stm32f4xx_hal.h"
 
 /* Exported defines ----------------------------------------------------------*/
 #define MCP3425_OK 0

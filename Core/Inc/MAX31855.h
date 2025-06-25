@@ -8,8 +8,7 @@
 #define INC_MAX31855_H_
 
 #include <stdint.h>
-#include "stm32f4xx_hal_spi.h"
-#include "stm32f4xx_hal_gpio.h"
+#include "stm32f4xx_hal.h"
 
 // ------------------------- Defines -------------------------
 // GPIO設定（Chip Select用）

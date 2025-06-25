@@ -15,7 +15,7 @@
 #include "fatfs_sd.h"
 
 extern SPI_HandleTypeDef hspi1;
-extern volatile uint8_t Timer1, Timer2; /* 10msごとに減少するタイマー */
+extern volatile uint16_t Timer1, Timer2; /* 1ms Timer Counter for SD card operations */
 
 static volatile DSTATUS Stat = STA_NOINIT; /* ディスク状態フラグ */
 static uint8_t CardType;                   /* SDタイプ 0:MMC, 1:SDC, 2:Block addressing */

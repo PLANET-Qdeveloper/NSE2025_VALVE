@@ -30,10 +30,13 @@
 #include "state_manager.h"
 #include "sensor_manager.h"
 #include "comm_manager.h"
+#include "servo.h"
+#include "fatfs.h"
+#include "diskio.h"
+#include "ff.h"
 #include "fatfs_sd.h"
 #include "MAX31855.h"
 #include "MCP3425.h"
-#include "servo.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -217,9 +220,9 @@ void system_user_init(void)
 /* USER CODE END 0 */
 
 /**
- * @brief  The application entry point.
- * @retval int
- */
+  * @brief  The application entry point.
+  * @retval int
+  */
 int main(void)
 {
 
@@ -256,101 +259,33 @@ int main(void)
   MX_I2C3_Init();
   /* USER CODE BEGIN 2 */
   system_user_init();
-
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    // センサーデータ読み取りと検証（1回のみ）
-    SensorValidationResult_t sensor_result = sensor_read_and_validate(&hspi2, &hi2c1);
-
-    // センサーエラー処理
-    if (!sensor_result.is_valid)
+    // PA9信号によるNOS電磁弁制御（PA9がHIGHの時にOPEN）
+    if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_9) == GPIO_PIN_SET)
     {
-      // センサーエラーは無視（エラーカウント機能は削除）
-      HAL_Delay(MAIN_LOOP_DELAY_MS);
-      continue; // 無効なデータの場合はスキップ
+      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, GPIO_PIN_SET); // NOS電磁弁OPEN
+    }
+    else
+    {
+      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, GPIO_PIN_RESET); // NOS電磁弁CLOSE
     }
 
-    // システム状態を一度だけ取得
-    const system_state_t *system_state = state_manager_get_state();
-
-    // サーボモーター制御処理
+    // PA10信号によるサーボバルブ制御（PA10がHIGHになったら30秒間OPEN）
     const ValveControl_t *valve_state = state_manager_get_valve_state();
     ValveControl_t current_valve_state = *valve_state; // コピーして操作
     valve_control_process(&htim3, TIM_CHANNEL_1, &current_valve_state,
-                          GPIOA, GPIO_PIN_9, GPIOA, GPIO_PIN_10);
+                          GPIOA, GPIO_PIN_11,  // NOSバルブ制御ピン（未使用）
+                          GPIOA, GPIO_PIN_10); // PA10信号をトリガーに使用
     state_manager_set_valve_state(&current_valve_state);
 
-    // サーボ動作テスト（ボタンに依存しない定期的な動作確認）
-    static uint32_t last_servo_test_time = 0;
-    static bool servo_test_position = false; // false: 0度, true: 245度
-    uint32_t current_time = HAL_GetTick();
+    // メインループ遅延
+    HAL_Delay(10);
 
-    // 10秒毎にサーボを動作させる（テスト用）
-    if (current_time - last_servo_test_time >= 10000) // 10秒間隔
-    {
-      if (servo_test_position)
-      {
-        // バルブを開く（245度）
-        servo_open_valve(&htim3, TIM_CHANNEL_1);
-        printf("サーボテスト: バルブ開放（245度）\r\n");
-      }
-      else
-      {
-        // バルブを閉じる（0度）
-        servo_close_valve(&htim3, TIM_CHANNEL_1);
-        printf("サーボテスト: バルブ閉鎖（0度）\r\n");
-      }
-
-      servo_test_position = !servo_test_position; // 位置を切り替え
-      last_servo_test_time = current_time;
-    }
-
-    // 通信用データを準備（変換処理を最適化）
-    comm_data.temperature = (int32_t)(sensor_result.temperature * 100);
-    comm_data.pressure = (uint16_t)(sensor_result.pressure / 10);
-
-    // UART経由でデータを送信（huart2はプロトコル通信専用、huart5はデバッグ出力専用）
-    if (system_state->uart_comm_ready)
-    {
-      comm_send_data_via_uart(&comm_data, &huart2); // プロトコル通信をhuart2に変更
-    }
-
-    // データをバッファに追加
-    uint32_t current_count = system_state->data_count;
-    bool buffer_full = (current_count >= MAX_DATA_POINTS - 1);
-
-    if (current_count < MAX_DATA_POINTS)
-    {
-      data_buffer[current_count].timestamp = HAL_GetTick();
-      data_buffer[current_count].temp_processed_data = sensor_result.temperature;
-      data_buffer[current_count].press_processed_data = sensor_result.pressure;
-      state_manager_set_data_count(current_count + 1);
-      buffer_full = (current_count + 1 >= MAX_DATA_POINTS);
-    }
-
-    // バッファが満杯になったらファイルに保存
-    if (buffer_full && system_state->sd_card_ready)
-    {
-      app_error_t save_result = data_save_to_sd(data_buffer, state_manager_get_data_count(), &hrtc);
-      if (save_result != APP_ERROR_NONE)
-      {
-        // SDカード書き込みエラーの場合、SDカード状態を更新
-        bool sd_status = data_check_sd_status();
-        state_manager_set_sd_card_ready(sd_status);
-      }
-
-      // 書き込み結果に関わらずカウントをリセット（メモリ不足を防ぐため）
-      state_manager_set_data_count(0);
-    }
-
-    // State Manager状態更新
-    state_manager_update();
-
-    HAL_Delay(MAIN_LOOP_DELAY_MS);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -359,23 +294,23 @@ int main(void)
 }
 
 /**
- * @brief System Clock Configuration
- * @retval None
- */
+  * @brief System Clock Configuration
+  * @retval None
+  */
 void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
   /** Configure the main internal regulator output voltage
-   */
+  */
   __HAL_RCC_PWR_CLK_ENABLE();
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
 
   /** Initializes the RCC Oscillators according to the specified parameters
-   * in the RCC_OscInitTypeDef structure.
-   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI | RCC_OSCILLATORTYPE_LSI;
+  * in the RCC_OscInitTypeDef structure.
+  */
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI|RCC_OSCILLATORTYPE_LSI;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
   RCC_OscInitStruct.LSIState = RCC_LSI_ON;
@@ -386,8 +321,9 @@ void SystemClock_Config(void)
   }
 
   /** Initializes the CPU, AHB and APB buses clocks
-   */
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
+  */
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
+                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
@@ -400,10 +336,10 @@ void SystemClock_Config(void)
 }
 
 /**
- * @brief I2C1 Initialization Function
- * @param None
- * @retval None
- */
+  * @brief I2C1 Initialization Function
+  * @param None
+  * @retval None
+  */
 static void MX_I2C1_Init(void)
 {
 
@@ -430,13 +366,14 @@ static void MX_I2C1_Init(void)
   /* USER CODE BEGIN I2C1_Init 2 */
 
   /* USER CODE END I2C1_Init 2 */
+
 }
 
 /**
- * @brief I2C3 Initialization Function
- * @param None
- * @retval None
- */
+  * @brief I2C3 Initialization Function
+  * @param None
+  * @retval None
+  */
 static void MX_I2C3_Init(void)
 {
 
@@ -463,13 +400,14 @@ static void MX_I2C3_Init(void)
   /* USER CODE BEGIN I2C3_Init 2 */
 
   /* USER CODE END I2C3_Init 2 */
+
 }
 
 /**
- * @brief RTC Initialization Function
- * @param None
- * @retval None
- */
+  * @brief RTC Initialization Function
+  * @param None
+  * @retval None
+  */
 static void MX_RTC_Init(void)
 {
 
@@ -482,7 +420,7 @@ static void MX_RTC_Init(void)
   /* USER CODE END RTC_Init 1 */
 
   /** Initialize RTC Only
-   */
+  */
   hrtc.Instance = RTC;
   hrtc.Init.HourFormat = RTC_HOURFORMAT_24;
   hrtc.Init.AsynchPrediv = 127;
@@ -497,13 +435,14 @@ static void MX_RTC_Init(void)
   /* USER CODE BEGIN RTC_Init 2 */
 
   /* USER CODE END RTC_Init 2 */
+
 }
 
 /**
- * @brief SPI1 Initialization Function
- * @param None
- * @retval None
- */
+  * @brief SPI1 Initialization Function
+  * @param None
+  * @retval None
+  */
 static void MX_SPI1_Init(void)
 {
 
@@ -534,13 +473,14 @@ static void MX_SPI1_Init(void)
   /* USER CODE BEGIN SPI1_Init 2 */
 
   /* USER CODE END SPI1_Init 2 */
+
 }
 
 /**
- * @brief SPI2 Initialization Function
- * @param None
- * @retval None
- */
+  * @brief SPI2 Initialization Function
+  * @param None
+  * @retval None
+  */
 static void MX_SPI2_Init(void)
 {
 
@@ -571,13 +511,14 @@ static void MX_SPI2_Init(void)
   /* USER CODE BEGIN SPI2_Init 2 */
 
   /* USER CODE END SPI2_Init 2 */
+
 }
 
 /**
- * @brief TIM3 Initialization Function
- * @param None
- * @retval None
- */
+  * @brief TIM3 Initialization Function
+  * @param None
+  * @retval None
+  */
 static void MX_TIM3_Init(void)
 {
 
@@ -608,7 +549,7 @@ static void MX_TIM3_Init(void)
     Error_Handler();
   }
   sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 0;
+  sConfigOC.Pulse = 500;
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
   if (HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
@@ -619,13 +560,14 @@ static void MX_TIM3_Init(void)
 
   /* USER CODE END TIM3_Init 2 */
   HAL_TIM_MspPostInit(&htim3);
+
 }
 
 /**
- * @brief UART5 Initialization Function
- * @param None
- * @retval None
- */
+  * @brief UART5 Initialization Function
+  * @param None
+  * @retval None
+  */
 static void MX_UART5_Init(void)
 {
 
@@ -651,13 +593,14 @@ static void MX_UART5_Init(void)
   /* USER CODE BEGIN UART5_Init 2 */
 
   /* USER CODE END UART5_Init 2 */
+
 }
 
 /**
- * @brief USART2 Initialization Function
- * @param None
- * @retval None
- */
+  * @brief USART2 Initialization Function
+  * @param None
+  * @retval None
+  */
 static void MX_USART2_UART_Init(void)
 {
 
@@ -683,13 +626,14 @@ static void MX_USART2_UART_Init(void)
   /* USER CODE BEGIN USART2_Init 2 */
 
   /* USER CODE END USART2_Init 2 */
+
 }
 
 /**
- * @brief GPIO Initialization Function
- * @param None
- * @retval None
- */
+  * @brief GPIO Initialization Function
+  * @param None
+  * @retval None
+  */
 static void MX_GPIO_Init(void)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
@@ -704,20 +648,20 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOD_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4 | GPIO_PIN_9 | GPIO_PIN_10, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4|GPIO_PIN_9|GPIO_PIN_10, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12 | GPIO_PIN_3, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12|GPIO_PIN_3, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : PA4 PA9 PA10 */
-  GPIO_InitStruct.Pin = GPIO_PIN_4 | GPIO_PIN_9 | GPIO_PIN_10;
+  GPIO_InitStruct.Pin = GPIO_PIN_4|GPIO_PIN_9|GPIO_PIN_10;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pins : PB12 PB3 */
-  GPIO_InitStruct.Pin = GPIO_PIN_12 | GPIO_PIN_3;
+  GPIO_InitStruct.Pin = GPIO_PIN_12|GPIO_PIN_3;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -733,9 +677,9 @@ static void MX_GPIO_Init(void)
 /* USER CODE END 4 */
 
 /**
- * @brief  This function is executed in case of error occurrence.
- * @retval None
- */
+  * @brief  This function is executed in case of error occurrence.
+  * @retval None
+  */
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
@@ -747,14 +691,14 @@ void Error_Handler(void)
   /* USER CODE END Error_Handler_Debug */
 }
 
-#ifdef USE_FULL_ASSERT
+#ifdef  USE_FULL_ASSERT
 /**
- * @brief  Reports the name of the source file and the source line number
- *         where the assert_param error has occurred.
- * @param  file: pointer to the source file name
- * @param  line: assert_param error line source number
- * @retval None
- */
+  * @brief  Reports the name of the source file and the source line number
+  *         where the assert_param error has occurred.
+  * @param  file: pointer to the source file name
+  * @param  line: assert_param error line source number
+  * @retval None
+  */
 void assert_failed(uint8_t *file, uint32_t line)
 {
   /* USER CODE BEGIN 6 */

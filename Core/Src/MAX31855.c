@@ -9,7 +9,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "MAX31855.h"
-#include "main.h"
 #include <stdio.h>
 #include <stdint.h>
 

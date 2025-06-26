@@ -31,8 +31,13 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
+#include "config.h"
+#include "app_types.h"
+#include "sensor_manager.h"
+#include "data_manager.h"
 #include "servo.h"
 #include "MAX31855.h"
 #include "MCP3425.h"
@@ -45,20 +50,7 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
 
-#define MAX_DATA_POINTS 20
-
-    typedef struct
-    {
-        uint32_t timestamp;
-        float temp_processed_data;  // 処理済み温度（摂氏）
-        float press_processed_data; // 処理済み圧力（Pa）
-    } DataBuffer_t;
-
-    typedef struct
-    {
-        int16_t temperature;
-        uint16_t pressure;
-    } CommData_t;
+    /* Type definitions moved to app_types.h for better organization */
 
 /* USER CODE END ET */
 
@@ -78,7 +70,8 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
-
+void system_user_init(void);
+int _write(int file, char *ptr, int len); /* printf redirect function */
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/

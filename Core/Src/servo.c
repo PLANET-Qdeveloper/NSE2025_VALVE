@@ -98,9 +98,6 @@ static uint32_t compute_compare_from_us(uint32_t pulse_us)
  */
 void servo_init(TIM_HandleTypeDef *htim, uint32_t channel)
 {
-  // サーボ電源制御 (PB3をHIGHにしてサーボに電源供給)
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_SET);
-  printf("サーボ電源ON (PB3 = HIGH)\r\n");
 
   // PWM設定情報を表示
   uint32_t timer_freq = TIM3_CLOCK_FREQ / (TIM3_PRESCALER + 1);

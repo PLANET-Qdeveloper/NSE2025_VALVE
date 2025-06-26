@@ -22,10 +22,14 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include <string.h>
-#include <stdio.h>
-#include <inttypes.h>
 #include <stdbool.h>
+#include <stdio.h>
+#include <string.h>
+#include "config.h"
+#include "app_types.h"
+#include "state_manager.h"
+#include "sensor_manager.h"
+#include "comm_manager.h"
 #include "fatfs_sd.h"
 #include "MAX31855.h"
 #include "MCP3425.h"
@@ -56,36 +60,20 @@ RTC_HandleTypeDef hrtc;
 SPI_HandleTypeDef hspi1;
 SPI_HandleTypeDef hspi2;
 
-TIM_HandleTypeDef htim1;
-TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim3;
 
 UART_HandleTypeDef huart5;
-UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
-// Timer variables for SD card operations (1ms timer counter)
-volatile uint16_t Timer1, Timer2;
+// SDカード用タイマー変数
+volatile uint16_t Timer1, Timer2; /* 1ms Timer Counter for SD card operations */
+extern volatile uint8_t FatFsCnt; /* FatFs counter for SD card operations (defined in stm32f4xx_it.c) */
 
-#define MAX_DATA_POINTS 20
-typedef struct
-{
-  uint32_t timestamp;
-  float temp_processed_data;  // 処理済み温度（摂氏）
-  float press_processed_data; // 処理済み圧力（Pa）
-} DataBuffer_t;
+// データバッファ（State Manager管理のため、システム状態は削除）
+static DataBuffer_t data_buffer[MAX_DATA_POINTS];
+static CommData_t comm_data;
 
-typedef struct
-{
-  int16_t temperature;
-  uint16_t pressure;
-} CommData_t;
-
-DataBuffer_t data_buffer[MAX_DATA_POINTS];
-CommData_t comm_data;
-uint16_t data_count = 0;
-uint8_t sensor_error_count = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -95,25 +83,19 @@ static void MX_I2C1_Init(void);
 static void MX_SPI1_Init(void);
 static void MX_SPI2_Init(void);
 static void MX_TIM3_Init(void);
-static void MX_USART1_UART_Init(void);
 static void MX_USART2_UART_Init(void);
-static void MX_TIM1_Init(void);
 static void MX_RTC_Init(void);
 static void MX_UART5_Init(void);
 static void MX_I2C3_Init(void);
-static void MX_TIM2_Init(void);
 /* USER CODE BEGIN PFP */
 int _write(int file, char *ptr, int len);
-void get_datetime_filename(char *filename, size_t max_len);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 FATFS fs;
 FIL fil;
-FRESULT fresult;
-char buffer[128];
-UINT br, bw;
+UINT bw;
 
 // printf関数をUART経由で出力するためのリダイレクト
 int _write(int file, char *ptr, int len)
@@ -122,12 +104,122 @@ int _write(int file, char *ptr, int len)
   HAL_UART_Transmit(&huart5, (uint8_t *)ptr, len, HAL_MAX_DELAY);
   return len;
 }
+
+/**
+ * @brief ユーザーシステム初期化
+ */
+void system_user_init(void)
+{
+  // State Manager初期化
+  state_manager_init();
+
+  // サーボモーター初期化（PWM開始と初期位置設定も含む）
+  servo_init(&htim3, TIM_CHANNEL_1);
+
+  // UART通信プロトコル初期化
+  comm_init();
+
+  // SDカードファイルシステムの初期化
+  FRESULT mount_result = f_mount(&fs, "", 1);
+
+  if (mount_result != FR_OK)
+  {
+    printf("SDカード初期マウント失敗: FRESULT=%d\r\n", mount_result);
+
+    // フォーマットを試行
+    BYTE work[_MAX_SS];
+    FRESULT format_result = f_mkfs("", FM_FAT32, 0, work, sizeof(work));
+
+    if (format_result == FR_OK)
+    {
+      printf("SDカードフォーマット成功\r\n");
+      mount_result = f_mount(&fs, "", 1);
+      if (mount_result == FR_OK)
+      {
+        printf("SDカード再マウント成功\r\n");
+        state_manager_set_sd_card_ready(true);
+      }
+      else
+      {
+        printf("SDカード再マウント失敗: FRESULT=%d\r\n", mount_result);
+        state_manager_set_sd_card_ready(false);
+      }
+    }
+    else
+    {
+      printf("SDカードフォーマット失敗: FRESULT=%d\r\n", format_result);
+      state_manager_set_sd_card_ready(false);
+    }
+  }
+  else
+  {
+    printf("SDカードマウント成功\r\n");
+    state_manager_set_sd_card_ready(true);
+  }
+
+  state_manager_set_uart_comm_ready(true);
+
+  // RTCの状態確認と初期設定
+  RTC_TimeTypeDef current_time;
+  RTC_DateTypeDef current_date;
+  HAL_RTC_GetTime(&hrtc, &current_time, RTC_FORMAT_BIN);
+  HAL_RTC_GetDate(&hrtc, &current_date, RTC_FORMAT_BIN);
+
+  // RTCが初期化されていない場合、デフォルト値を設定
+  if (current_date.Year == 0 || current_date.Month == 0 || current_date.Date == 0)
+  {
+    RTC_TimeTypeDef default_time = {0};
+    RTC_DateTypeDef default_date = {0};
+
+    default_time.Hours = 12;
+    default_time.Minutes = 0;
+    default_time.Seconds = 0;
+    default_time.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
+    default_time.StoreOperation = RTC_STOREOPERATION_RESET;
+
+    default_date.WeekDay = RTC_WEEKDAY_MONDAY;
+    default_date.Month = 1;
+    default_date.Date = 1;
+    default_date.Year = 25; // 2025年
+
+    HAL_RTC_SetTime(&hrtc, &default_time, RTC_FORMAT_BIN);
+    HAL_RTC_SetDate(&hrtc, &default_date, RTC_FORMAT_BIN);
+  }
+
+  // SDカードの基本動作テスト
+  FRESULT test_result = f_open(&fil, "test.txt", FA_CREATE_ALWAYS | FA_WRITE);
+  if (test_result == FR_OK)
+  {
+    char buffer[64]; // ローカルバッファ
+    sprintf(buffer, "SDカードテスト成功\r\n");
+    f_write(&fil, buffer, strlen(buffer), &bw);
+    f_close(&fil);
+
+    // テストファイルを削除
+    f_unlink("test.txt");
+  }
+
+  // ファイル名生成テスト
+  char test_filename[32];
+  SD_get_datetime_filename(test_filename, sizeof(test_filename), &hrtc);
+  printf("生成されたファイル名: %s\r\n", test_filename);
+
+  // 8.3形式の検証（ddhhmmss.csv = 12文字）
+  if (strlen(test_filename) <= 12) // "filename.ext" = 最大12文字
+  {
+    printf("ファイル名は8.3形式に適合しています\r\n");
+  }
+  else
+  {
+    printf("警告: ファイル名が8.3形式の制限を超えています\r\n");
+  }
+}
 /* USER CODE END 0 */
 
 /**
-  * @brief  The application entry point.
-  * @retval int
-  */
+ * @brief  The application entry point.
+ * @retval int
+ */
 int main(void)
 {
 
@@ -157,66 +249,13 @@ int main(void)
   MX_SPI1_Init();
   MX_SPI2_Init();
   MX_TIM3_Init();
-  MX_USART1_UART_Init();
   MX_USART2_UART_Init();
   MX_FATFS_Init();
-  MX_TIM1_Init();
   MX_RTC_Init();
   MX_UART5_Init();
   MX_I2C3_Init();
-  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
-  servo_init();
-  FRESULT mount_result = f_mount(&fs, "", 1);
-
-  if (mount_result != FR_OK)
-  {
-    // フォーマットを試行
-    BYTE work[_MAX_SS];
-    FRESULT format_result = f_mkfs("", FM_FAT32, 0, work, sizeof(work));
-
-    if (format_result == FR_OK)
-    {
-      mount_result = f_mount(&fs, "", 1);
-    }
-  }
-  // RTCの状態確認と初期設定
-  RTC_TimeTypeDef current_time;
-  RTC_DateTypeDef current_date;
-  HAL_RTC_GetTime(&hrtc, &current_time, RTC_FORMAT_BIN);
-  HAL_RTC_GetDate(&hrtc, &current_date, RTC_FORMAT_BIN);
-
-  // RTCが初期化されていない場合、デフォルト値を設定
-  if (current_date.Year == 0 || current_date.Month == 0 || current_date.Date == 0)
-  {
-    RTC_TimeTypeDef default_time = {0};
-    RTC_DateTypeDef default_date = {0};
-
-    default_time.Hours = 12;
-    default_time.Minutes = 0;
-    default_time.Seconds = 0;
-    default_time.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
-    default_time.StoreOperation = RTC_STOREOPERATION_RESET;
-
-    default_date.WeekDay = RTC_WEEKDAY_MONDAY;
-    default_date.Month = 1;
-    default_date.Date = 1;
-    default_date.Year = 25; // 2025年
-
-    HAL_RTC_SetTime(&hrtc, &default_time, RTC_FORMAT_BIN);
-    HAL_RTC_SetDate(&hrtc, &default_date, RTC_FORMAT_BIN);
-  }
-  // SDカードの基本動作テスト
-  FRESULT test_result = f_open(&fil, "test.txt", FA_CREATE_ALWAYS | FA_WRITE);
-  if (test_result == FR_OK)
-  {
-    sprintf(buffer, "SDカードテスト成功\r\n");
-    f_write(&fil, buffer, strlen(buffer), &bw);
-    f_close(&fil);
-
-    // テストファイルを削除
-    f_unlink("test.txt");
-  }
+  system_user_init();
 
   /* USER CODE END 2 */
 
@@ -224,118 +263,94 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    // センサーデータ読み取り
-    MAX31855_Data_t temperature = Max31855_Read_Temp(&hspi2);
-    MCP3425_Data_t pressure = MCP3425_Read_Pressure(&hi2c1); // センサーデータの有効性をチェック（仮定：有効なデータの範囲チェック）
-    bool valid_data = true;
-    if (temperature.processed_data < -100.0f || temperature.processed_data > 1000.0f)
-    {
-      valid_data = false;
-    }
-    if (pressure.processed_data < 0.0f || pressure.processed_data > 200000.0f)
-    {
-      valid_data = false;
-    }
+    // センサーデータ読み取りと検証（1回のみ）
+    SensorValidationResult_t sensor_result = sensor_read_and_validate(&hspi2, &hi2c1);
 
-    if (!valid_data)
+    // センサーエラー処理
+    if (!sensor_result.is_valid)
     {
-      sensor_error_count++;
-      if (sensor_error_count >= 5)
-      {
-        // 5回連続でエラーの場合、エラー状態をリセット
-        sensor_error_count = 0;
-      }
-      HAL_Delay(1000);
+      // センサーエラーは無視（エラーカウント機能は削除）
+      HAL_Delay(MAIN_LOOP_DELAY_MS);
       continue; // 無効なデータの場合はスキップ
     }
 
-    sensor_error_count = 0; // 有効なデータを受信したらエラーカウントをリセット    // 通信用データを更新
-    comm_data.temperature = temperature.raw_data;
-    comm_data.pressure = pressure.raw_data; // データを配列に保存（バッファオーバーフロー防止）
-    if (data_count < MAX_DATA_POINTS)
+    // システム状態を一度だけ取得
+    const system_state_t *system_state = state_manager_get_state();
+
+    // サーボモーター制御処理
+    const ValveControl_t *valve_state = state_manager_get_valve_state();
+    ValveControl_t current_valve_state = *valve_state; // コピーして操作
+    valve_control_process(&htim3, TIM_CHANNEL_1, &current_valve_state,
+                          GPIOA, GPIO_PIN_9, GPIOA, GPIO_PIN_10);
+    state_manager_set_valve_state(&current_valve_state);
+
+    // サーボ動作テスト（ボタンに依存しない定期的な動作確認）
+    static uint32_t last_servo_test_time = 0;
+    static bool servo_test_position = false; // false: 0度, true: 245度
+    uint32_t current_time = HAL_GetTick();
+
+    // 10秒毎にサーボを動作させる（テスト用）
+    if (current_time - last_servo_test_time >= 10000) // 10秒間隔
     {
-      data_buffer[data_count].timestamp = HAL_GetTick();
-      data_buffer[data_count].temp_processed_data = temperature.processed_data;
-      data_buffer[data_count].press_processed_data = pressure.processed_data;
-      data_count++;
-    }
-
-    // バッファが満杯になったらファイルに保存
-    if (data_count >= MAX_DATA_POINTS)
-    {
-      // ディスクの状態を確認
-      DSTATUS disk_status = SD_disk_status(0);
-
-      if (disk_status != 0)
+      if (servo_test_position)
       {
-        // ディスクエラーの場合、再初期化を試行
-        DSTATUS reinit_status = SD_disk_initialize(0);
-        if (reinit_status == 0)
-        {
-          // ファイルシステムの再マウント
-          f_mount(NULL, "", 0); // アンマウント
-          f_mount(&fs, "", 1);
-        }
-      }
-
-      // 日時ベースのファイル名を生成
-      char filename[64];
-      get_datetime_filename(filename, sizeof(filename));
-
-      // ファイルに書き込み
-      FRESULT res = f_open(&fil, filename, FA_CREATE_ALWAYS | FA_WRITE);
-      if (res == FR_OK)
-      {
-        bool write_success = true;
-
-        // ヘッダー書き込み
-        sprintf(buffer, "時刻,温度(°C),圧力(Pa)\r\n");
-        FRESULT write_result = f_write(&fil, buffer, strlen(buffer), &bw);
-        if (write_result != FR_OK)
-        {
-          write_success = false;
-        }
-
-        // データ書き込み
-        if (write_success)
-        {
-          for (int i = 0; i < MAX_DATA_POINTS && write_success; i++)
-          {
-            sprintf(buffer, "%lu,%.2f,%.2f\r\n",
-                    (unsigned long)data_buffer[i].timestamp,
-                    data_buffer[i].temp_processed_data,
-                    data_buffer[i].press_processed_data);
-
-            write_result = f_write(&fil, buffer, strlen(buffer), &bw);
-            if (write_result != FR_OK)
-            {
-              write_success = false;
-            }
-          }
-        }
-
-        f_close(&fil);
-
-        if (write_success)
-        {
-          // 書き込み成功時のみデータカウントをリセット
-          data_count = 0;
-        }
-        else
-        {
-          // 書き込み失敗時はファイルを削除
-          f_unlink(filename);
-        }
+        // バルブを開く（245度）
+        servo_open_valve(&htim3, TIM_CHANNEL_1);
+        printf("サーボテスト: バルブ開放（245度）\r\n");
       }
       else
       {
-        // ファイルオープンに失敗した場合もデータカウントをリセット
-        // （メモリ不足を防ぐため）
-        data_count = 0;
+        // バルブを閉じる（0度）
+        servo_close_valve(&htim3, TIM_CHANNEL_1);
+        printf("サーボテスト: バルブ閉鎖（0度）\r\n");
       }
+
+      servo_test_position = !servo_test_position; // 位置を切り替え
+      last_servo_test_time = current_time;
     }
 
-    HAL_Delay(1000); // 1秒待機
+    // 通信用データを準備（変換処理を最適化）
+    comm_data.temperature = (int32_t)(sensor_result.temperature * 100);
+    comm_data.pressure = (uint16_t)(sensor_result.pressure / 10);
+
+    // UART経由でデータを送信（huart2はプロトコル通信専用、huart5はデバッグ出力専用）
+    if (system_state->uart_comm_ready)
+    {
+      comm_send_data_via_uart(&comm_data, &huart2); // プロトコル通信をhuart2に変更
+    }
+
+    // データをバッファに追加
+    uint32_t current_count = system_state->data_count;
+    bool buffer_full = (current_count >= MAX_DATA_POINTS - 1);
+
+    if (current_count < MAX_DATA_POINTS)
+    {
+      data_buffer[current_count].timestamp = HAL_GetTick();
+      data_buffer[current_count].temp_processed_data = sensor_result.temperature;
+      data_buffer[current_count].press_processed_data = sensor_result.pressure;
+      state_manager_set_data_count(current_count + 1);
+      buffer_full = (current_count + 1 >= MAX_DATA_POINTS);
+    }
+
+    // バッファが満杯になったらファイルに保存
+    if (buffer_full && system_state->sd_card_ready)
+    {
+      app_error_t save_result = data_save_to_sd(data_buffer, state_manager_get_data_count(), &hrtc);
+      if (save_result != APP_ERROR_NONE)
+      {
+        // SDカード書き込みエラーの場合、SDカード状態を更新
+        bool sd_status = data_check_sd_status();
+        state_manager_set_sd_card_ready(sd_status);
+      }
+
+      // 書き込み結果に関わらずカウントをリセット（メモリ不足を防ぐため）
+      state_manager_set_data_count(0);
+    }
+
+    // State Manager状態更新
+    state_manager_update();
+
+    HAL_Delay(MAIN_LOOP_DELAY_MS);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -344,23 +359,23 @@ int main(void)
 }
 
 /**
-  * @brief System Clock Configuration
-  * @retval None
-  */
+ * @brief System Clock Configuration
+ * @retval None
+ */
 void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
   /** Configure the main internal regulator output voltage
-  */
+   */
   __HAL_RCC_PWR_CLK_ENABLE();
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
 
   /** Initializes the RCC Oscillators according to the specified parameters
-  * in the RCC_OscInitTypeDef structure.
-  */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI|RCC_OSCILLATORTYPE_LSI;
+   * in the RCC_OscInitTypeDef structure.
+   */
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI | RCC_OSCILLATORTYPE_LSI;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
   RCC_OscInitStruct.LSIState = RCC_LSI_ON;
@@ -371,9 +386,8 @@ void SystemClock_Config(void)
   }
 
   /** Initializes the CPU, AHB and APB buses clocks
-  */
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
-                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+   */
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
@@ -386,10 +400,10 @@ void SystemClock_Config(void)
 }
 
 /**
-  * @brief I2C1 Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief I2C1 Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_I2C1_Init(void)
 {
 
@@ -416,14 +430,13 @@ static void MX_I2C1_Init(void)
   /* USER CODE BEGIN I2C1_Init 2 */
 
   /* USER CODE END I2C1_Init 2 */
-
 }
 
 /**
-  * @brief I2C3 Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief I2C3 Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_I2C3_Init(void)
 {
 
@@ -450,14 +463,13 @@ static void MX_I2C3_Init(void)
   /* USER CODE BEGIN I2C3_Init 2 */
 
   /* USER CODE END I2C3_Init 2 */
-
 }
 
 /**
-  * @brief RTC Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief RTC Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_RTC_Init(void)
 {
 
@@ -470,7 +482,7 @@ static void MX_RTC_Init(void)
   /* USER CODE END RTC_Init 1 */
 
   /** Initialize RTC Only
-  */
+   */
   hrtc.Instance = RTC;
   hrtc.Init.HourFormat = RTC_HOURFORMAT_24;
   hrtc.Init.AsynchPrediv = 127;
@@ -485,14 +497,13 @@ static void MX_RTC_Init(void)
   /* USER CODE BEGIN RTC_Init 2 */
 
   /* USER CODE END RTC_Init 2 */
-
 }
 
 /**
-  * @brief SPI1 Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief SPI1 Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_SPI1_Init(void)
 {
 
@@ -523,14 +534,13 @@ static void MX_SPI1_Init(void)
   /* USER CODE BEGIN SPI1_Init 2 */
 
   /* USER CODE END SPI1_Init 2 */
-
 }
 
 /**
-  * @brief SPI2 Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief SPI2 Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_SPI2_Init(void)
 {
 
@@ -561,105 +571,13 @@ static void MX_SPI2_Init(void)
   /* USER CODE BEGIN SPI2_Init 2 */
 
   /* USER CODE END SPI2_Init 2 */
-
 }
 
 /**
-  * @brief TIM1 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_TIM1_Init(void)
-{
-
-  /* USER CODE BEGIN TIM1_Init 0 */
-
-  /* USER CODE END TIM1_Init 0 */
-
-  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
-  TIM_MasterConfigTypeDef sMasterConfig = {0};
-
-  /* USER CODE BEGIN TIM1_Init 1 */
-
-  /* USER CODE END TIM1_Init 1 */
-  htim1.Instance = TIM1;
-  htim1.Init.Prescaler = 0;
-  htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim1.Init.Period = 65535;
-  htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim1.Init.RepetitionCounter = 0;
-  htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  if (HAL_TIM_Base_Init(&htim1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
-  if (HAL_TIM_ConfigClockSource(&htim1, &sClockSourceConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
-  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-  if (HAL_TIMEx_MasterConfigSynchronization(&htim1, &sMasterConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN TIM1_Init 2 */
-
-  /* USER CODE END TIM1_Init 2 */
-
-}
-
-/**
-  * @brief TIM2 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_TIM2_Init(void)
-{
-
-  /* USER CODE BEGIN TIM2_Init 0 */
-
-  /* USER CODE END TIM2_Init 0 */
-
-  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
-  TIM_MasterConfigTypeDef sMasterConfig = {0};
-
-  /* USER CODE BEGIN TIM2_Init 1 */
-
-  /* USER CODE END TIM2_Init 1 */
-  htim2.Instance = TIM2;
-  htim2.Init.Prescaler = 0;
-  htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim2.Init.Period = 4294967295;
-  htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
-  if (HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
-  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-  if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN TIM2_Init 2 */
-
-  /* USER CODE END TIM2_Init 2 */
-
-}
-
-/**
-  * @brief TIM3 Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief TIM3 Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_TIM3_Init(void)
 {
 
@@ -674,12 +592,12 @@ static void MX_TIM3_Init(void)
 
   /* USER CODE END TIM3_Init 1 */
   htim3.Instance = TIM3;
-  htim3.Init.Prescaler = 0;
+  htim3.Init.Prescaler = 9;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim3.Init.Period = 65535;
+  htim3.Init.Period = 15999;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  if (HAL_TIM_OC_Init(&htim3) != HAL_OK)
+  if (HAL_TIM_PWM_Init(&htim3) != HAL_OK)
   {
     Error_Handler();
   }
@@ -689,11 +607,11 @@ static void MX_TIM3_Init(void)
   {
     Error_Handler();
   }
-  sConfigOC.OCMode = TIM_OCMODE_TIMING;
+  sConfigOC.OCMode = TIM_OCMODE_PWM1;
   sConfigOC.Pulse = 0;
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-  if (HAL_TIM_OC_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
+  if (HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
   {
     Error_Handler();
   }
@@ -701,14 +619,13 @@ static void MX_TIM3_Init(void)
 
   /* USER CODE END TIM3_Init 2 */
   HAL_TIM_MspPostInit(&htim3);
-
 }
 
 /**
-  * @brief UART5 Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief UART5 Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_UART5_Init(void)
 {
 
@@ -734,47 +651,13 @@ static void MX_UART5_Init(void)
   /* USER CODE BEGIN UART5_Init 2 */
 
   /* USER CODE END UART5_Init 2 */
-
 }
 
 /**
-  * @brief USART1 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_USART1_UART_Init(void)
-{
-
-  /* USER CODE BEGIN USART1_Init 0 */
-
-  /* USER CODE END USART1_Init 0 */
-
-  /* USER CODE BEGIN USART1_Init 1 */
-
-  /* USER CODE END USART1_Init 1 */
-  huart1.Instance = USART1;
-  huart1.Init.BaudRate = 115200;
-  huart1.Init.WordLength = UART_WORDLENGTH_8B;
-  huart1.Init.StopBits = UART_STOPBITS_1;
-  huart1.Init.Parity = UART_PARITY_NONE;
-  huart1.Init.Mode = UART_MODE_TX_RX;
-  huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  huart1.Init.OverSampling = UART_OVERSAMPLING_16;
-  if (HAL_UART_Init(&huart1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN USART1_Init 2 */
-
-  /* USER CODE END USART1_Init 2 */
-
-}
-
-/**
-  * @brief USART2 Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief USART2 Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_USART2_UART_Init(void)
 {
 
@@ -800,14 +683,13 @@ static void MX_USART2_UART_Init(void)
   /* USER CODE BEGIN USART2_Init 2 */
 
   /* USER CODE END USART2_Init 2 */
-
 }
 
 /**
-  * @brief GPIO Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief GPIO Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_GPIO_Init(void)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
@@ -822,20 +704,20 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOD_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4 | GPIO_PIN_9 | GPIO_PIN_10, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12 | GPIO_PIN_3, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin : PA4 */
-  GPIO_InitStruct.Pin = GPIO_PIN_4;
+  /*Configure GPIO pins : PA4 PA9 PA10 */
+  GPIO_InitStruct.Pin = GPIO_PIN_4 | GPIO_PIN_9 | GPIO_PIN_10;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : PB12 */
-  GPIO_InitStruct.Pin = GPIO_PIN_12;
+  /*Configure GPIO pins : PB12 PB3 */
+  GPIO_InitStruct.Pin = GPIO_PIN_12 | GPIO_PIN_3;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -847,26 +729,13 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-// 日時を含むファイル名を生成する関数（8.3形式対応）
-void get_datetime_filename(char *filename, size_t max_len)
-{
-  RTC_TimeTypeDef time;
-  RTC_DateTypeDef date;
 
-  // RTCから現在の日時を取得
-  HAL_RTC_GetTime(&hrtc, &time, RTC_FORMAT_BIN);
-  HAL_RTC_GetDate(&hrtc, &date, RTC_FORMAT_BIN);
-
-  // 年月日時分を含むファイル名を生成
-  snprintf(filename, max_len, "D%02d%02d%02d%02d%02d.CSV",
-           date.Year, date.Month, date.Date, time.Hours, time.Minutes);
-}
 /* USER CODE END 4 */
 
 /**
-  * @brief  This function is executed in case of error occurrence.
-  * @retval None
-  */
+ * @brief  This function is executed in case of error occurrence.
+ * @retval None
+ */
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
@@ -878,14 +747,14 @@ void Error_Handler(void)
   /* USER CODE END Error_Handler_Debug */
 }
 
-#ifdef  USE_FULL_ASSERT
+#ifdef USE_FULL_ASSERT
 /**
-  * @brief  Reports the name of the source file and the source line number
-  *         where the assert_param error has occurred.
-  * @param  file: pointer to the source file name
-  * @param  line: assert_param error line source number
-  * @retval None
-  */
+ * @brief  Reports the name of the source file and the source line number
+ *         where the assert_param error has occurred.
+ * @param  file: pointer to the source file name
+ * @param  line: assert_param error line source number
+ * @retval None
+ */
 void assert_failed(uint8_t *file, uint32_t line)
 {
   /* USER CODE BEGIN 6 */

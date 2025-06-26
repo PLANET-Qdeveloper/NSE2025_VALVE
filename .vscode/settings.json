@@ -6,7 +6,8 @@
   "C_Cpp.intelliSenseEngine": "default",
   "clangd.enable": false,
   "files.associations": {
-    "main.h": "c"
+    "main.h": "c",
+    "stdbool.h": "c"
   },
   "cmake.configureSettings": {
     "CMAKE_BUILD_TYPE": "Debug"

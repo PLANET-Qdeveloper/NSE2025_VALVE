@@ -28,24 +28,49 @@ extern "C"
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "main.h"
+#include "stm32f4xx_hal.h"
+#include "app_types.h"
+#include <stdbool.h> // bool型のサポート
 
-/* Exported types ------------------------------------------------------------*/
+    /* Exported types ------------------------------------------------------------*/
+    /* ValveControl_t moved to app_types.h for better organization */
 
 /* Exported constants --------------------------------------------------------*/
-#define SERVO_MIN_PULSE_US 1000 // 最小パルス幅（マイクロ秒）
-#define SERVO_MAX_PULSE_US 2000 // 最大パルス幅（マイクロ秒）
-#define SERVO_MIN_ANGLE 0       // 最小角度（度）
-#define SERVO_MAX_ANGLE 270     // 最大角度（度）
+// サーボモーター PWM パルス幅設定（動作していた設定に戻す）
+#define SERVO_MIN_PULSE_US 500  // 最小パルス幅（マイクロ秒）- 0度位置
+#define SERVO_MAX_PULSE_US 2500 // 最大パルス幅（マイクロ秒）- 270度位置
+
+// サーボモーター角度設定
+#define SERVO_MIN_ANGLE 0   // 最小角度（度）
+#define SERVO_MAX_ANGLE 270 // 最大角度（度）
+
+// バルブ制御用角度定義
+#define SERVO_OPEN_ANGLE 245 // バルブ開放角度（度）
+#define SERVO_CLOSE_ANGLE 0  // バルブ閉鎖角度（度）
+
+// バルブ動作時間
+#define SERVO_OPEN_TIME_MS 30000 // バルブ開放時間（30秒）
 
     /* Exported macro ------------------------------------------------------------*/
 
     /* Exported functions prototypes ---------------------------------------------*/
-    void servo_init(void);
-    void servo_set_angle(uint16_t angle);
-    void servo_move_to_angle_smooth(uint16_t target_angle, uint32_t step_delay);
-    uint32_t servo_compute_pulse_us_from_angle(uint16_t angle);
-    uint32_t servo_compute_compare_from_us(uint32_t pulse_us);
+
+    // 基本制御関数
+    void servo_init(TIM_HandleTypeDef *htim, uint32_t channel);
+    void servo_set_angle(TIM_HandleTypeDef *htim, uint32_t channel, uint16_t angle);
+    uint16_t servo_get_current_angle(void);
+
+    // バルブ制御専用関数
+    void servo_open_valve(TIM_HandleTypeDef *htim, uint32_t channel);
+    void servo_close_valve(TIM_HandleTypeDef *htim, uint32_t channel);
+
+    // バルブ制御プロセス関数
+    void valve_control_process(TIM_HandleTypeDef *htim, uint32_t channel,
+                               ValveControl_t *valve_state,
+                               GPIO_TypeDef *nos_port, uint16_t nos_pin,
+                               GPIO_TypeDef *button_port, uint16_t button_pin);
+    bool read_button_with_debounce(GPIO_TypeDef *button_port, uint16_t button_pin,
+                                   bool *button_pressed_last);
 
 #ifdef __cplusplus
 }

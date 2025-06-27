@@ -21,6 +21,18 @@
 #define THERMOCOUPLE_SHORT_VCC 0x04   // VCCショート (D2)
 #define THERMOCOUPLE_FAULT 0x00010000 // フォルトフラグ (D16)
 
+// MAX31855用の定数とマクロ
+#define MAX31855_TEMP_SCALE 0.25f
+#define MAX31855_REF_SCALE 0.0625f
+#define MAX31855_TEMP_MIN_RAW -1080
+#define MAX31855_TEMP_MAX_RAW 7200
+#define MAX31855_TEMP_MASK 0x3FFF
+#define MAX31855_TEMP_SIGN_BIT 0x2000
+#define MAX31855_TEMP_SIGN_EXT 0xC000
+#define MAX31855_REF_MASK 0x0FFF
+#define MAX31855_REF_SIGN_BIT 0x0800
+#define MAX31855_REF_SIGN_EXT 0xF000
+
 // ------------------------- Types -------------------------
 // MAX31855用の定数とマクロのみ定義
 typedef struct

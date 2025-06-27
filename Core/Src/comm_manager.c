@@ -23,22 +23,10 @@
 #include <stdio.h>
 
 /* Private variables ---------------------------------------------------------*/
-static pq_com_format_t uart_packet;
-static uint8_t uart_tx_buffer[MAX_UART_BUFFER_SIZE];
 
 /* Private function prototypes -----------------------------------------------*/
 
 /* Exported functions --------------------------------------------------------*/
-
-/**
- * @brief 通信プロトコルの初期化
- * @retval app_error_t エラーコード
- */
-app_error_t comm_init(void)
-{
-    pq_com_format_init(&uart_packet, NULL, 0);
-    return APP_ERROR_NONE;
-}
 
 /**
  * @brief CommData_tをUART経由で送信
@@ -52,25 +40,8 @@ app_error_t comm_send_data_via_uart(const CommData_t *data, UART_HandleTypeDef *
     APP_ERROR_CHECK(data != NULL, APP_ERROR_INVALID_PARAM, "data is NULL");
     APP_ERROR_CHECK(huart != NULL, APP_ERROR_INVALID_PARAM, "huart is NULL");
 
-    // CommData_tのデータをペイロードとして設定
-    pq_com_format_result_t comm_result = pq_com_format_set(&uart_packet, (const uint8_t *)data, sizeof(CommData_t));
-    if (comm_result != PQ_COM_FORMAT_SUCCESS)
-    {
-        return APP_ERROR_COMM_ENCODE_FAILED;
-    }
-
-    // パケットをエンコード
-    comm_result = pq_com_format_encode(&uart_packet, uart_tx_buffer, sizeof(uart_tx_buffer));
-    if (comm_result != PQ_COM_FORMAT_SUCCESS)
-    {
-        return APP_ERROR_COMM_ENCODE_FAILED;
-    }
-
-    // 送信サイズを計算（ヘッダー + ペイロード + フッター）
-    uint16_t packet_size = PQ_COM_FORMAT_HEADER_SIZE + sizeof(CommData_t) + PQ_COM_FORMAT_FOOTER_SIZE;
-
     // UART経由でパケットを送信
-    APP_HAL_CHECK(HAL_UART_Transmit(huart, uart_tx_buffer, packet_size, UART_TIMEOUT_MS),
+    APP_HAL_CHECK(HAL_UART_Transmit(huart, (uint8_t *)data, sizeof(CommData_t), UART_TIMEOUT_MS),
                   "UART transmission failed");
 
     return APP_ERROR_NONE;

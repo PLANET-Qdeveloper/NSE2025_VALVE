@@ -28,7 +28,6 @@ extern "C"
 #include "stm32f4xx_hal.h"
 #include "config.h"
 #include "app_types.h"
-#include "pq_com_format/pq_com_format.h"
 
     /* Exported Functions --------------------------------------------------------*/
 

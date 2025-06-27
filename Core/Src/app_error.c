@@ -19,7 +19,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "app_types.h"
-#include "pq_com_format/pq_com_format.h"
 #include <stdio.h>
 #include <string.h>
 

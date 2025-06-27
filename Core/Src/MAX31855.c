@@ -42,7 +42,7 @@ MAX31855_Data_t Max31855_Read_Temp(SPI_HandleTypeDef *hspi)
     HAL_Delay(1);
 
     // SPI communication with 4 bytes (32-bit data) - receive only
-    status = HAL_SPI_Receive(hspi, rx, 4, 10000);
+    status = HAL_SPI_Receive(hspi, rx, 4, 10);
 
     // CS HIGH to end communication
     HAL_GPIO_WritePin(MAX31855_CS_PORT, MAX31855_CS_PIN, GPIO_PIN_SET);

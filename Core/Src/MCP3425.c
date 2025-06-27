@@ -42,7 +42,7 @@ MCP3425_Data_t MCP3425_Read_Pressure(I2C_HandleTypeDef *hi2c)
 
 	uint8_t mcp3425_addr = MCP3425_I2C_ADDR << 1; // HAL用に左シフト
 
-	if (HAL_I2C_Master_Receive(hi2c, mcp3425_addr, (uint8_t *)&adc_value, 2, HAL_MAX_DELAY) != HAL_OK)
+	if (HAL_I2C_Master_Receive(hi2c, mcp3425_addr, (uint8_t *)&adc_value, 2, 10) != HAL_OK)
 	{
 		return (MCP3425_Data_t){.processed_data = -999.0f, .raw_data = 0};
 	}

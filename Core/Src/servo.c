@@ -338,6 +338,9 @@ void servo_valve_control(TIM_HandleTypeDef *htim, uint32_t channel,
       servo_close_valve(htim, channel);
       valve_state->valve_operation_active = false;
       printf("サーボバルブ30秒制御終了 - バルブを閉じました\r\n");
+      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, GPIO_PIN_RESET);
+      HAL_Delay(15000);
+      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, GPIO_PIN_SET);
     }
     return; // 動作中は新しい入力を受け付けない
   }

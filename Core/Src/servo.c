@@ -251,21 +251,37 @@ bool read_button_with_debounce(GPIO_TypeDef *button_port, uint16_t button_pin,
 }
 
 /**
- * @brief バルブ制御処理
+ * @brief NOS電磁弁制御処理（PA9信号による自動制御）
+ * @param nos_port NOS電磁弁のGPIOポート
+ * @param nos_pin NOS電磁弁のGPIOピン
+ */
+void nos_solenoid_control(GPIO_TypeDef *nos_port, uint16_t nos_pin)
+{
+  // PA9信号をチェックしてNOS電磁弁を制御
+  if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_9) == GPIO_PIN_SET)
+  {
+    HAL_GPIO_WritePin(nos_port, nos_pin, GPIO_PIN_SET); // NOS電磁弁OPEN
+  }
+  else
+  {
+    HAL_GPIO_WritePin(nos_port, nos_pin, GPIO_PIN_RESET); // NOS電磁弁CLOSE
+  }
+}
+
+/**
+ * @brief PA10信号によるサーボバルブ制御処理（30秒間OPEN制御）
  * @param htim タイマーハンドル
  * @param channel PWMチャンネル
  * @param valve_state バルブ状態管理構造体
- * @param nos_port NOSバルブのGPIOポート
- * @param nos_pin NOSバルブのGPIOピン
- * @param button_port ボタンのGPIOポート
- * @param button_pin ボタンのGPIOピン
  */
-void valve_control_process(TIM_HandleTypeDef *htim, uint32_t channel,
-                           ValveControl_t *valve_state,
-                           GPIO_TypeDef *nos_port, uint16_t nos_pin,
-                           GPIO_TypeDef *button_port, uint16_t button_pin)
+void servo_valve_control(TIM_HandleTypeDef *htim, uint32_t channel,
+                                 ValveControl_t *valve_state)
 {
   uint32_t current_time = HAL_GetTick();
+  static bool pa10_last_state = false;
+
+  // PA10信号の状態を読み取り
+  bool pa10_current = (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10) == GPIO_PIN_SET);
 
   // バルブ動作中の処理
   if (valve_state->valve_operation_active)
@@ -273,29 +289,24 @@ void valve_control_process(TIM_HandleTypeDef *htim, uint32_t channel,
     // 30秒経過をチェック
     if (current_time - valve_state->valve_operation_start_time >= SERVO_OPEN_TIME_MS)
     {
-      // バルブを閉じる
+      // サーボバルブを閉じる
       servo_close_valve(htim, channel);
-
-      // NOS バルブも閉じる
-      HAL_GPIO_WritePin(nos_port, nos_pin, GPIO_PIN_RESET);
-
       valve_state->valve_operation_active = false;
+      printf("サーボバルブ30秒制御終了 - バルブを閉じました\r\n");
     }
+    pa10_last_state = pa10_current;
     return; // 動作中は新しい入力を受け付けない
   }
 
-  // ボタン入力チェック
-  if (read_button_with_debounce(button_port, button_pin, &valve_state->button_pressed_last))
+  // PA10信号の立ち上がりエッジを検出
+  if (pa10_current && !pa10_last_state)
   {
-    // バルブを開く
+    // サーボバルブを開く（30秒間）
     servo_open_valve(htim, channel);
-
-    // NOS バルブも開く
-    HAL_GPIO_WritePin(nos_port, nos_pin, GPIO_PIN_SET);
-
     valve_state->valve_operation_start_time = current_time;
     valve_state->valve_operation_active = true;
-
-    printf("Valve opened - will close in 30 seconds\r\n");
+    printf("PA10信号検出 - サーボバルブを30秒間開きます\r\n");
   }
+
+  pa10_last_state = pa10_current;
 }

@@ -64,11 +64,18 @@ extern "C"
     void servo_open_valve(TIM_HandleTypeDef *htim, uint32_t channel);
     void servo_close_valve(TIM_HandleTypeDef *htim, uint32_t channel);
 
-    // バルブ制御プロセス関数
+    // 個別制御関数
+    void nos_solenoid_control(GPIO_TypeDef *nos_port, uint16_t nos_pin);
+    void servo_valve_control(TIM_HandleTypeDef *htim, uint32_t channel, ValveControl_t *valve_state);
+
+    // PA10信号制御関数
+    void servo_valve_control_by_pa10(TIM_HandleTypeDef *htim, uint32_t channel,
+                                     ValveControl_t *valve_state);
+
+    // 統合制御プロセス関数（個別制御）
     void valve_control_process(TIM_HandleTypeDef *htim, uint32_t channel,
                                ValveControl_t *valve_state,
-                               GPIO_TypeDef *nos_port, uint16_t nos_pin,
-                               GPIO_TypeDef *button_port, uint16_t button_pin);
+                               GPIO_TypeDef *nos_port, uint16_t nos_pin);
     bool read_button_with_debounce(GPIO_TypeDef *button_port, uint16_t button_pin,
                                    bool *button_pressed_last);
 

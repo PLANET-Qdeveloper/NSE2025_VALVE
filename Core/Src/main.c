@@ -298,21 +298,12 @@ int main(void)
   while (1)
   {
     // PA9信号によるNOS電磁弁制御（PA9がHIGHの時にOPEN）
-    if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_9) == GPIO_PIN_SET)
-    {
-      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, GPIO_PIN_SET); // NOS電磁弁OPEN
-    }
-    else
-    {
-      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, GPIO_PIN_RESET); // NOS電磁弁CLOSE
-    }
+    nos_solenoid_control(GPIOA, GPIO_PIN_11);
 
     // PA10信号によるサーボバルブ制御（PA10がHIGHになったら30秒間OPEN）
     const ValveControl_t *valve_state = state_manager_get_valve_state();
     ValveControl_t current_valve_state = *valve_state; // コピーして操作
-    valve_control_process(&htim3, TIM_CHANNEL_1, &current_valve_state,
-                          GPIOA, GPIO_PIN_11,  // NOSバルブ制御ピン（未使用）
-                          GPIOA, GPIO_PIN_10); // PA10信号をトリガーに使用
+    servo_valve_control(&htim3, TIM_CHANNEL_1, &current_valve_state);
     state_manager_set_valve_state(&current_valve_state);
 
     // センサーデータ読み取り処理（1秒間隔）

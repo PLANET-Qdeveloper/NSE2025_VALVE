@@ -175,22 +175,68 @@ app_error_t data_save_to_sd(const DataBuffer_t *data_buffer, uint32_t data_count
     // データ書き込み
     for (uint32_t i = 0; i < data_count; i++)
     {
+        // floatデータの詳細診断を追加
+        float temp_val = data_buffer[i].temp_processed_data;
+        float press_val = data_buffer[i].press_processed_data;
+
+        // float値のバイナリ表現を確認
+        uint32_t temp_hex = *(uint32_t *)&temp_val;
+        uint32_t press_hex = *(uint32_t *)&press_val;
+
+        printf("データ診断[%lu]: 温度=%.6f (0x%08lX), 圧力=%.6f (0x%08lX)\r\n",
+               i, temp_val, temp_hex, press_val, press_hex);
+
+        // NaN や無限大の値をチェック
+        if (temp_val != temp_val)
+        { // NaN check
+            printf("警告: 温度値がNaNです\r\n");
+            temp_val = 0.0f;
+        }
+        if (press_val != press_val)
+        { // NaN check
+            printf("警告: 圧力値がNaNです\r\n");
+            press_val = 0.0f;
+        }
+
         sprintf(buffer, "%lu,%.2f,%.2f\r\n",
                 (unsigned long)data_buffer[i].timestamp,
-                data_buffer[i].temp_processed_data,
-                data_buffer[i].press_processed_data);
+                temp_val,
+                press_val);
+
+        // デバッグ: 書き込み予定のデータを出力
+        printf("書き込みデータ[%lu]: %s", i, buffer);
 
         write_result = f_write(&fil, buffer, strlen(buffer), &bw);
         if (write_result != FR_OK)
         {
             f_close(&fil);
             f_unlink(filename);
-            APP_ERROR_REPORT(APP_ERROR_SD_WRITE_FAILED, "Failed to write data to file");
+            char error_msg[128];
+            snprintf(error_msg, sizeof(error_msg),
+                     "Failed to write data line %lu: FRESULT=%d", i, write_result);
+            APP_ERROR_REPORT(APP_ERROR_SD_WRITE_FAILED, error_msg);
             return APP_ERROR_SD_WRITE_FAILED;
+        }
+
+        // デバッグ: 実際に書き込まれたバイト数を確認
+        if (bw != strlen(buffer))
+        {
+            printf("警告: 書き込みバイト数不一致 - 期待:%zu, 実際:%u\r\n", strlen(buffer), bw);
         }
     }
 
+    // データを確実にSDカードに書き込む
+    FRESULT sync_result = f_sync(&fil);
+    if (sync_result != FR_OK)
+    {
+        printf("警告: f_sync失敗: FRESULT=%d\r\n", sync_result);
+    }
+
     f_close(&fil);
+
+    // 保存完了の詳細ログ
+    printf("SDカード保存完了: ファイル名=%s, データ件数=%lu\r\n", filename, data_count);
+
     return APP_ERROR_NONE;
 }
 

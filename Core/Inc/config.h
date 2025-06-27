@@ -47,7 +47,7 @@ extern "C"
 
 /* ファイル設定 */
 #define MAX_FILENAME_LENGTH 64
-#define DATA_WRITE_BUFFER_SIZE 128
+#define DATA_WRITE_BUFFER_SIZE 256
 
 /* 通信設定 */
 #define UART_TIMEOUT_MS 1000

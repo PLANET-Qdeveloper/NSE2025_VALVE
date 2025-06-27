@@ -29,6 +29,7 @@
 #include "app_types.h"
 #include "state_manager.h"
 #include "sensor_manager.h"
+#include "data_manager.h"
 #include "comm_manager.h"
 #include "servo.h"
 #include "fatfs.h"
@@ -75,7 +76,11 @@ extern volatile uint8_t FatFsCnt; /* FatFs counter for SD card operations (defin
 
 // データバッファ（State Manager管理のため、システム状態は削除）
 static DataBuffer_t data_buffer[MAX_DATA_POINTS];
-static CommData_t comm_data;
+
+// センサーデータ管理用変数
+static uint32_t data_buffer_index = 0;
+static uint32_t last_sensor_read_time = 0;
+static uint32_t last_data_save_time = 0;
 
 /* USER CODE END PV */
 
@@ -216,13 +221,40 @@ void system_user_init(void)
   {
     printf("警告: ファイル名が8.3形式の制限を超えています\r\n");
   }
+
+  // Float演算基本テスト
+  printf("=== Float演算テスト開始 ===\r\n");
+  float test_temp = 25.67f;
+  float test_press = 101325.45f;
+  char float_buffer[64];
+
+  printf("テスト値: 温度=%.2f°C, 圧力=%.2f Pa\r\n", test_temp, test_press);
+  printf("16進表現: 温度=0x%08lX, 圧力=0x%08lX\r\n",
+         *(uint32_t *)&test_temp, *(uint32_t *)&test_press);
+
+  sprintf(float_buffer, "%.2f,%.2f", test_temp, test_press);
+  printf("sprintf結果: '%s'\r\n", float_buffer);
+
+  // 算術演算テスト
+  float result = test_temp + test_press;
+  printf("加算テスト: %.2f + %.2f = %.6f\r\n", test_temp, test_press, result);
+
+  // DataBuffer_t構造体への格納テスト
+  DataBuffer_t test_buffer;
+  test_buffer.timestamp = HAL_GetTick();
+  test_buffer.temp_processed_data = test_temp;
+  test_buffer.press_processed_data = test_press;
+
+  printf("構造体格納テスト: timestamp=%lu, temp=%.2f, press=%.2f\r\n",
+         test_buffer.timestamp, test_buffer.temp_processed_data, test_buffer.press_processed_data);
+  printf("=== Float演算テスト完了 ===\r\n");
 }
 /* USER CODE END 0 */
 
 /**
-  * @brief  The application entry point.
-  * @retval int
-  */
+ * @brief  The application entry point.
+ * @retval int
+ */
 int main(void)
 {
 
@@ -283,6 +315,84 @@ int main(void)
                           GPIOA, GPIO_PIN_10); // PA10信号をトリガーに使用
     state_manager_set_valve_state(&current_valve_state);
 
+    // センサーデータ読み取り処理（1秒間隔）
+    uint32_t current_time = HAL_GetTick();
+    if (current_time - last_sensor_read_time >= 1000) // 1秒間隔
+    {
+      last_sensor_read_time = current_time;
+
+      // センサーデータ読み取りと検証
+      SensorValidationResult_t sensor_result = sensor_read_and_validate(&hspi1, &hi2c1);
+
+      if (sensor_result.is_valid)
+      {
+        // 有効なデータをバッファに追加
+        data_buffer[data_buffer_index].timestamp = current_time;
+        data_buffer[data_buffer_index].temp_processed_data = sensor_result.temperature;
+        data_buffer[data_buffer_index].press_processed_data = sensor_result.pressure;
+
+        // デバッグ: センサー値の詳細出力
+        printf("センサー値詳細:\r\n");
+        printf("  - 温度: raw=%.6f, formatted=%.2f, hex=0x%08lX\r\n",
+               sensor_result.temperature, sensor_result.temperature,
+               *(uint32_t *)&sensor_result.temperature);
+        printf("  - 圧力: raw=%.6f, formatted=%.2f, hex=0x%08lX\r\n",
+               sensor_result.pressure, sensor_result.pressure,
+               *(uint32_t *)&sensor_result.pressure);
+        printf("  - バッファ格納後: temp=%.2f (0x%08lX), press=%.2f (0x%08lX)\r\n",
+               data_buffer[data_buffer_index].temp_processed_data,
+               *(uint32_t *)&data_buffer[data_buffer_index].temp_processed_data,
+               data_buffer[data_buffer_index].press_processed_data,
+               *(uint32_t *)&data_buffer[data_buffer_index].press_processed_data);
+
+        data_buffer_index++;
+
+        printf("センサーデータ取得: 温度=%.2f°C, 圧力=%.2f Pa (バッファ: %lu/%d)\r\n",
+               sensor_result.temperature, sensor_result.pressure,
+               data_buffer_index, MAX_DATA_POINTS);
+
+        // バッファが満杯の場合、SDカードに保存
+        if (data_buffer_index >= MAX_DATA_POINTS)
+        {
+          printf("バッファ満杯のため、SDカードに保存開始\r\n");
+          app_error_t save_result = data_save_to_sd(data_buffer, data_buffer_index, &hrtc);
+
+          if (save_result == APP_ERROR_NONE)
+          {
+            printf("SDカード保存成功: %lu件のデータ\r\n", data_buffer_index);
+            data_buffer_index = 0; // バッファリセット
+            last_data_save_time = current_time;
+          }
+          else
+          {
+            printf("SDカード保存失敗: エラーコード=%d\r\n", save_result);
+          }
+        }
+      }
+      else
+      {
+        printf("センサーデータ無効: エラーコード=%d\r\n", sensor_result.validation_error);
+      }
+    }
+
+    // 定期保存処理（5分間隔、バッファにデータがある場合）
+    if (data_buffer_index > 0 && (current_time - last_data_save_time >= 300000)) // 5分間隔
+    {
+      printf("定期保存開始: %lu件のデータ\r\n", data_buffer_index);
+      app_error_t save_result = data_save_to_sd(data_buffer, data_buffer_index, &hrtc);
+
+      if (save_result == APP_ERROR_NONE)
+      {
+        printf("定期保存成功: %lu件のデータ\r\n", data_buffer_index);
+        data_buffer_index = 0; // バッファリセット
+        last_data_save_time = current_time;
+      }
+      else
+      {
+        printf("定期保存失敗: エラーコード=%d\r\n", save_result);
+      }
+    }
+
     // メインループ遅延
     HAL_Delay(10);
 
@@ -294,23 +404,23 @@ int main(void)
 }
 
 /**
-  * @brief System Clock Configuration
-  * @retval None
-  */
+ * @brief System Clock Configuration
+ * @retval None
+ */
 void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
   /** Configure the main internal regulator output voltage
-  */
+   */
   __HAL_RCC_PWR_CLK_ENABLE();
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
 
   /** Initializes the RCC Oscillators according to the specified parameters
-  * in the RCC_OscInitTypeDef structure.
-  */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI|RCC_OSCILLATORTYPE_LSI;
+   * in the RCC_OscInitTypeDef structure.
+   */
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI | RCC_OSCILLATORTYPE_LSI;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
   RCC_OscInitStruct.LSIState = RCC_LSI_ON;
@@ -321,9 +431,8 @@ void SystemClock_Config(void)
   }
 
   /** Initializes the CPU, AHB and APB buses clocks
-  */
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
-                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+   */
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
@@ -336,10 +445,10 @@ void SystemClock_Config(void)
 }
 
 /**
-  * @brief I2C1 Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief I2C1 Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_I2C1_Init(void)
 {
 
@@ -366,14 +475,13 @@ static void MX_I2C1_Init(void)
   /* USER CODE BEGIN I2C1_Init 2 */
 
   /* USER CODE END I2C1_Init 2 */
-
 }
 
 /**
-  * @brief I2C3 Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief I2C3 Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_I2C3_Init(void)
 {
 
@@ -400,14 +508,13 @@ static void MX_I2C3_Init(void)
   /* USER CODE BEGIN I2C3_Init 2 */
 
   /* USER CODE END I2C3_Init 2 */
-
 }
 
 /**
-  * @brief RTC Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief RTC Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_RTC_Init(void)
 {
 
@@ -420,7 +527,7 @@ static void MX_RTC_Init(void)
   /* USER CODE END RTC_Init 1 */
 
   /** Initialize RTC Only
-  */
+   */
   hrtc.Instance = RTC;
   hrtc.Init.HourFormat = RTC_HOURFORMAT_24;
   hrtc.Init.AsynchPrediv = 127;
@@ -435,14 +542,13 @@ static void MX_RTC_Init(void)
   /* USER CODE BEGIN RTC_Init 2 */
 
   /* USER CODE END RTC_Init 2 */
-
 }
 
 /**
-  * @brief SPI1 Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief SPI1 Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_SPI1_Init(void)
 {
 
@@ -473,14 +579,13 @@ static void MX_SPI1_Init(void)
   /* USER CODE BEGIN SPI1_Init 2 */
 
   /* USER CODE END SPI1_Init 2 */
-
 }
 
 /**
-  * @brief SPI2 Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief SPI2 Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_SPI2_Init(void)
 {
 
@@ -511,14 +616,13 @@ static void MX_SPI2_Init(void)
   /* USER CODE BEGIN SPI2_Init 2 */
 
   /* USER CODE END SPI2_Init 2 */
-
 }
 
 /**
-  * @brief TIM3 Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief TIM3 Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_TIM3_Init(void)
 {
 
@@ -560,14 +664,13 @@ static void MX_TIM3_Init(void)
 
   /* USER CODE END TIM3_Init 2 */
   HAL_TIM_MspPostInit(&htim3);
-
 }
 
 /**
-  * @brief UART5 Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief UART5 Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_UART5_Init(void)
 {
 
@@ -593,14 +696,13 @@ static void MX_UART5_Init(void)
   /* USER CODE BEGIN UART5_Init 2 */
 
   /* USER CODE END UART5_Init 2 */
-
 }
 
 /**
-  * @brief USART2 Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief USART2 Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_USART2_UART_Init(void)
 {
 
@@ -626,14 +728,13 @@ static void MX_USART2_UART_Init(void)
   /* USER CODE BEGIN USART2_Init 2 */
 
   /* USER CODE END USART2_Init 2 */
-
 }
 
 /**
-  * @brief GPIO Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief GPIO Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_GPIO_Init(void)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
@@ -648,20 +749,20 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOD_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4|GPIO_PIN_9|GPIO_PIN_10, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4 | GPIO_PIN_9 | GPIO_PIN_10, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12|GPIO_PIN_3, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12 | GPIO_PIN_3, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : PA4 PA9 PA10 */
-  GPIO_InitStruct.Pin = GPIO_PIN_4|GPIO_PIN_9|GPIO_PIN_10;
+  GPIO_InitStruct.Pin = GPIO_PIN_4 | GPIO_PIN_9 | GPIO_PIN_10;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pins : PB12 PB3 */
-  GPIO_InitStruct.Pin = GPIO_PIN_12|GPIO_PIN_3;
+  GPIO_InitStruct.Pin = GPIO_PIN_12 | GPIO_PIN_3;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -677,9 +778,9 @@ static void MX_GPIO_Init(void)
 /* USER CODE END 4 */
 
 /**
-  * @brief  This function is executed in case of error occurrence.
-  * @retval None
-  */
+ * @brief  This function is executed in case of error occurrence.
+ * @retval None
+ */
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
@@ -691,14 +792,14 @@ void Error_Handler(void)
   /* USER CODE END Error_Handler_Debug */
 }
 
-#ifdef  USE_FULL_ASSERT
+#ifdef USE_FULL_ASSERT
 /**
-  * @brief  Reports the name of the source file and the source line number
-  *         where the assert_param error has occurred.
-  * @param  file: pointer to the source file name
-  * @param  line: assert_param error line source number
-  * @retval None
-  */
+ * @brief  Reports the name of the source file and the source line number
+ *         where the assert_param error has occurred.
+ * @param  file: pointer to the source file name
+ * @param  line: assert_param error line source number
+ * @retval None
+ */
 void assert_failed(uint8_t *file, uint32_t line)
 {
   /* USER CODE BEGIN 6 */

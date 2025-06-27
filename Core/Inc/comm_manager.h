@@ -28,7 +28,6 @@ extern "C"
 #include "stm32f4xx_hal.h"
 #include "config.h"
 #include "app_types.h"
-#include "pq_com_format/pq_com_format.h"
 
     /* Exported Functions --------------------------------------------------------*/
 
@@ -45,6 +44,14 @@ extern "C"
      * @retval app_error_t エラーコード
      */
     app_error_t comm_send_data_via_uart(const CommData_t *data, UART_HandleTypeDef *huart);
+
+    /**
+     * @brief センサーデータを通信用データに変換
+     * @param temperature 温度データ（生データ）
+     * @param pressure 圧力データ（生データ）
+     * @param comm_data 通信用データ構造体
+     */
+    void comm_convert_sensor_data(int16_t temperature, uint16_t pressure, CommData_t *comm_data);
 
 #ifdef __cplusplus
 }

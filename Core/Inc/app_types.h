@@ -145,13 +145,6 @@ extern "C"
     app_error_t app_error_from_hal_status(HAL_StatusTypeDef hal_status);
 
     /**
-     * @brief pq_com_format_result_tをapp_error_tに変換
-     * @param comm_result 通信ライブラリ結果
-     * @return アプリケーションエラーコード
-     */
-    app_error_t app_error_from_comm_result(int comm_result);
-
-    /**
      * @brief エラーハンドラーを設定
      * @param handler エラーハンドラー関数
      */

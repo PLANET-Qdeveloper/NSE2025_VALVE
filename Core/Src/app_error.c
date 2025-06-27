@@ -19,7 +19,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "app_types.h"
-#include "pq_com_format/pq_com_format.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -131,33 +130,6 @@ app_error_t app_error_from_hal_status(HAL_StatusTypeDef hal_status)
         return APP_ERROR_TIMEOUT;
     default:
         return APP_ERROR_SYSTEM_INIT_FAILED;
-    }
-}
-
-/**
- * @brief pq_com_format_result_tをapp_error_tに変換
- * @param comm_result 通信ライブラリ結果
- * @return アプリケーションエラーコード
- */
-app_error_t app_error_from_comm_result(int comm_result)
-{
-    // pq_com_format_result_tの値を直接使用
-    switch (comm_result)
-    {
-    case 0: // PQ_COM_FORMAT_SUCCESS
-        return APP_ERROR_NONE;
-    case -1: // PQ_COM_FORMAT_ERROR_INVALID_PARAM
-        return APP_ERROR_INVALID_PARAM;
-    case -2: // PQ_COM_FORMAT_ERROR_BUFFER_TOO_SMALL
-        return APP_ERROR_BUFFER_TOO_SMALL;
-    case -3: // PQ_COM_FORMAT_ERROR_INVALID_FORMAT
-        return APP_ERROR_INVALID_FORMAT;
-    case -4: // PQ_COM_FORMAT_ERROR_MEMORY
-        return APP_ERROR_MEMORY;
-    case -5: // PQ_COM_FORMAT_ERROR_CHECKSUM
-        return APP_ERROR_CHECKSUM;
-    default:
-        return APP_ERROR_COMM_PROTOCOL_ERROR;
     }
 }
 

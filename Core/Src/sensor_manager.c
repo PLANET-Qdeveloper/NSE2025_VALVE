@@ -45,15 +45,29 @@ SensorValidationResult_t sensor_read_and_validate(SPI_HandleTypeDef *hspi_temp,
     // データの有効性チェック
     result.temperature = temperature_data.processed_data;
     result.pressure = pressure_data.processed_data;
+
+    printf("センサー読み取り生データ:\r\n");
+    printf("  - 温度センサー: processed=%.6f (0x%08lX), raw=0x%08lX\r\n",
+           temperature_data.processed_data,
+           *(uint32_t *)&temperature_data.processed_data,
+           temperature_data.raw_data);
+    printf("  - 圧力センサー: processed=%.6f (0x%08lX)\r\n",
+           pressure_data.processed_data,
+           *(uint32_t *)&pressure_data.processed_data);
+
     result.is_valid = sensor_validate_data(result.temperature, result.pressure);
 
     if (!result.is_valid)
     {
         result.validation_error = APP_ERROR_SENSOR_INVALID_DATA;
+        printf("センサーデータ検証失敗: 温度=%.6f, 圧力=%.6f\r\n",
+               result.temperature, result.pressure);
     }
     else
     {
         result.validation_error = APP_ERROR_NONE;
+        printf("センサーデータ検証成功: 温度=%.6f, 圧力=%.6f\r\n",
+               result.temperature, result.pressure);
     }
 
     return result;

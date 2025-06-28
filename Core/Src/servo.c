@@ -21,6 +21,8 @@
 #include "servo.h"
 #include "config.h"
 #include <stdio.h>
+#include "main.h"
+#include "stm32f4xx_hal.h"
 
 /* Private includes ----------------------------------------------------------*/
 
@@ -36,6 +38,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 static uint16_t current_servo_angle = 0; // 現在のサーボ角度を保存
+extern UART_HandleTypeDef huart1;
 
 /* Private function prototypes -----------------------------------------------*/
 static uint32_t compute_pulse_us_from_angle(uint16_t angle);
@@ -347,7 +350,13 @@ void servo_valve_control(TIM_HandleTypeDef *htim, uint32_t channel,
 
   // read_button_with_debounce関数を使用してPA10信号を読み取り
   // 注意：PA10は通常HIGH状態で、トリガー時にHIGHになる信号として扱う
-  if (read_button_with_debounce(GPIOA, GPIO_PIN_10, &pa10_last_state))
+  uint8_t cmd = 0;
+  HAL_UART_Receive(&huart1, &cmd, 1, 10);
+  HAL_UART_Receive(&huart1, &cmd, 1, 10);
+  HAL_UART_Receive(&huart1, &cmd, 1, 10);
+  HAL_UART_Receive(&huart1, &cmd, 1, 10);
+
+  if (cmd == 'L')
   {
     // サーボバルブを開く（30秒間）
     servo_open_valve(htim, channel);

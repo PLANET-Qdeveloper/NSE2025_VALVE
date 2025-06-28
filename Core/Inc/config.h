@@ -43,7 +43,7 @@ extern "C"
 
 /* タイミング設定 */
 #define MAIN_LOOP_DELAY_MS 1000
-#define BUTTON_DEBOUNCE_TIME_MS 100
+#define BUTTON_DEBOUNCE_TIME_MS 500
 
 /* ファイル設定 */
 #define MAX_FILENAME_LENGTH 64

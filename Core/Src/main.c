@@ -25,15 +25,8 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
-#include "config.h"
-#include "app_types.h"
-#include "state_manager.h"
-#include "sensor_manager.h"
-#include "data_manager.h"
-#include "comm_manager.h"
-#include "servo.h"
-#include "fatfs.h"
-#include "diskio.h"
+#include "types.h"
+#include "valve.h"
 #include "ff.h"
 #include "fatfs_sd.h"
 #include "MAX31855.h"
@@ -42,12 +35,22 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-
+ServoControl_t servo_state = {
+    .valve_operation_active = false,
+    .valve_operation_start_time = 0,
+};
+SolenoidControl_t solenoid_state = {
+    .solenoid_operation_active = false,
+    .solenoid_operation_start_time = 0};
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+#define MAX_FILENAME_LENGTH 64
+uint8_t cmd = 0;
+FATFS fs;
+FIL fil;
+UINT bw;
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -57,13 +60,13 @@
 
 /* Private variables ---------------------------------------------------------*/
 I2C_HandleTypeDef hi2c1;
-I2C_HandleTypeDef hi2c3;
 
 RTC_HandleTypeDef hrtc;
 
 SPI_HandleTypeDef hspi1;
 SPI_HandleTypeDef hspi2;
 
+TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim3;
 
 UART_HandleTypeDef huart5;
@@ -75,13 +78,13 @@ UART_HandleTypeDef huart2;
 volatile uint16_t Timer1, Timer2; /* 1ms Timer Counter for SD card operations */
 extern volatile uint8_t FatFsCnt; /* FatFs counter for SD card operations (defined in stm32f4xx_it.c) */
 
-// データバッファ（State Manager管理のため、システム状態は削除）
-static DataBuffer_t data_buffer[MAX_DATA_POINTS];
-
-// センサーデータ管理用変数
-static uint32_t data_buffer_index = 0;
-static uint32_t last_sensor_read_time = 0;
-static uint32_t last_data_save_time = 0;
+// センサーデータ管理変数
+#define MAX_DATA_POINTS 200
+static SensorData_t data_buffer[MAX_DATA_POINTS];
+static SensorData_t temp_buffer[MAX_DATA_POINTS];
+static volatile uint32_t data_buffer_index = 0;
+static volatile bool save_data_flag = false;
+static volatile bool read_sensor_flag = false; // センサー読み取りフラグを追加
 
 /* USER CODE END PV */
 
@@ -95,17 +98,15 @@ static void MX_TIM3_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_RTC_Init(void);
 static void MX_UART5_Init(void);
-static void MX_I2C3_Init(void);
 static void MX_USART1_UART_Init(void);
+static void MX_TIM2_Init(void);
 /* USER CODE BEGIN PFP */
 int _write(int file, char *ptr, int len);
+void system_init(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-FATFS fs;
-FIL fil;
-UINT bw;
 
 // printf関数をUART経由で出力するためのリダイレクト
 int _write(int file, char *ptr, int len)
@@ -118,20 +119,19 @@ int _write(int file, char *ptr, int len)
 /**
  * @brief ユーザーシステム初期化
  */
-void system_user_init(void)
+void system_init(void)
 {
-  // State Manager初期化
-  state_manager_init();
+  servo_init(&servo_state);
+  solenoid_init(&solenoid_state);
 
-  // サーボモーター初期化（PWM開始と初期位置設定も含む）
-  servo_init(&htim3, TIM_CHANNEL_1);
-
-  // UART通信プロトコル初期化
-  comm_init();
+  // UART1の受信割り込み開始
+  HAL_UART_Receive_IT(&huart1, &cmd, 1);
 
   // SDカードファイルシステムの初期化
-  FRESULT mount_result = f_mount(&fs, "", 1);
+  f_mount(&fs, "", 1);
 
+#ifdef ENABLE_SD_FORMAT
+  FRESULT mount_result = f_mount(&fs, "", 1);
   if (mount_result != FR_OK)
   {
     printf("SDカード初期マウント失敗: FRESULT=%d\r\n", mount_result);
@@ -147,28 +147,22 @@ void system_user_init(void)
       if (mount_result == FR_OK)
       {
         printf("SDカード再マウント成功\r\n");
-        state_manager_set_sd_card_ready(true);
       }
       else
       {
         printf("SDカード再マウント失敗: FRESULT=%d\r\n", mount_result);
-        state_manager_set_sd_card_ready(false);
       }
     }
     else
     {
       printf("SDカードフォーマット失敗: FRESULT=%d\r\n", format_result);
-      state_manager_set_sd_card_ready(false);
     }
   }
   else
   {
     printf("SDカードマウント成功\r\n");
-    state_manager_set_sd_card_ready(true);
   }
-
-  state_manager_set_uart_comm_ready(true);
-
+#endif
   // RTCの状態確認と初期設定
   RTC_TimeTypeDef current_time;
   RTC_DateTypeDef current_date;
@@ -196,6 +190,7 @@ void system_user_init(void)
     HAL_RTC_SetDate(&hrtc, &default_date, RTC_FORMAT_BIN);
   }
 
+#ifdef ENABLE_SD_FORMAT
   // SDカードの基本動作テスト
   FRESULT test_result = f_open(&fil, "test.txt", FA_CREATE_ALWAYS | FA_WRITE);
   if (test_result == FR_OK)
@@ -204,52 +199,8 @@ void system_user_init(void)
     sprintf(buffer, "SDカードテスト成功\r\n");
     f_write(&fil, buffer, strlen(buffer), &bw);
     f_close(&fil);
-
-    // テストファイルを削除
-    f_unlink("test.txt");
   }
-
-  // ファイル名生成テスト
-  char test_filename[32];
-  SD_get_datetime_filename(test_filename, sizeof(test_filename), &hrtc);
-  printf("生成されたファイル名: %s\r\n", test_filename);
-
-  // 8.3形式の検証（ddhhmmss.csv = 12文字）
-  if (strlen(test_filename) <= 12) // "filename.ext" = 最大12文字
-  {
-    printf("ファイル名は8.3形式に適合しています\r\n");
-  }
-  else
-  {
-    printf("警告: ファイル名が8.3形式の制限を超えています\r\n");
-  }
-
-  // Float演算基本テスト
-  printf("=== Float演算テスト開始 ===\r\n");
-  float test_temp = 25.67f;
-  float test_press = 101325.45f;
-  char float_buffer[64];
-
-  printf("テスト値: 温度=%.2f°C, 圧力=%.2f Pa\r\n", test_temp, test_press);
-  printf("16進表現: 温度=0x%08lX, 圧力=0x%08lX\r\n",
-         *(uint32_t *)&test_temp, *(uint32_t *)&test_press);
-
-  sprintf(float_buffer, "%.2f,%.2f", test_temp, test_press);
-  printf("sprintf結果: '%s'\r\n", float_buffer);
-
-  // 算術演算テスト
-  float result = test_temp + test_press;
-  printf("加算テスト: %.2f + %.2f = %.6f\r\n", test_temp, test_press, result);
-
-  // DataBuffer_t構造体への格納テスト
-  DataBuffer_t test_buffer;
-  test_buffer.timestamp = HAL_GetTick();
-  test_buffer.temp_processed_data = test_temp;
-  test_buffer.press_processed_data = test_press;
-
-  printf("構造体格納テスト: timestamp=%lu, temp=%.2f, press=%.2f\r\n",
-         test_buffer.timestamp, test_buffer.temp_processed_data, test_buffer.press_processed_data);
-  printf("=== Float演算テスト完了 ===\r\n");
+#endif
 }
 /* USER CODE END 0 */
 
@@ -290,108 +241,80 @@ int main(void)
   MX_FATFS_Init();
   MX_RTC_Init();
   MX_UART5_Init();
-  MX_I2C3_Init();
   MX_USART1_UART_Init();
+  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
-  system_user_init();
+  system_init();
+  // タイマー割り込み開始
+  HAL_TIM_Base_Start_IT(&htim2);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    // PA9信号によるNOS電磁弁制御（PA9がHIGHの時にOPEN）
-    nos_solenoid_control(GPIOA, GPIO_PIN_11);
-
-    // PA10信号によるサーボバルブ制御（PA10がHIGHになったら30秒間OPEN）
-    const ValveControl_t *valve_state = state_manager_get_valve_state();
-    ValveControl_t current_valve_state = *valve_state; // コピーして操作
-    servo_valve_control(&htim3, TIM_CHANNEL_1, &current_valve_state);
-    state_manager_set_valve_state(&current_valve_state);
-
-    // センサーデータ読み取り処理（1秒間隔）
     uint32_t current_time = HAL_GetTick();
-#define TEST_MODEß
-#ifdef TEST_MODE
-    if (current_time - last_sensor_read_time >= 1000) // 1秒間隔
+    if (solenoid_state.solenoid_operation_active && solenoid_state.solenoid_operation_start_time == 0)
     {
-      last_sensor_read_time = current_time;
+      solenoid_state.solenoid_operation_start_time = current_time;
+      solenoid_open(&solenoid_state);
+    }
+    if (servo_state.valve_operation_active && servo_state.valve_operation_start_time == 0)
+    {
+      servo_state.valve_operation_start_time = current_time;
+      servo_open(&servo_state);
+    }
 
-      // センサーデータ読み取りと検証
-      SensorValidationResult_t sensor_result = sensor_read_and_validate(&hspi1, &hi2c1);
+    // ソレノイドタイムアウト処理（15秒）
+    if (solenoid_state.solenoid_operation_active && (current_time - solenoid_state.solenoid_operation_start_time >= 15000))
+    {
+      solenoid_close(&solenoid_state);
+    }
 
-      if (sensor_result.is_valid)
+    // サーボタイムアウト処理（30秒）
+    if (servo_state.valve_operation_active && (current_time - servo_state.valve_operation_start_time >= 30000))
+    {
+      servo_close(&servo_state);
+    }
+
+    // センサーデータ読み取りとバッファ保存（メインループで実行）
+    if (read_sensor_flag)
+    {
+      read_sensor_flag = false;
+
+      if (data_buffer_index < MAX_DATA_POINTS)
       {
-        // 有効なデータをバッファに追加
-        data_buffer[data_buffer_index].timestamp = current_time;
-        data_buffer[data_buffer_index].temp_processed_data = sensor_result.temperature;
-        data_buffer[data_buffer_index].press_processed_data = sensor_result.pressure;
+        // センサーデータ読み取り
+        float temp_data = MAX31855_Read_Temp(&hspi2);
+        float press_data = MCP3425_Read_Pressure(&hi2c1);
 
-        // デバッグ: センサー値の詳細出力
-        printf("センサー値詳細:\r\n");
-        printf("  - 温度: raw=%.6f, formatted=%.2f, hex=0x%08lX\r\n",
-               sensor_result.temperature, sensor_result.temperature,
-               *(uint32_t *)&sensor_result.temperature);
-        printf("  - 圧力: raw=%.6f, formatted=%.2f, hex=0x%08lX\r\n",
-               sensor_result.pressure, sensor_result.pressure,
-               *(uint32_t *)&sensor_result.pressure);
-        printf("  - バッファ格納後: temp=%.2f (0x%08lX), press=%.2f (0x%08lX)\r\n",
-               data_buffer[data_buffer_index].temp_processed_data,
-               *(uint32_t *)&data_buffer[data_buffer_index].temp_processed_data,
-               data_buffer[data_buffer_index].press_processed_data,
-               *(uint32_t *)&data_buffer[data_buffer_index].press_processed_data);
+        // バッファに保存
+        data_buffer[data_buffer_index] = (SensorData_t){
+            .timestamp = HAL_GetTick(),
+            .temp_data = temp_data,
+            .press_data = press_data};
 
         data_buffer_index++;
 
-        printf("センサーデータ取得: 温度=%.2f°C, 圧力=%.2f Pa (バッファ: %lu/%d)\r\n",
-               sensor_result.temperature, sensor_result.pressure,
-               data_buffer_index, MAX_DATA_POINTS);
-
-        // バッファが満杯の場合、SDカードに保存
+        // バッファ満杯時はSD保存フラグを立てる
         if (data_buffer_index >= MAX_DATA_POINTS)
         {
-          printf("バッファ満杯のため、SDカードに保存開始\r\n");
-          app_error_t save_result = data_save_to_sd(data_buffer, data_buffer_index, &hrtc);
-
-          if (save_result == APP_ERROR_NONE)
-          {
-            printf("SDカード保存成功: %lu件のデータ\r\n", data_buffer_index);
-            data_buffer_index = 0; // バッファリセット
-            last_data_save_time = current_time;
-          }
-          else
-          {
-            printf("SDカード保存失敗: エラーコード=%d\r\n", save_result);
-          }
+          save_data_flag = true;
         }
       }
-      else
-      {
-        printf("センサーデータ無効: エラーコード=%d\r\n", sensor_result.validation_error);
-      }
     }
 
-    // 定期保存処理（5分間隔、バッファにデータがある場合）
-    if (data_buffer_index > 0 && (current_time - last_data_save_time >= 300000)) // 5分間隔
+    // SD保存処理（非同期実行）
+    if (save_data_flag)
     {
-      printf("定期保存開始: %lu件のデータ\r\n", data_buffer_index);
-      app_error_t save_result = data_save_to_sd(data_buffer, data_buffer_index, &hrtc);
-
-      if (save_result == APP_ERROR_NONE)
-      {
-        printf("定期保存成功: %lu件のデータ\r\n", data_buffer_index);
-        data_buffer_index = 0; // バッファリセット
-        last_data_save_time = current_time;
-      }
-      else
-      {
-        printf("定期保存失敗: エラーコード=%d\r\n", save_result);
-      }
+      save_data_flag = false;
+      __disable_irq();
+      uint32_t save_count = data_buffer_index;
+      memcpy(temp_buffer, data_buffer, save_count * sizeof(SensorData_t));
+      data_buffer_index = 0;
+      __enable_irq();
+      sd_save_data(temp_buffer, save_count, &hrtc);
     }
-
-    // メインループ遅延
-    HAL_Delay(10);
-#endif
 
     /* USER CODE END WHILE */
 
@@ -432,7 +355,7 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
-  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV2;
+  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 
@@ -473,40 +396,6 @@ static void MX_I2C1_Init(void)
   /* USER CODE BEGIN I2C1_Init 2 */
 
   /* USER CODE END I2C1_Init 2 */
-
-}
-
-/**
-  * @brief I2C3 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_I2C3_Init(void)
-{
-
-  /* USER CODE BEGIN I2C3_Init 0 */
-
-  /* USER CODE END I2C3_Init 0 */
-
-  /* USER CODE BEGIN I2C3_Init 1 */
-
-  /* USER CODE END I2C3_Init 1 */
-  hi2c3.Instance = I2C3;
-  hi2c3.Init.ClockSpeed = 100000;
-  hi2c3.Init.DutyCycle = I2C_DUTYCYCLE_2;
-  hi2c3.Init.OwnAddress1 = 0;
-  hi2c3.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
-  hi2c3.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
-  hi2c3.Init.OwnAddress2 = 0;
-  hi2c3.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
-  hi2c3.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
-  if (HAL_I2C_Init(&hi2c3) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN I2C3_Init 2 */
-
-  /* USER CODE END I2C3_Init 2 */
 
 }
 
@@ -568,7 +457,7 @@ static void MX_SPI1_Init(void)
   hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
   hspi1.Init.NSS = SPI_NSS_SOFT;
-  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_256;
+  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_128;
   hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
   hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
@@ -601,7 +490,7 @@ static void MX_SPI2_Init(void)
   /* SPI2 parameter configuration*/
   hspi2.Instance = SPI2;
   hspi2.Init.Mode = SPI_MODE_MASTER;
-  hspi2.Init.Direction = SPI_DIRECTION_2LINES;
+  hspi2.Init.Direction = SPI_DIRECTION_2LINES_RXONLY;
   hspi2.Init.DataSize = SPI_DATASIZE_8BIT;
   hspi2.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi2.Init.CLKPhase = SPI_PHASE_1EDGE;
@@ -618,6 +507,51 @@ static void MX_SPI2_Init(void)
   /* USER CODE BEGIN SPI2_Init 2 */
 
   /* USER CODE END SPI2_Init 2 */
+
+}
+
+/**
+  * @brief TIM2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM2_Init(void)
+{
+
+  /* USER CODE BEGIN TIM2_Init 0 */
+
+  /* USER CODE END TIM2_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM2_Init 1 */
+
+  /* USER CODE END TIM2_Init 1 */
+  htim2.Instance = TIM2;
+  htim2.Init.Prescaler = 7999;
+  htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim2.Init.Period = 999;
+  htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM2_Init 2 */
+
+  /* USER CODE END TIM2_Init 2 */
 
 }
 
@@ -640,7 +574,7 @@ static void MX_TIM3_Init(void)
 
   /* USER CODE END TIM3_Init 1 */
   htim3.Instance = TIM3;
-  htim3.Init.Prescaler = 9;
+  htim3.Init.Prescaler = 19;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim3.Init.Period = 15999;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -822,7 +756,34 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+  if (huart->Instance == USART1)
+  {
+    // 受信したデータで直接バルブ制御
+    if (cmd == 'L')
+    {
+      servo_state.valve_operation_active = true;
+    }
+    else if (cmd == 'E')
+    {
+      solenoid_state.solenoid_operation_active = true;
+    }
+  }
+  HAL_UART_Receive_IT(&huart1, &cmd, 1);
+}
 
+/**
+ * @brief TIM2の周期経過コールバック（1秒間隔でセンサーデータ取得フラグ設定）
+ */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  if (htim->Instance == TIM2)
+  {
+    // センサーデータ読み取りフラグを立てるだけ
+    read_sensor_flag = true;
+  }
+}
 /* USER CODE END 4 */
 
 /**

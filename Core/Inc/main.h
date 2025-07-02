@@ -34,14 +34,10 @@ extern "C" {
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
-#include "config.h"
-#include "app_types.h"
-#include "sensor_manager.h"
-#include "data_manager.h"
-#include "servo.h"
+#include "types.h"
+#include "valve.h"
 #include "MAX31855.h"
 #include "MCP3425.h"
-/* #include "fatfs.h" */ /* Moved to main.c to avoid circular include */
 #include "diskio.h"
 #include "ff.h"
 #include "fatfs_sd.h"
@@ -70,8 +66,8 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
-void system_user_init(void);
-int _write(int file, char *ptr, int len); /* printf redirect function */
+    void system_init(void);
+    int _write(int file, char *ptr, int len); /* printf redirect function */
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/

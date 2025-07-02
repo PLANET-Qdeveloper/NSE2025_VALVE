@@ -13,6 +13,7 @@
 
 #include "diskio.h"
 #include "main.h"
+#include "types.h"
 #include <stddef.h>
 
 /* Definitions for MMC/SDC command */
@@ -90,6 +91,10 @@ void SD_get_datetime_filename(char *filename, size_t max_len, RTC_HandleTypeDef 
 /* 再試行回数 */
 #define SD_MAX_RETRY_COUNT 64
 #define SD_CMD_RETRY_COUNT 10
+
+/* SDカード管理関数 */
+bool sd_save_data(const SensorData_t *data_buffer, uint32_t data_count, RTC_HandleTypeDef *hrtc);
+bool sd_check_status(void);
 
 #endif
 

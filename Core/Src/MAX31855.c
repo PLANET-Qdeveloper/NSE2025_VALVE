@@ -9,50 +9,29 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "MAX31855.h"
-#include <stdio.h>
-#include <stdint.h>
-
-/* Private typedef -----------------------------------------------------------*/
-
-/* Private define ------------------------------------------------------------*/
-
-/* Private macro -------------------------------------------------------------*/
-
-/* Private variables ---------------------------------------------------------*/
-
-/* Private function prototypes -----------------------------------------------*/
-
-/* Private functions --------------------------------------------------------*/
 
 /**
  * @brief MAX31855から温度を取得する関数
  * @param hspi SPIハンドルへのポインタ
- * @retval MAX31855_Data_t構造体（エラー時は温度に-999.0fが設定される）
+ * @retval float 温度値（摂氏）、エラー時は-999.0f
  */
-MAX31855_Data_t Max31855_Read_Temp(SPI_HandleTypeDef *hspi)
+float MAX31855_Read_Temp(SPI_HandleTypeDef *hspi)
 {
-    MAX31855_Data_t result = {0};
     uint8_t rx[4] = {0};
     HAL_StatusTypeDef status;
 
     // CS LOW to start communication
     HAL_GPIO_WritePin(MAX31855_CS_PORT, MAX31855_CS_PIN, GPIO_PIN_RESET);
 
-    // Small delay for CS setup time
-    HAL_Delay(1);
-
-    // SPI communication with 4 bytes (32-bit data) - receive only
-    status = HAL_SPI_Receive(hspi, rx, 4, 10);
-
+    // SPI communication with 4 bytes (32-bit data) - receive only mode
+    status = HAL_SPI_Receive(hspi, rx, 4, 100);
     // CS HIGH to end communication
     HAL_GPIO_WritePin(MAX31855_CS_PORT, MAX31855_CS_PIN, GPIO_PIN_SET);
 
     // Check SPI communication status
     if (status != HAL_OK)
     {
-        result.processed_data = -999.0f; // SPI communication error
-        result.raw_data = 0;
-        return result;
+        return -999.0f; // SPI communication error
     }
 
     // 32ビットデータを組み立て
@@ -62,9 +41,7 @@ MAX31855_Data_t Max31855_Read_Temp(SPI_HandleTypeDef *hspi)
     // フォルトビットのチェック（D16: 総合フォルト）
     if (data & THERMOCOUPLE_FAULT)
     {
-        result.processed_data = -1.0f; // フォルトエラー
-        result.raw_data = 0;
-        return result;
+        return -1.0f; // フォルトエラー
     }
 
     // サーモカップル温度データの抽出（D31:D18の14ビット、符号付き、0.25°C単位）
@@ -88,14 +65,9 @@ MAX31855_Data_t Max31855_Read_Temp(SPI_HandleTypeDef *hspi)
     // 温度が有効範囲内かチェック（-270°C から +1800°C）
     if (thermocouple_temp < MAX31855_TEMP_MIN_RAW || thermocouple_temp > MAX31855_TEMP_MAX_RAW)
     {
-        result.processed_data = -999.0f; // Invalid temperature data
-        result.raw_data = thermocouple_temp;
-        return result;
+        return -999.0f; // Invalid temperature data
     }
 
     // 温度を0.25°C単位から実際の温度に変換
-    result.processed_data = (float)thermocouple_temp * MAX31855_TEMP_SCALE;
-    result.raw_data = thermocouple_temp;
-
-    return result;
+    return (float)thermocouple_temp * MAX31855_TEMP_SCALE;
 }

@@ -684,10 +684,10 @@ void SD_get_datetime_filename(char *filename, size_t max_len, RTC_HandleTypeDef 
   }
 
   /* 8.3形式に適合するファイル名を生成 */
-  /* 形式: DDHHMMSS.csv（DD=日、HH=時、MM=分、SS=秒） */
+  /* 形式: MMDDHHMM.csv（MM=月、DD=日、HH=時、MM=分） */
   snprintf(filename, max_len, "%02d%02d%02d%02d.csv",
+           date.Month,     /* 月 */
            date.Date,     /* 日 */
            time.Hours,    /* 時 */
-           time.Minutes,  /* 分 */
-           time.Seconds); /* 秒 */
+           time.Minutes); /* 分 */
 }

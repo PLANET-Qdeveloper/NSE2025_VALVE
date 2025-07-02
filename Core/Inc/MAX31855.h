@@ -33,15 +33,7 @@
 #define MAX31855_REF_SIGN_BIT 0x0800
 #define MAX31855_REF_SIGN_EXT 0xF000
 
-// ------------------------- Types -------------------------
-// MAX31855用の定数とマクロのみ定義
-typedef struct
-{
-    float processed_data; // 処理済み温度値（摂氏）
-    int16_t raw_data;     // 生データ
-} MAX31855_Data_t;
-
 // ------------------------- Functions  ----------------------
-MAX31855_Data_t Max31855_Read_Temp(SPI_HandleTypeDef *hspi);
+float MAX31855_Read_Temp(SPI_HandleTypeDef *hspi);
 
 #endif

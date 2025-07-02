@@ -48,15 +48,11 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
 # Add sources to executable
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
-    Core/Src/servo.c
+    Core/Src/valve.c
     Core/Src/MAX31855.c
     Core/Src/MCP3425.c
     Core/Src/fatfs_sd.c
-    Core/Src/sensor_manager.c
-    Core/Src/data_manager.c
-    Core/Src/comm_manager.c
-    Core/Src/app_error.c
-    Core/Src/state_manager.c
+    Core/Src/sdcard.c
 )
 
 # Add include paths

@@ -38,4 +38,7 @@ Thumbs.db
 .vscode/
 *.swp
 *.swo
-*~pq_com_format/
+*~
+
+# pq_com_format directory
+pq_com_format/

@@ -79,6 +79,7 @@ float MCP3425_Read_Pressure(I2C_HandleTypeDef *hi2c)
 	float voltage = (float)adc_value * MCP3425_LSB_SIZE * 3;
 
 	// MLH02kPSB06A圧力センサの変換式
+	// data sheetより圧力の変化はratiometric
 	// 出力電圧範囲: 0.5-4.5V, 圧力範囲: 50-2000 PSI (344.738-13789.5 kPa)
 	// P = (V - 0.5) / (4.5 - 0.5) * (13789.5 - 344.738) + 344.738
 	// P = 3361.190 * V - 1335.857 (kPa単位)

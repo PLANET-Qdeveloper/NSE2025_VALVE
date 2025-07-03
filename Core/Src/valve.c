@@ -120,7 +120,6 @@ void servo_open(ServoControl_t *servo_state)
   uint32_t compare_value = compute_compare_from_us(pulse_us);
 
   __HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_1, compare_value);
-  servo_state->valve_operation_active = true;
 }
 
 /**
@@ -133,19 +132,14 @@ void servo_close(ServoControl_t *servo_state)
   uint32_t compare_value = compute_compare_from_us(pulse_us);
 
   __HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_1, compare_value);
-  servo_state->valve_operation_active = false;
-  servo_state->valve_operation_start_time = 0;
 }
 
 void solenoid_open(SolenoidControl_t *solenoid_state)
 {
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, GPIO_PIN_RESET); // NOS電磁弁OPEN
-  solenoid_state->solenoid_operation_active = true;
 }
 
 void solenoid_close(SolenoidControl_t *solenoid_state)
 {
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, GPIO_PIN_SET); // NOS電磁弁CLOSE
-  solenoid_state->solenoid_operation_active = false;
-  solenoid_state->solenoid_operation_start_time = 0;
 }

@@ -110,7 +110,7 @@ bool sd_save_data(const SensorData_t *data_buffer, uint32_t data_count,
     }
 
     // ヘッダー書き込み
-    sprintf(buffer, "時刻,温度(°C),圧力(Pa)\r\n");
+    sprintf(buffer, "時刻,温度(°C),圧力(Pa),NOS開放\r\n");
     FRESULT write_result = f_write(&fil, buffer, strlen(buffer), &bw);
     if (write_result != FR_OK)
     {
@@ -130,8 +130,9 @@ bool sd_save_data(const SensorData_t *data_buffer, uint32_t data_count,
         uint32_t temp_hex = *(uint32_t *)&temp_val;
         uint32_t press_hex = *(uint32_t *)&press_val;
 
-        printf("データ診断[%lu]: 温度=%.6f (0x%08lX), 圧力=%.6f (0x%08lX)\r\n",
-               i, temp_val, temp_hex, press_val, press_hex);
+        printf("データ診断[%lu]: 温度=%.6f (0x%08lX), 圧力=%.6f (0x%08lX), NOS=%s\r\n",
+               i, temp_val, temp_hex, press_val, press_hex,
+               data_buffer[i].is_nos_open ? "開" : "閉");
 
         // NaN や無限大の値をチェック
         if (temp_val != temp_val)
@@ -145,10 +146,11 @@ bool sd_save_data(const SensorData_t *data_buffer, uint32_t data_count,
             press_val = 0.0f;
         }
 
-        sprintf(buffer, "%lu,%.2f,%.2f\r\n",
+        sprintf(buffer, "%lu,%.2f,%.2f,%s\r\n",
                 (unsigned long)data_buffer[i].timestamp,
                 temp_val,
-                press_val);
+                press_val,
+                data_buffer[i].is_nos_open ? "1" : "0");
 
         // デバッグ: 書き込み予定のデータを出力
         printf("書き込みデータ[%lu]: %s", i, buffer);

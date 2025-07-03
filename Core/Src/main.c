@@ -84,7 +84,7 @@ static SensorData_t data_buffer[MAX_DATA_POINTS];
 static SensorData_t temp_buffer[MAX_DATA_POINTS];
 static volatile uint32_t data_buffer_index = 0;
 static volatile bool save_data_flag = false;
-static volatile bool read_sensor_flag = false; // センサー読み取りフラグを追加
+static volatile bool read_sensor_flag = false;
 
 /* USER CODE END PV */
 
@@ -308,7 +308,9 @@ int main(void)
         data_buffer[data_buffer_index] = (SensorData_t){
             .timestamp = HAL_GetTick(),
             .temp_data = temp_data,
-            .press_data = press_data};
+            .press_data = press_data,
+            .is_nos_open = solenoid_state.solenoid_operation_active // NOS開放状態フラグを保存
+        };
 
         data_buffer_index++;
 

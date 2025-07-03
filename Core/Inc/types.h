@@ -37,6 +37,7 @@ extern "C"
         uint32_t timestamp;
         float temp_data;  // 処理済み温度（摂氏）
         float press_data; // 処理済み圧力（Pa）
+        bool is_nos_open; // NOS開放状態フラグ
     } SensorData_t;
 
     /**

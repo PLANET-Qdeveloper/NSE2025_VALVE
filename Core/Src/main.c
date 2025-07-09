@@ -79,9 +79,9 @@ volatile uint16_t Timer1, Timer2; /* 1ms Timer Counter for SD card operations */
 extern volatile uint8_t FatFsCnt; /* FatFs counter for SD card operations (defined in stm32f4xx_it.c) */
 
 // センサーデータ管理変数
-#define MAX_DATA_POINTS 200
-static SensorData_t data_buffer[MAX_DATA_POINTS];
-static SensorData_t temp_buffer[MAX_DATA_POINTS];
+#define MAX_DATA_POINTS 10
+static SensorData_t data_buffer[1024];
+static SensorData_t temp_buffer[1024];
 static volatile uint32_t data_buffer_index = 0;
 static volatile bool save_data_flag = false;
 static volatile bool read_sensor_flag = false;

@@ -43,14 +43,14 @@ extern "C"
 
     /* Exported functions prototypes ---------------------------------------------*/
 
-    void servo_init(ServoControl_t *servo_state);
-    void solenoid_init(SolenoidControl_t *solenoid_state);
+    void servo_init();
+    void solenoid_init();
 
-    void servo_open(ServoControl_t *servo_state);
-    void servo_close(ServoControl_t *servo_state);
+    void servo_open();
+    void servo_close();
 
-    void solenoid_open(SolenoidControl_t *solenoid_state);
-    void solenoid_close(SolenoidControl_t *solenoid_state);
+    void solenoid_open();
+    void solenoid_close();
 
 #ifdef __cplusplus
 }

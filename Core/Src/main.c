@@ -240,12 +240,12 @@ int main(void)
       if (solenoid_state.solenoid_operation_start_time == 0)
       {
         solenoid_state.solenoid_operation_start_time = current_time;
-        solenoid_open(&solenoid_state);
+        solenoid_open();
       }
       else if (current_time - solenoid_state.solenoid_operation_start_time >= 15000)
       {
         // ソレノイド操作が15秒を超えた場合、ソレノイドを閉じる
-        solenoid_close(&solenoid_state);
+        solenoid_close();
         solenoid_state.solenoid_operation_active = false;
         solenoid_state.solenoid_operation_start_time = 0;
       }
@@ -256,12 +256,12 @@ int main(void)
       if (servo_state.valve_operation_start_time == 0)
       {
         servo_state.valve_operation_start_time = current_time;
-        servo_open(&servo_state);
+        servo_open();
       }
       else if (current_time - servo_state.valve_operation_start_time >= 30000)
       {
         // サーボ操作が30秒を超えた場合、サーボを閉じる
-        servo_close(&servo_state);
+        servo_close();
         servo_state.valve_operation_active = false;
         servo_state.valve_operation_start_time = 0;
       }

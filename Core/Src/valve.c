@@ -113,7 +113,7 @@ void solenoid_init(SolenoidControl_t *solenoid_state)
  * @brief  バルブを開く
  * @retval None
  */
-void servo_open(ServoControl_t *servo_state)
+void servo_open()
 {
   // 角度からパルス幅を計算
   uint32_t pulse_us = compute_pulse_us_from_angle(SERVO_OPEN_ANGLE);
@@ -126,7 +126,7 @@ void servo_open(ServoControl_t *servo_state)
  * @brief  バルブを閉じる
  * @retval None
  */
-void servo_close(ServoControl_t *servo_state)
+void servo_close()
 {
   uint32_t pulse_us = compute_pulse_us_from_angle(SERVO_CLOSE_ANGLE);
   uint32_t compare_value = compute_compare_from_us(pulse_us);
@@ -134,12 +134,12 @@ void servo_close(ServoControl_t *servo_state)
   __HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_1, compare_value);
 }
 
-void solenoid_open(SolenoidControl_t *solenoid_state)
+void solenoid_open()
 {
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, GPIO_PIN_RESET); // NOS電磁弁OPEN
 }
 
-void solenoid_close(SolenoidControl_t *solenoid_state)
+void solenoid_close()
 {
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, GPIO_PIN_SET); // NOS電磁弁CLOSE
 }

@@ -136,6 +136,9 @@ void system_init(void)
   // SDカードファイルシステムの初期化
   f_mount(&fs, "", 1);
 
+  // Vファイル番号の初期化（既存ファイルをスキャン）
+  SD_init_valve_file_number();
+
 #ifdef ENABLE_SD_FORMAT
   FRESULT mount_result = f_mount(&fs, "", 1);
   if (mount_result != FR_OK)
@@ -260,7 +263,7 @@ int main(void)
   while (1)
   {
     uint32_t current_time = HAL_GetTick();
-    if(solenoid_state.solenoid_operation_active)
+    if (solenoid_state.solenoid_operation_active)
     {
       // ソレノイド操作がアクティブな場合、開始時間が設定されていないならば現在時刻を設定
       if (solenoid_state.solenoid_operation_start_time == 0)
@@ -268,7 +271,7 @@ int main(void)
         solenoid_state.solenoid_operation_start_time = current_time;
         solenoid_open(&solenoid_state);
       }
-      else if(current_time - solenoid_state.solenoid_operation_start_time >= 15000)
+      else if (current_time - solenoid_state.solenoid_operation_start_time >= 15000)
       {
         // ソレノイド操作が15秒を超えた場合、ソレノイドを閉じる
         solenoid_close(&solenoid_state);
@@ -276,7 +279,7 @@ int main(void)
         solenoid_state.solenoid_operation_start_time = 0;
       }
     }
-    if(servo_state.valve_operation_active)
+    if (servo_state.valve_operation_active)
     {
       // サーボ操作がアクティブな場合、開始時間が設定されていないならば現在時刻を設定
       if (servo_state.valve_operation_start_time == 0)
@@ -284,7 +287,7 @@ int main(void)
         servo_state.valve_operation_start_time = current_time;
         servo_open(&servo_state);
       }
-      else if(current_time - servo_state.valve_operation_start_time >= 30000)
+      else if (current_time - servo_state.valve_operation_start_time >= 30000)
       {
         // サーボ操作が30秒を超えた場合、サーボを閉じる
         servo_close(&servo_state);
@@ -331,7 +334,7 @@ int main(void)
       memcpy(temp_buffer, data_buffer, save_count * sizeof(SensorData_t));
       data_buffer_index = 0;
       __enable_irq();
-      sd_save_data(temp_buffer, save_count, &hrtc);
+      sd_save_data(temp_buffer, save_count);
     }
 
     /* USER CODE END WHILE */

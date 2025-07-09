@@ -39,11 +39,9 @@ extern FIL fil;
  * @brief データをSDカードに保存
  * @param data_buffer データバッファ配列
  * @param data_count データ数
- * @param hrtc RTCハンドル
  * @retval bool 成功時true、失敗時false
  */
-bool sd_save_data(const SensorData_t *data_buffer, uint32_t data_count,
-                  RTC_HandleTypeDef *hrtc)
+bool sd_save_data(const SensorData_t *data_buffer, uint32_t data_count)
 {
     char filename[MAX_FILENAME_LENGTH];
     char buffer[DATA_WRITE_BUFFER_SIZE];
@@ -51,10 +49,6 @@ bool sd_save_data(const SensorData_t *data_buffer, uint32_t data_count,
 
     // パラメータ検証
     if (data_buffer == NULL)
-    {
-        return false;
-    }
-    if (hrtc == NULL)
     {
         return false;
     }
@@ -76,8 +70,8 @@ bool sd_save_data(const SensorData_t *data_buffer, uint32_t data_count,
         return false;
     }
 
-    // 日時ベースのファイル名を生成
-    SD_get_datetime_filename(filename, sizeof(filename), hrtc);
+    // VALVEファイル名を生成
+    SD_get_valve_filename(filename, sizeof(filename));
 
     // ファイルオープン（リトライ機能付き）
     FRESULT res;

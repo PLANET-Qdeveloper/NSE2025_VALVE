@@ -24,7 +24,8 @@ float MAX31855_Read_Temp(SPI_HandleTypeDef *hspi)
     HAL_GPIO_WritePin(MAX31855_CS_PORT, MAX31855_CS_PIN, GPIO_PIN_RESET);
 
     // SPI communication with 4 bytes (32-bit data) - receive only mode
-    status = HAL_SPI_Receive(hspi, rx, 4, 100);
+    status = HAL_SPI_Receive(hspi, rx, 4, HAL_MAX_DELAY);
+    
     // CS HIGH to end communication
     HAL_GPIO_WritePin(MAX31855_CS_PORT, MAX31855_CS_PIN, GPIO_PIN_SET);
 
@@ -70,4 +71,30 @@ float MAX31855_Read_Temp(SPI_HandleTypeDef *hspi)
 
     // 温度を0.25°C単位から実際の温度に変換
     return (float)thermocouple_temp * MAX31855_TEMP_SCALE;
+}
+
+/**
+ * @brief DMAを使用してMAX31855から温度データを取得
+ * @param hspi SPIハンドルへのポインタ
+ * @param buffer DMA受信用のバッファ（4バイト）
+ * @retval HAL_StatusTypeDef DMA転送の開始ステータス
+ */
+HAL_StatusTypeDef MAX31855_Read_Temp_DMA(SPI_HandleTypeDef *hspi, uint8_t *buffer)
+{
+    // CS信号をLowに設定
+    HAL_GPIO_WritePin(MAX31855_CS_PORT, MAX31855_CS_PIN, GPIO_PIN_RESET);
+
+    // 少し待機（CS立ち下がり後の安定化時間）
+    HAL_Delay(1);
+
+    // DMA受信開始
+    HAL_StatusTypeDef status = HAL_SPI_Receive_DMA(hspi, buffer, 4);
+
+    // DMA開始に失敗した場合はCS信号をHighに戻す
+    if (status != HAL_OK)
+    {
+        HAL_GPIO_WritePin(MAX31855_CS_PORT, MAX31855_CS_PIN, GPIO_PIN_SET);
+    }
+
+    return status;
 }

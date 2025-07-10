@@ -56,7 +56,7 @@ float MCP3425_Read_Pressure(I2C_HandleTypeDef *hi2c)
 	uint8_t mcp3425_addr = MCP3425_I2C_ADDR << 1; // HAL用に左シフト
 
 	// データを読み取り（データ2バイト + 設定1バイト）
-	if (HAL_I2C_Master_Receive(hi2c, mcp3425_addr, data, 3, 10) != HAL_OK)
+	if (HAL_I2C_Master_Receive(hi2c, mcp3425_addr, data, 3, HAL_MAX_DELAY) != HAL_OK)
 	{
 		return -999.0f;
 	}
@@ -86,4 +86,21 @@ float MCP3425_Read_Pressure(I2C_HandleTypeDef *hi2c)
 	float pressure = 3361.190f * voltage - 1335.857f;
 
 	return pressure;
+}
+
+/**
+ * @brief DMAを使用してMCP3425から圧力データを取得
+ * @param hi2c I2Cハンドルへのポインタ
+ * @param buffer DMA受信用のバッファ（3バイト）
+ * @retval HAL_StatusTypeDef DMA転送の開始ステータス
+ */
+HAL_StatusTypeDef MCP3425_Read_Pressure_DMA(I2C_HandleTypeDef *hi2c, uint8_t *buffer)
+{
+	// MCP3425のアドレス（7bit）
+	uint8_t device_addr = MCP3425_I2C_ADDR; // 0x68
+
+	// DMA受信開始
+	HAL_StatusTypeDef status = HAL_I2C_Master_Receive_DMA(hi2c, device_addr << 1, buffer, 3);
+
+	return status;
 }

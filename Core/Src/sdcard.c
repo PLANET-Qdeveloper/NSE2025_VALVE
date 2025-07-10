@@ -19,6 +19,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "fatfs_sd.h"
+#include "sdcard.h"
 #include "types.h"
 #include <stdio.h>
 #include <string.h>
@@ -30,11 +31,11 @@
 /* Private variables ---------------------------------------------------------*/
 extern FATFS fs;
 extern FIL fil;
+static uint32_t next_valve_file_number = 1;
 
-/* Private function prototypes -----------------------------------------------*/
+/* Private function prototypes ----------------------------------------------*/
 
 /* Exported functions --------------------------------------------------------*/
-
 /**
  * @brief データをSDカードに保存
  * @param data_buffer データバッファ配列
@@ -43,16 +44,15 @@ extern FIL fil;
  */
 bool sd_save_data(const SensorData_t *data_buffer, uint32_t data_count)
 {
-    char filename[MAX_FILENAME_LENGTH];
+    static bool file_opened = false;
+    static char current_filename[MAX_FILENAME_LENGTH];
+    static uint32_t total_data_count = 0;  // 総書き込みデータ数をカウント
     char buffer[DATA_WRITE_BUFFER_SIZE];
     UINT bw;
+    FRESULT res;
 
     // パラメータ検証
-    if (data_buffer == NULL)
-    {
-        return false;
-    }
-    if (data_count == 0)
+    if (data_buffer == NULL || data_count == 0)
     {
         return false;
     }
@@ -63,118 +63,65 @@ bool sd_save_data(const SensorData_t *data_buffer, uint32_t data_count)
         return false;
     }
 
-    // 詳細なSDカード状態チェック
-    DSTATUS disk_status = SD_disk_status(0);
-    if (disk_status != 0)
+    // 初回のみファイルオープンとヘッダー書き込み
+    if (!file_opened)
     {
-        return false;
-    }
+        // 新しいファイルを作成
+        SD_get_filename(current_filename, sizeof(current_filename));
 
-    // VALVEファイル名を生成
-    SD_get_valve_filename(filename, sizeof(filename));
-
-    // ファイルオープン（リトライ機能付き）
-    FRESULT res;
-    int retry_count = 0;
-    const int max_retries = 3;
-
-    do
-    {
-        res = f_open(&fil, filename, FA_CREATE_ALWAYS | FA_WRITE);
-        if (res == FR_OK)
+        res = f_open(&fil, current_filename, FA_CREATE_ALWAYS | FA_WRITE);
+        if (res != FR_OK)
         {
-            break; // 成功
+            return false;
         }
+        file_opened = true;
+        total_data_count = 0;  // カウンターをリセット
 
-        // リトライ前にSDカード状態を再確認
-        HAL_Delay(100); // 短い待機
-
-        // SDカードの再初期化を試行
-        if (retry_count < max_retries - 1)
+        // ヘッダー書き込み
+        sprintf(buffer, "時刻,温度(°C),圧力(Pa),NOS開放\r\n");
+        res = f_write(&fil, buffer, strlen(buffer), &bw);
+        if (res != FR_OK || bw != strlen(buffer))
         {
-            sd_check_status();
+            f_close(&fil);
+            f_unlink(current_filename);
+            file_opened = false;
+            return false;
         }
-
-        retry_count++;
-    } while (retry_count < max_retries);
-
-    if (res != FR_OK)
-    {
-        return false;
-    }
-
-    // ヘッダー書き込み
-    sprintf(buffer, "時刻,温度(°C),圧力(Pa),NOS開放\r\n");
-    FRESULT write_result = f_write(&fil, buffer, strlen(buffer), &bw);
-    if (write_result != FR_OK)
-    {
-        f_close(&fil);
-        f_unlink(filename);
-        return false;
     }
 
     // データ書き込み
     for (uint32_t i = 0; i < data_count; i++)
     {
-        // floatデータの詳細診断を追加
-        float temp_val = data_buffer[i].temp_data;
-        float press_val = data_buffer[i].press_data;
+        // センサーデータをCSV形式で文字列化
+        sprintf(buffer, "%lu,%.2f,%.2f,%d\r\n",
+                data_buffer[i].timestamp,
+                data_buffer[i].temp_data,
+                data_buffer[i].press_data,
+                data_buffer[i].is_nos_open);
 
-        // float値のバイナリ表現を確認
-        uint32_t temp_hex = *(uint32_t *)&temp_val;
-        uint32_t press_hex = *(uint32_t *)&press_val;
-
-        printf("データ診断[%lu]: 温度=%.6f (0x%08lX), 圧力=%.6f (0x%08lX), NOS=%s\r\n",
-               i, temp_val, temp_hex, press_val, press_hex,
-               data_buffer[i].is_nos_open ? "開" : "閉");
-
-        // NaN や無限大の値をチェック
-        if (temp_val != temp_val)
-        { // NaN check
-            printf("警告: 温度値がNaNです\r\n");
-            temp_val = 0.0f;
-        }
-        if (press_val != press_val)
-        { // NaN check
-            printf("警告: 圧力値がNaNです\r\n");
-            press_val = 0.0f;
-        }
-
-        sprintf(buffer, "%lu,%.2f,%.2f,%s\r\n",
-                (unsigned long)data_buffer[i].timestamp,
-                temp_val,
-                press_val,
-                data_buffer[i].is_nos_open ? "1" : "0");
-
-        // デバッグ: 書き込み予定のデータを出力
-        printf("書き込みデータ[%lu]: %s", i, buffer);
-
-        write_result = f_write(&fil, buffer, strlen(buffer), &bw);
-        if (write_result != FR_OK)
+        res = f_write(&fil, buffer, strlen(buffer), &bw);
+        if (res != FR_OK || bw != strlen(buffer))
         {
             f_close(&fil);
-            f_unlink(filename);
+            f_unlink(current_filename);
+            file_opened = false;
+            total_data_count = 0;
             return false;
         }
-
-        // デバッグ: 実際に書き込まれたバイト数を確認
-        if (bw != strlen(buffer))
-        {
-            printf("警告: 書き込みバイト数不一致 - 期待:%zu, 実際:%u\r\n", strlen(buffer), bw);
-        }
+        
+        total_data_count++;  // 書き込み完了後にカウントアップ
     }
 
-    // データを確実にSDカードに書き込む
-    FRESULT sync_result = f_sync(&fil);
-    if (sync_result != FR_OK)
+    // 定期的な同期（パフォーマンス向上）
+    f_sync(&fil);
+
+    // 1000個のデータが書き込まれたらファイルを閉じる
+    if (total_data_count >= 1000)
     {
-        printf("警告: f_sync失敗: FRESULT=%d\r\n", sync_result);
+        f_close(&fil);
+        file_opened = false;
+        total_data_count = 0;
     }
-
-    f_close(&fil);
-
-    // 保存完了の詳細ログ
-    printf("SDカード保存完了: ファイル名=%s, データ件数=%lu\r\n", filename, data_count);
 
     return true;
 }
@@ -203,4 +150,88 @@ bool sd_check_status(void)
     }
 
     return true;
+}
+
+/* Vファイル番号を初期化（起動時に一度だけ実行） */
+void SD_init_valve_file_number(void)
+{
+    DIR dir;
+    FILINFO fno;
+    FRESULT res;
+    uint32_t max_num = 0;
+    uint32_t current_num;
+
+    /* ルートディレクトリを開く */
+    res = f_opendir(&dir, "");
+    if (res == FR_OK)
+    {
+        /* 既存のV_x.csvファイルを探して最大番号を取得 */
+        for (;;)
+        {
+            res = f_readdir(&dir, &fno);
+            if (res != FR_OK || fno.fname[0] == 0)
+                break; /* ディレクトリの終端またはエラー */
+
+            /* V_x.csvファイルかチェック */
+            if ((fno.fattrib & AM_DIR) == 0) /* ディレクトリではない */
+            {
+                char *name = fno.fname;
+                /* ファイル名がV_で始まり、.csvで終わるかチェック */
+                if (strncmp(name, "V_", 2) == 0)
+                {
+                    char *dot = strrchr(name, '.');
+                    if (dot != NULL && strcmp(dot, ".csv") == 0)
+                    {
+                        /* 番号部分を抽出 */
+                        char *num_start = name + 2; /* "V_"の後 */
+                        char *num_end = dot;
+                        char num_str[16];
+
+                        /* 番号部分をコピー */
+                        size_t num_len = num_end - num_start;
+                        if (num_len > 0 && num_len < sizeof(num_str))
+                        {
+                            strncpy(num_str, num_start, num_len);
+                            num_str[num_len] = '\0';
+
+                            /* 数値に変換 */
+                            current_num = (uint32_t)atoi(num_str);
+                            if (current_num > max_num)
+                            {
+                                max_num = current_num;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        f_closedir(&dir);
+    }
+
+    /* 次の番号を設定 */
+    next_valve_file_number = max_num + 1;
+
+    printf("Vファイル番号初期化完了: 次のファイル番号=%lu\r\n", (unsigned long)next_valve_file_number);
+}
+
+/* Vファイル名を連番で生成（8.3形式対応） */
+void SD_get_filename(char *filename, size_t max_len)
+{
+    /* パラメータ検証 */
+    if (filename == NULL || max_len < 13)
+    {
+        if (filename != NULL && max_len > 0)
+        {
+            filename[0] = '\0'; /* エラー時は空文字列 */
+        }
+        return;
+    }
+
+    /* 8.3形式に適合するファイル名を生成 */
+    /* 形式: V_x.csv（xは1から始まる連番） */
+    snprintf(filename, max_len, "V_%lu.csv", (unsigned long)next_valve_file_number);
+    
+
+    /* 次回のために番号をインクリメント */
+    next_valve_file_number++;
 }

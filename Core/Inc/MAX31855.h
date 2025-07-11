@@ -35,5 +35,6 @@
 
 // ------------------------- Functions  ----------------------
 float MAX31855_Read_Temp(SPI_HandleTypeDef *hspi);
+HAL_StatusTypeDef MAX31855_Read_Temp_DMA(SPI_HandleTypeDef *hspi, uint8_t *buffer);
 
 #endif

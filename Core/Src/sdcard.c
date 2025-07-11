@@ -115,8 +115,8 @@ bool sd_save_data(const SensorData_t *data_buffer, uint32_t data_count)
     // 定期的な同期（パフォーマンス向上）
     f_sync(&fil);
 
-    // 1000個のデータが書き込まれたらファイルを閉じる
-    if (total_data_count >= 1000)
+    // 2000個のデータが書き込まれたらファイルを閉じる
+    if (total_data_count >= 2000)
     {
         f_close(&fil);
         file_opened = false;

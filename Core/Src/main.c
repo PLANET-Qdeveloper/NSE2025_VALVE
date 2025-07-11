@@ -31,6 +31,7 @@
 #include "fatfs_sd.h"
 #include "MAX31855.h"
 #include "MCP3425.h"
+#include "sdcard.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -79,9 +80,9 @@ volatile uint16_t Timer1, Timer2; /* 1ms Timer Counter for SD card operations */
 extern volatile uint8_t FatFsCnt; /* FatFs counter for SD card operations (defined in stm32f4xx_it.c) */
 
 // センサーデータ管理変数
-#define MAX_DATA_POINTS 10
-static SensorData_t data_buffer[1024];
-static SensorData_t temp_buffer[1024];
+#define DATA_BUFFER_SIZE 10
+static SensorData_t data_buffer[DATA_BUFFER_SIZE];
+static SensorData_t temp_buffer[DATA_BUFFER_SIZE];
 static volatile uint32_t data_buffer_index = 0;
 static volatile bool save_data_flag = false;
 static volatile bool read_sensor_flag = false;
@@ -141,6 +142,17 @@ void system_init(void)
   // UART1の受信割り込み開始
   HAL_UART_Receive_IT(&huart1, &cmd, 1);
   MCP3425_Init(&hi2c1); // MCP3425の初期化
+  
+  // I2C通信の安定化ウォームアップ
+  printf("Initializing I2C communication...\r\n");
+  HAL_Delay(100); // デバイス電源安定化待機
+  
+  // MCP3425との通信テスト（エラーは無視）
+  uint8_t test_data[3];
+  HAL_I2C_Master_Receive(&hi2c1, (0x68 << 1), test_data, 3, 100);
+  HAL_Delay(50); // 追加安定化時間
+  
+  printf("I2C communication initialized\r\n");
   // SDカードファイルシステムの初期化
   f_mount(&fs, "", 1);
 
@@ -196,9 +208,9 @@ void system_init(void)
 /* USER CODE END 0 */
 
 /**
-  * @brief  The application entry point.
-  * @retval int
-  */
+ * @brief  The application entry point.
+ * @retval int
+ */
 int main(void)
 {
 
@@ -285,11 +297,9 @@ int main(void)
     if (save_data_flag)
     {
       save_data_flag = false;
-      __disable_irq();
       uint32_t save_count = data_buffer_index;
       memcpy(temp_buffer, data_buffer, save_count * sizeof(SensorData_t));
       data_buffer_index = 0;
-      __enable_irq();
       sd_save_data(temp_buffer, save_count);
     }
 
@@ -301,22 +311,22 @@ int main(void)
 }
 
 /**
-  * @brief System Clock Configuration
-  * @retval None
-  */
+ * @brief System Clock Configuration
+ * @retval None
+ */
 void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
   /** Configure the main internal regulator output voltage
-  */
+   */
   __HAL_RCC_PWR_CLK_ENABLE();
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
 
   /** Initializes the RCC Oscillators according to the specified parameters
-  * in the RCC_OscInitTypeDef structure.
-  */
+   * in the RCC_OscInitTypeDef structure.
+   */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
@@ -327,9 +337,8 @@ void SystemClock_Config(void)
   }
 
   /** Initializes the CPU, AHB and APB buses clocks
-  */
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
-                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+   */
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
@@ -342,10 +351,10 @@ void SystemClock_Config(void)
 }
 
 /**
-  * @brief I2C1 Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief I2C1 Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_I2C1_Init(void)
 {
 
@@ -372,14 +381,13 @@ static void MX_I2C1_Init(void)
   /* USER CODE BEGIN I2C1_Init 2 */
 
   /* USER CODE END I2C1_Init 2 */
-
 }
 
 /**
-  * @brief SPI1 Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief SPI1 Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_SPI1_Init(void)
 {
 
@@ -410,14 +418,13 @@ static void MX_SPI1_Init(void)
   /* USER CODE BEGIN SPI1_Init 2 */
 
   /* USER CODE END SPI1_Init 2 */
-
 }
 
 /**
-  * @brief SPI2 Initialization Function
-  * @param None
-  * @retval None
-  */
+ * @brief SPI2 Initialization Function
+ * @param None
+ * @retval None
+ */
 static void MX_SPI2_Init(void)
 {
 
@@ -654,7 +661,6 @@ static void MX_DMA_Init(void)
   /* DMA1_Stream3_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA1_Stream3_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(DMA1_Stream3_IRQn);
-
 }
 
 /**
@@ -734,7 +740,6 @@ void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *hspi)
   {
     spi2_dma_complete = true;
   }
-
 }
 
 // I2C DMA完了コールバック関数
@@ -743,6 +748,19 @@ void HAL_I2C_MasterRxCpltCallback(I2C_HandleTypeDef *hi2c)
   if (hi2c->Instance == I2C1)
   {
     i2c1_dma_complete = true;
+  }
+}
+
+// I2C エラーコールバック関数（新規追加）
+void HAL_I2C_ErrorCallback(I2C_HandleTypeDef *hi2c)
+{
+  if (hi2c->Instance == I2C1)
+  {
+    uint32_t error = HAL_I2C_GetError(hi2c);
+    printf("I2C1 エラーコールバック: 0x%08X\r\n", error);
+
+    // エラー状態をクリア
+    hi2c->ErrorCode = HAL_I2C_ERROR_NONE;
   }
 }
 
@@ -756,57 +774,20 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     // DMAでのセンサーデータ取得を開始（エラーハンドリング付き）
     HAL_StatusTypeDef spi_status = MAX31855_Read_Temp_DMA(&hspi2, spi2_dma_buffer);
     HAL_StatusTypeDef i2c_status = MCP3425_Read_Pressure_DMA(&hi2c1, i2c1_dma_buffer);
-    
+
     // DMA開始失敗時のエラーハンドリング
     if (spi_status != HAL_OK)
     {
-      printf("SPI2 DMA開始エラー: %d\r\n", spi_status);
+      printf("SPI2 DMA start error: %d\r\n", spi_status);
     }
-    
+
     if (i2c_status != HAL_OK)
     {
-      printf("I2C1 DMA開始エラー: %d\r\n", i2c_status);
+      printf("I2C1 DMA start error: %d\r\n", i2c_status);
     }
 
-    // ポーリング方式は無効化（DMAを使用するため）
-    // read_sensor_flag = true;
   }
 }
-/* USER CODE END 4 */
-
-/**
- * @brief  This function is executed in case of error occurrence.
- * @retval None
- */
-void Error_Handler(void)
-{
-  /* USER CODE BEGIN Error_Handler_Debug */
-  /* User can add his own implementation to report the HAL error return state */
-  __disable_irq();
-  while (1)
-  {
-  }
-  /* USER CODE END Error_Handler_Debug */
-}
-
-#ifdef USE_FULL_ASSERT
-/**
- * @brief  Reports the name of the source file and the source line number
- *         where the assert_param error has occurred.
- * @param  file: pointer to the source file name
- * @param  line: assert_param error line source number
- * @retval None
- */
-void assert_failed(uint8_t *file, uint32_t line)
-{
-  /* USER CODE BEGIN 6 */
-  /* User can add his own implementation to report the file name and line number,
-     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
-  /* USER CODE END 6 */
-}
-#endif /* USE_FULL_ASSERT */
-
-/* USER CODE BEGIN 0 */
 
 /**
  * @brief DMA受信完了後のデータ処理
@@ -822,9 +803,6 @@ void process_dma_sensor_data(void)
   if (spi2_dma_complete)
   {
     spi2_dma_complete = false;
-
-    // CS信号をHighに戻す
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_SET);
 
     // 32bitデータを結合
     uint32_t raw_data = (spi2_dma_buffer[0] << 24) |
@@ -857,10 +835,10 @@ void process_dma_sensor_data(void)
     {
       // 16bitデータを結合（12ビットADC）
       int16_t adc_value = (i2c1_dma_buffer[0] << 8) | i2c1_dma_buffer[1];
-      
+
       // 電圧値に変換（12ビット、PGA=1倍、3倍分圧補正）
       float voltage = (float)adc_value * 0.001f * 3.0f;
-      
+
       // MLH02kPSB06A圧力センサの変換式 (kPa単位)
       press_data = 3361.190f * voltage - 1335.857f;
       press_valid = true;
@@ -872,7 +850,7 @@ void process_dma_sensor_data(void)
   }
 
   // 両方のデータが揃った場合にバッファに保存
-  if (temp_valid && press_valid && data_buffer_index < MAX_DATA_POINTS)
+  if (temp_valid && press_valid && data_buffer_index < DATA_BUFFER_SIZE)
   {
     data_buffer[data_buffer_index] = (SensorData_t){
         .timestamp = HAL_GetTick(),
@@ -886,11 +864,41 @@ void process_dma_sensor_data(void)
     temp_valid = false;
     press_valid = false;
 
-    if (data_buffer_index >= MAX_DATA_POINTS)
+    if (data_buffer_index >= DATA_BUFFER_SIZE)
     {
       save_data_flag = true;
     }
   }
 }
+/* USER CODE END 4 */
 
-/* USER CODE END 0 */
+/**
+ * @brief  This function is executed in case of error occurrence.
+ * @retval None
+ */
+void Error_Handler(void)
+{
+  /* USER CODE BEGIN Error_Handler_Debug */
+  /* User can add his own implementation to report the HAL error return state */
+  __disable_irq();
+  while (1)
+  {
+  }
+  /* USER CODE END Error_Handler_Debug */
+}
+#ifdef USE_FULL_ASSERT
+/**
+ * @brief  Reports the name of the source file and the source line number
+ *         where the assert_param error has occurred.
+ * @param  file: pointer to the source file name
+ * @param  line: assert_param error line source number
+ * @retval None
+ */
+void assert_failed(uint8_t *file, uint32_t line)
+{
+  /* USER CODE BEGIN 6 */
+  /* User can add his own implementation to report the file name and line number,
+     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+  /* USER CODE END 6 */
+}
+#endif /* USE_FULL_ASSERT */

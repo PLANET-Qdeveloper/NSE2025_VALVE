@@ -98,9 +98,70 @@ HAL_StatusTypeDef MCP3425_Read_Pressure_DMA(I2C_HandleTypeDef *hi2c, uint8_t *bu
 {
 	// MCP3425のアドレス（7bit）
 	uint8_t device_addr = MCP3425_I2C_ADDR; // 0x68
+	// I2C状態の詳細チェック
+	HAL_I2C_StateTypeDef i2c_state = HAL_I2C_GetState(hi2c);
+	
+	if (i2c_state != HAL_I2C_STATE_READY)
+	{
+		printf("MCP3425 DMA: I2C not ready (state: %d)\r\n", i2c_state);
+		return HAL_BUSY;
+	}
+	// DMAハンドルの状態確認
+	if (hi2c->hdmarx != NULL)
+	{
+		HAL_DMA_StateTypeDef dma_state = HAL_DMA_GetState(hi2c->hdmarx);
+		
+		if (dma_state != HAL_DMA_STATE_READY)
+		{
+			printf("MCP3425 DMA: DMA not ready\r\n");
+			HAL_DMA_Abort(hi2c->hdmarx);
+		}
+	}
+	else
+	{
+		printf("MCP3425 DMA: DMA handle is NULL\r\n");
+		return HAL_ERROR;
+	}
 
 	// DMA受信開始
 	HAL_StatusTypeDef status = HAL_I2C_Master_Receive_DMA(hi2c, device_addr << 1, buffer, 3);
 
 	return status;
+}
+
+/**
+ * @brief MCP3425の動作確認用テスト関数
+ * @param hi2c I2Cハンドルへのポインタ
+ * @retval uint8_t デバイスの応答があれば1、なければ0
+ */
+uint8_t MCP3425_Test_Connection(I2C_HandleTypeDef *hi2c)
+{
+	uint8_t device_addr = MCP3425_I2C_ADDR << 1;
+	uint8_t test_data[3] = {0};
+	
+	printf("=== MCP3425接続テスト開始 ===\r\n");
+	
+	// I2Cデバイスの存在確認
+	HAL_StatusTypeDef status = HAL_I2C_IsDeviceReady(hi2c, device_addr, 3, 100);
+	printf("MCP3425デバイス確認: %s (ステータス: %d)\r\n", 
+	       (status == HAL_OK) ? "接続OK" : "接続NG", status);
+	
+	if (status != HAL_OK)
+	{
+		return 0;
+	}
+	
+	// 同期受信テスト
+	status = HAL_I2C_Master_Receive(hi2c, device_addr, test_data, 3, 1000);
+	printf("同期受信テスト: %s (ステータス: %d)\r\n", 
+	       (status == HAL_OK) ? "成功" : "失敗", status);
+	
+	if (status == HAL_OK)
+	{
+		printf("受信データ: 0x%02X 0x%02X 0x%02X\r\n", 
+		       test_data[0], test_data[1], test_data[2]);
+	}
+	
+	printf("=== MCP3425接続テスト完了 ===\r\n");
+	return (status == HAL_OK) ? 1 : 0;
 }

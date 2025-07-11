@@ -84,10 +84,6 @@ HAL_StatusTypeDef MAX31855_Read_Temp_DMA(SPI_HandleTypeDef *hspi, uint8_t *buffe
     // CS信号をLowに設定
     HAL_GPIO_WritePin(MAX31855_CS_PORT, MAX31855_CS_PIN, GPIO_PIN_RESET);
 
-    // 少し待機（CS立ち下がり後の安定化時間）
-    HAL_Delay(1);
-
-    // DMA受信開始
     HAL_StatusTypeDef status = HAL_SPI_Receive_DMA(hspi, buffer, 4);
 
     // DMA開始に失敗した場合はCS信号をHighに戻す

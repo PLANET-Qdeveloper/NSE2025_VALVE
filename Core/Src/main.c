@@ -130,14 +130,13 @@ int _write(int file, char *ptr, int len)
  */
 void system_init(void)
 {
-  servo_init(&servo_state);
-  solenoid_init(&solenoid_state);
-
-  // 状態を明示的にリセット
+  // 状態を明示的にリセット（初期化前）
   servo_state.valve_operation_active = false;
   servo_state.valve_operation_start_time = 0;
   solenoid_state.solenoid_operation_active = false;
   solenoid_state.solenoid_operation_start_time = 0;
+
+  solenoid_init();
 
   // UART1の受信割り込み開始
   HAL_UART_Receive_IT(&huart1, &cmd, 1);
@@ -191,9 +190,7 @@ void system_init(void)
   {
     printf("SDカードマウント成功\r\n");
   }
-#endif
 
-#ifdef ENABLE_SD_FORMAT
   // SDカードの基本動作テスト
   FRESULT test_result = f_open(&fil, "test.txt", FA_CREATE_ALWAYS | FA_WRITE);
   if (test_result == FR_OK)
@@ -729,6 +726,10 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     {
       solenoid_state.solenoid_operation_active = true;
     }
+    else if (cmd == 'R')
+    {
+      servo_init();
+    }
   }
   HAL_UART_Receive_IT(&huart1, &cmd, 1);
 }
@@ -853,7 +854,7 @@ void process_dma_sensor_data(void)
   if (temp_valid && press_valid && data_buffer_index < DATA_BUFFER_SIZE)
   {
     data_buffer[data_buffer_index] = (SensorData_t){
-        .timestamp = HAL_GetTick(),
+        .timestamp = HAL_GetTick() % 1000,
         .temp_data = temp_data,
         .press_data = press_data,
         .is_nos_open = solenoid_state.solenoid_operation_active};

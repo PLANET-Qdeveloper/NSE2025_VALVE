@@ -16,7 +16,6 @@
  ******************************************************************************
  */
 /* USER CODE END Header */
-
 /* Includes ------------------------------------------------------------------*/
 #include "fatfs_sd.h"
 #include "sdcard.h"
@@ -46,7 +45,7 @@ bool sd_save_data(const SensorData_t *data_buffer, uint32_t data_count)
 {
     static bool file_opened = false;
     static char current_filename[MAX_FILENAME_LENGTH];
-    static uint32_t total_data_count = 0;  // 総書き込みデータ数をカウント
+    static uint32_t total_data_count = 0; // 総書き込みデータ数をカウント
     char buffer[DATA_WRITE_BUFFER_SIZE];
     UINT bw;
     FRESULT res;
@@ -75,7 +74,7 @@ bool sd_save_data(const SensorData_t *data_buffer, uint32_t data_count)
             return false;
         }
         file_opened = true;
-        total_data_count = 0;  // カウンターをリセット
+        total_data_count = 0; // カウンターをリセット
 
         // ヘッダー書き込み
         sprintf(buffer, "時刻,温度(°C),圧力(Pa),NOS開放\r\n");
@@ -108,15 +107,15 @@ bool sd_save_data(const SensorData_t *data_buffer, uint32_t data_count)
             total_data_count = 0;
             return false;
         }
-        
-        total_data_count++;  // 書き込み完了後にカウントアップ
+
+        total_data_count++; // 書き込み完了後にカウントアップ
     }
 
     // 定期的な同期（パフォーマンス向上）
     f_sync(&fil);
 
-    // 2000個のデータが書き込まれたらファイルを閉じる
-    if (total_data_count >= 2000)
+    // 10000個のデータが書き込まれたらファイルを閉じる
+    if (total_data_count >= 10000)
     {
         f_close(&fil);
         file_opened = false;
@@ -172,34 +171,53 @@ void SD_init_valve_file_number(void)
             if (res != FR_OK || fno.fname[0] == 0)
                 break; /* ディレクトリの終端またはエラー */
 
-            /* V_x.csvファイルかチェック */
-            if ((fno.fattrib & AM_DIR) == 0) /* ディレクトリではない */
+            char *name = fno.fname;
+
+            /* 文字化けしたファイル名をスキップ */
+            if (name[0] == '\0' || (unsigned char)name[0] >= 0x80)
             {
-                char *name = fno.fname;
-                /* ファイル名がV_で始まり、.csvで終わるかチェック */
-                if (strncmp(name, "V_", 2) == 0)
+                continue;
+            }
+
+            /* 通常の属性チェック、または属性異常時はファイル名のみで判定 */
+            bool is_regular_file = false;
+
+            if (fno.fattrib != 0xFF)
+            {
+                /* 通常の属性チェック：ディレクトリでない場合 */
+                is_regular_file = ((fno.fattrib & AM_DIR) == 0);
+            }
+            else
+            {
+                /* 属性が異常値(0xFF)の場合、拡張子で判定 */
+                char *dot = strrchr(name, '.');
+                is_regular_file = (dot != NULL && (strcmp(dot, ".csv") == 0 || strcmp(dot, ".CSV") == 0));
+            }
+
+            /* 通常ファイルかつV_*.csvファイルの場合のみ処理 */
+            if (is_regular_file && strncmp(name, "V_", 2) == 0)
+            {
+                char *dot = strrchr(name, '.');
+                if (dot != NULL && (strcmp(dot, ".csv") == 0 || strcmp(dot, ".CSV") == 0))
                 {
-                    char *dot = strrchr(name, '.');
-                    if (dot != NULL && strcmp(dot, ".csv") == 0)
+
+                    /* 番号部分を抽出 */
+                    char *num_start = name + 2; /* "V_"の後 */
+                    char *num_end = dot;
+                    char num_str[16];
+
+                    /* 番号部分をコピー */
+                    size_t num_len = num_end - num_start;
+                    if (num_len > 0 && num_len < sizeof(num_str))
                     {
-                        /* 番号部分を抽出 */
-                        char *num_start = name + 2; /* "V_"の後 */
-                        char *num_end = dot;
-                        char num_str[16];
+                        strncpy(num_str, num_start, num_len);
+                        num_str[num_len] = '\0';
 
-                        /* 番号部分をコピー */
-                        size_t num_len = num_end - num_start;
-                        if (num_len > 0 && num_len < sizeof(num_str))
+                        /* 数値に変換 */
+                        current_num = (uint32_t)atoi(num_str);
+                        if (current_num > max_num)
                         {
-                            strncpy(num_str, num_start, num_len);
-                            num_str[num_len] = '\0';
-
-                            /* 数値に変換 */
-                            current_num = (uint32_t)atoi(num_str);
-                            if (current_num > max_num)
-                            {
-                                max_num = current_num;
-                            }
+                            max_num = current_num;
                         }
                     }
                 }
@@ -210,8 +228,6 @@ void SD_init_valve_file_number(void)
 
     /* 次の番号を設定 */
     next_valve_file_number = max_num + 1;
-
-    printf("Vファイル番号初期化完了: 次のファイル番号=%lu\r\n", (unsigned long)next_valve_file_number);
 }
 
 /* Vファイル名を連番で生成（8.3形式対応） */
@@ -230,7 +246,6 @@ void SD_get_filename(char *filename, size_t max_len)
     /* 8.3形式に適合するファイル名を生成 */
     /* 形式: V_x.csv（xは1から始まる連番） */
     snprintf(filename, max_len, "V_%lu.csv", (unsigned long)next_valve_file_number);
-    
 
     /* 次回のために番号をインクリメント */
     next_valve_file_number++;

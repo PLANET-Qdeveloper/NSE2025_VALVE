@@ -97,16 +97,16 @@ static uint32_t compute_compare_from_us(uint32_t pulse_us)
  * @brief  サーボモーターの初期化
  * @retval None
  */
-void servo_init(ServoControl_t *servo_state)
+void servo_init()
 {
   __HAL_TIM_ENABLE(&htim3);
   HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
-  servo_close(servo_state);
+  servo_close(); // パラメータを削除
 }
 
-void solenoid_init(SolenoidControl_t *solenoid_state)
+void solenoid_init()
 {
-  solenoid_close(solenoid_state);
+  solenoid_close();
 }
 
 /**

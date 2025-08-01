@@ -97,8 +97,9 @@ static uint32_t compute_compare_from_us(uint32_t pulse_us)
  * @brief  サーボモーターの初期化
  * @retval None
  */
-void servo_init()
+void servo_init(void)
 {
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_RESET);
   __HAL_TIM_ENABLE(&htim3);
   HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
   servo_close(); // パラメータを削除

@@ -37,14 +37,13 @@ extern "C"
 
 /* Exported constants --------------------------------------------------------*/
 // バルブ動作時間
-#define SERVO_OPEN_TIME_MS 30000 // バルブ開放時間（30秒）
+#define SERVO_OPEN_TIME_MS 30000
 
     /* Exported macro ------------------------------------------------------------*/
 
     /* Exported functions prototypes ---------------------------------------------*/
 
     void servo_init();
-    void solenoid_init();
 
     void servo_open();
     void servo_close();

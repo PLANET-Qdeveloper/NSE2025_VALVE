@@ -32,6 +32,7 @@
 #include "MAX31855.h"
 #include "MCP3425.h"
 #include "sdcard.h"
+#include "pq_com_format/pq_com_format.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -80,20 +81,28 @@ volatile uint16_t Timer1, Timer2; /* 1ms Timer Counter for SD card operations */
 extern volatile uint8_t FatFsCnt; /* FatFs counter for SD card operations (defined in stm32f4xx_it.c) */
 
 // センサーデータ管理変数
-#define DATA_BUFFER_SIZE 10
-static SensorData_t data_buffer[DATA_BUFFER_SIZE];
-static SensorData_t temp_buffer[DATA_BUFFER_SIZE];
-static volatile uint32_t data_buffer_index = 0;
-static volatile bool save_data_flag = false;
-static volatile bool read_sensor_flag = false;
+static SensorData_t data_buffer;
 // DMA用バッファとフラグ
-static uint8_t spi2_dma_buffer[4]; // MAX31855用（32bit = 4byte）
-static uint8_t i2c1_dma_buffer[3]; // MCP3425用（24bit = 3byte）
+static uint8_t spi2_dma_buffer[4]; // MAX31855用
+static uint8_t i2c1_dma_buffer[3]; // MCP3425用
 
 // DMA転送完了フラグ
 static volatile bool spi2_dma_complete = false;
 static volatile bool i2c1_dma_complete = false;
 
+// 新しいセンサーデータが利用可能かのフラグ
+static volatile bool new_sensor_data_available = false;
+
+static pq_com_format_t packet = {
+    .destination_id = 0x01,
+    .source_id = 0x02,
+    .payload_length = sizeof(SensorData_t),
+};
+
+static uint8_t tx_buffer[32]; // 配列形式
+static bool packet_transmission_active = false;
+
+bool servo_init_flag = false;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -110,98 +119,14 @@ static void MX_USART1_UART_Init(void);
 static void MX_TIM2_Init(void);
 /* USER CODE BEGIN PFP */
 int _write(int file, char *ptr, int len);
-void system_init(void);
+void system_test(void);
 void process_dma_sensor_data(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-// printf関数をUART経由で出力するためのリダイレクト
-int _write(int file, char *ptr, int len)
-{
-  (void)file; // 未使用パラメータの警告を抑制
-  HAL_UART_Transmit(&huart5, (uint8_t *)ptr, len, HAL_MAX_DELAY);
-  return len;
-}
 
-/**
- * @brief ユーザーシステム初期化
- */
-void system_init(void)
-{
-  // 状態を明示的にリセット（初期化前）
-  servo_state.valve_operation_active = false;
-  servo_state.valve_operation_start_time = 0;
-  solenoid_state.solenoid_operation_active = false;
-  solenoid_state.solenoid_operation_start_time = 0;
-
-  solenoid_init();
-
-  // UART1の受信割り込み開始
-  HAL_UART_Receive_IT(&huart1, &cmd, 1);
-  MCP3425_Init(&hi2c1); // MCP3425の初期化
-  
-  // I2C通信の安定化ウォームアップ
-  printf("Initializing I2C communication...\r\n");
-  HAL_Delay(100); // デバイス電源安定化待機
-  
-  // MCP3425との通信テスト（エラーは無視）
-  uint8_t test_data[3];
-  HAL_I2C_Master_Receive(&hi2c1, (0x68 << 1), test_data, 3, 100);
-  HAL_Delay(50); // 追加安定化時間
-  
-  printf("I2C communication initialized\r\n");
-  // SDカードファイルシステムの初期化
-  f_mount(&fs, "", 1);
-
-  // Vファイル番号の初期化（既存ファイルをスキャン）
-  SD_init_valve_file_number();
-
-#ifdef ENABLE_SD_FORMAT
-  FRESULT mount_result = f_mount(&fs, "", 1);
-  if (mount_result != FR_OK)
-  {
-    printf("SDカード初期マウント失敗: FRESULT=%d\r\n", mount_result);
-
-    // フォーマットを試行
-    BYTE work[_MAX_SS];
-    FRESULT format_result = f_mkfs("", FM_FAT32, 0, work, sizeof(work));
-
-    if (format_result == FR_OK)
-    {
-      printf("SDカードフォーマット成功\r\n");
-      mount_result = f_mount(&fs, "", 1);
-      if (mount_result == FR_OK)
-      {
-        printf("SDカード再マウント成功\r\n");
-      }
-      else
-      {
-        printf("SDカード再マウント失敗: FRESULT=%d\r\n", mount_result);
-      }
-    }
-    else
-    {
-      printf("SDカードフォーマット失敗: FRESULT=%d\r\n", format_result);
-    }
-  }
-  else
-  {
-    printf("SDカードマウント成功\r\n");
-  }
-
-  // SDカードの基本動作テスト
-  FRESULT test_result = f_open(&fil, "test.txt", FA_CREATE_ALWAYS | FA_WRITE);
-  if (test_result == FR_OK)
-  {
-    char buffer[64]; // ローカルバッファ
-    sprintf(buffer, "SDカードテスト成功\r\n");
-    f_write(&fil, buffer, strlen(buffer), &bw);
-    f_close(&fil);
-  }
-#endif
-}
 /* USER CODE END 0 */
 
 /**
@@ -244,10 +169,20 @@ int main(void)
   MX_USART1_UART_Init();
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
-  system_init();
-  servo_init();
-  // タイマー割り込み開始
+
+  //system_test();
+  servo_state.valve_operation_active = false;
+  servo_state.valve_operation_start_time = 0;
+  solenoid_state.solenoid_operation_active = false;
+  solenoid_state.solenoid_operation_start_time = 0;
+
+  solenoid_close();
+  MCP3425_Init(&hi2c1);
+  // f_mount(&fs, "", 1);
+  // SD_init_valve_file_number();
+
   HAL_TIM_Base_Start_IT(&htim2);
+  HAL_UART_Receive_IT(&huart1, &cmd, 1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -255,6 +190,10 @@ int main(void)
   while (1)
   {
     uint32_t current_time = HAL_GetTick();
+    if (servo_init_flag == true)
+    {
+      servo_init();
+    }
     if (solenoid_state.solenoid_operation_active)
     {
       // ソレノイド操作がアクティブな場合、開始時間が設定されていないならば現在時刻を設定
@@ -287,19 +226,24 @@ int main(void)
         servo_state.valve_operation_start_time = 0;
       }
     }
-    servo_init();
-    // DMA完了後のセンサーデータ処理
     process_dma_sensor_data();
+    /*
+      // パケット形式でデータ送信（新しいセンサーデータがある場合のみ）
+      if (!packet_transmission_active && new_sensor_data_available)
+      {
+        pq_com_format_clear(&packet);
 
-    // SD保存処理（非同期実行）
-    if (save_data_flag)
-    {
-      save_data_flag = false;
-      uint32_t save_count = data_buffer_index;
-      memcpy(temp_buffer, data_buffer, save_count * sizeof(SensorData_t));
-      data_buffer_index = 0;
-      sd_save_data(temp_buffer, save_count);
-    }
+        // SensorData_t構造体をペイロードにコピー
+        memcpy(packet.payload, &data_buffer, sizeof(SensorData_t));
+        packet_transmission_active = true;
+        new_sensor_data_available = false; // フラグをクリア
+        if (pq_com_format_encode(&packet, tx_buffer) == PQ_COM_FORMAT_ENCODE_SUCCESS)
+        {
+          HAL_UART_Transmit_IT(&huart1, tx_buffer, 1); // 1バイトずつ送信
+        }
+      }
+    */
+    // sd_save_data(&data_buffer);
 
     /* USER CODE END WHILE */
 
@@ -406,7 +350,7 @@ static void MX_SPI1_Init(void)
   hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
   hspi1.Init.NSS = SPI_NSS_SOFT;
-  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_128;
+  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_64;
   hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
   hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
@@ -439,7 +383,7 @@ static void MX_SPI2_Init(void)
   /* SPI2 parameter configuration*/
   hspi2.Instance = SPI2;
   hspi2.Init.Mode = SPI_MODE_MASTER;
-  hspi2.Init.Direction = SPI_DIRECTION_2LINES_RXONLY;
+  hspi2.Init.Direction = SPI_DIRECTION_2LINES;
   hspi2.Init.DataSize = SPI_DATASIZE_8BIT;
   hspi2.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi2.Init.CLKPhase = SPI_PHASE_1EDGE;
@@ -565,7 +509,6 @@ static void MX_UART5_Init(void)
 
   /* USER CODE END UART5_Init 0 */
 
-  
   /* USER CODE BEGIN UART5_Init 1 */
 
   /* USER CODE END UART5_Init 1 */
@@ -664,10 +607,10 @@ static void MX_DMA_Init(void)
 
   /* DMA interrupt init */
   /* DMA1_Stream0_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA1_Stream0_IRQn, 0, 0);
+  HAL_NVIC_SetPriority(DMA1_Stream0_IRQn, 1, 0);
   HAL_NVIC_EnableIRQ(DMA1_Stream0_IRQn);
   /* DMA1_Stream3_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA1_Stream3_IRQn, 0, 0);
+  HAL_NVIC_SetPriority(DMA1_Stream3_IRQn, 1, 0);
   HAL_NVIC_EnableIRQ(DMA1_Stream3_IRQn);
 
 }
@@ -750,17 +693,66 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     }
     else if (cmd == 'R')
     {
-      servo_init();
+      servo_init_flag = true;
     }
   }
   HAL_UART_Receive_IT(&huart1, &cmd, 1);
 }
+/**
+ * @brief UART送信完了コールバック関数
+ * @param huart: UARTハンドル
+ */
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
+{
+  if (huart->Instance == USART1 && packet_transmission_active)
+  {
+    pq_com_format_encode_result_t result = pq_com_format_encode(&packet, tx_buffer);
 
-// SPI DMA完了コールバック関数
+    if (result == PQ_COM_FORMAT_ENCODE_SUCCESS)
+    {
+      HAL_UART_Transmit_IT(huart, tx_buffer, 1);
+    }
+    else if (result == PQ_COM_FORMAT_ENCODE_COMPLETED)
+    {
+      packet_transmission_active = false; // 送信完了
+    }
+  }
+}
+
+// SPI DMA完了コールバック関数（RX専用）
 void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *hspi)
 {
   if (hspi->Instance == SPI2)
   {
+    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_SET);
+    spi2_dma_complete = true;
+  }
+}
+
+void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
+{
+  if (hspi->Instance == SPI2)
+  {
+    // MAX31855のCS信号をHighに戻す
+    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_SET);
+    spi2_dma_complete = true;
+  }
+}
+
+void HAL_SPI_ErrorCallback(SPI_HandleTypeDef *hspi)
+{
+  if (hspi->Instance == SPI2)
+  {
+    // MAX31855のCS信号をHighに戻す（エラー時も必須）
+    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_SET);
+
+    // DMAを停止
+    if (hspi->hdmarx != NULL)
+    {
+      HAL_DMA_Abort(hspi->hdmarx);
+    }
+
+    // DMA完了フラグを設定
     spi2_dma_complete = true;
   }
 }
@@ -774,16 +766,18 @@ void HAL_I2C_MasterRxCpltCallback(I2C_HandleTypeDef *hi2c)
   }
 }
 
-// I2C エラーコールバック関数（新規追加）
 void HAL_I2C_ErrorCallback(I2C_HandleTypeDef *hi2c)
 {
   if (hi2c->Instance == I2C1)
   {
-    uint32_t error = HAL_I2C_GetError(hi2c);
-    printf("I2C1 エラーコールバック: 0x%08X\r\n", error);
+    // DMAを停止
+    if (hi2c->hdmarx != NULL)
+    {
+      HAL_DMA_Abort(hi2c->hdmarx);
+    }
 
-    // エラー状態をクリア
-    hi2c->ErrorCode = HAL_I2C_ERROR_NONE;
+    // DMA完了フラグを設定（次回の転送を可能にする）
+    i2c1_dma_complete = true;
   }
 }
 
@@ -794,21 +788,16 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
   if (htim->Instance == TIM2)
   {
-    // DMAでのセンサーデータ取得を開始（エラーハンドリング付き）
-    HAL_StatusTypeDef spi_status = MAX31855_Read_Temp_DMA(&hspi2, spi2_dma_buffer);
-    HAL_StatusTypeDef i2c_status = MCP3425_Read_Pressure_DMA(&hi2c1, i2c1_dma_buffer);
-
-    // DMA開始失敗時のエラーハンドリング
-    if (spi_status != HAL_OK)
+    // DMAでのセンサーデータ取得を開始
+    if (hspi2.State == HAL_SPI_STATE_READY)
     {
-      printf("SPI2 DMA start error: %d\r\n", spi_status);
+      MAX31855_Read_Temp_DMA(&hspi2, spi2_dma_buffer);
     }
 
-    if (i2c_status != HAL_OK)
+    if (hi2c1.State == HAL_I2C_STATE_READY)
     {
-      printf("I2C1 DMA start error: %d\r\n", i2c_status);
+      MCP3425_Read_Pressure_DMA(&hi2c1, i2c1_dma_buffer);
     }
-
   }
 }
 
@@ -817,80 +806,102 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
  */
 void process_dma_sensor_data(void)
 {
-  static float temp_data = 0.0f;
-  static float press_data = 0.0f;
-  static bool temp_valid = false;
-  static bool press_valid = false;
+  // 両方のDMAが完了していない場合は何もしない
+  if (!spi2_dma_complete || !i2c1_dma_complete)
+    return;
 
-  // MAX31855 DMA完了処理
-  if (spi2_dma_complete)
+  // フラグをクリア
+  spi2_dma_complete = false;
+  i2c1_dma_complete = false;
+
+  // 温度データ処理
+  uint32_t temp_raw_data = (spi2_dma_buffer[0] << 24) | (spi2_dma_buffer[1] << 16) |
+                           (spi2_dma_buffer[2] << 8) | spi2_dma_buffer[3];
+
+  // 圧力データ処理
+  int16_t press_adc = (i2c1_dma_buffer[0] << 8) | i2c1_dma_buffer[1];
+
+  // エラーチェックと変換
+  if (!(temp_raw_data & 0x7) && !(i2c1_dma_buffer[2] & 0x80))
   {
-    spi2_dma_complete = false;
+    // 温度変換
+    int16_t temp_raw = (temp_raw_data >> 18) & 0x3FFF;
+    if (temp_raw & 0x2000)
+      temp_raw |= 0xC000;
+    float temperature = temp_raw * 0.25f;
 
-    // 32bitデータを結合
-    uint32_t raw_data = (spi2_dma_buffer[0] << 24) |
-                        (spi2_dma_buffer[1] << 16) |
-                        (spi2_dma_buffer[2] << 8) |
-                        spi2_dma_buffer[3];
+    // 圧力変換
+    float voltage = (float)press_adc * 0.001f * 3.0f;
+    float pressure = 3361.190f * voltage - 1335.857f;
 
-    // 温度データに変換
-    if (!(raw_data & 0x7)) // エラーチェック（D0-D2がすべて0）
-    {
-      int16_t temp_raw = (raw_data >> 18) & 0x3FFF;
-      if (temp_raw & 0x2000)
-        temp_raw |= 0xC000; // 符号拡張
-      temp_data = temp_raw * 0.25f;
-      temp_valid = true;
-    }
-    else
-    {
-      printf("MAX31855エラー: フォルトビット検出 (0x%08X)\r\n", raw_data);
-    }
-  }
-
-  // MCP3425 DMA完了処理
-  if (i2c1_dma_complete)
-  {
-    i2c1_dma_complete = false;
-
-    // データレディビットをチェック（設定レジスタの最上位ビット）
-    if (!(i2c1_dma_buffer[2] & 0x80)) // Ready bit check (inverted logic)
-    {
-      // 16bitデータを結合（12ビットADC）
-      int16_t adc_value = (i2c1_dma_buffer[0] << 8) | i2c1_dma_buffer[1];
-
-      // 電圧値に変換（12ビット、PGA=1倍、3倍分圧補正）
-      float voltage = (float)adc_value * 0.001f * 3.0f;
-
-      // MLH02kPSB06A圧力センサの変換式 (kPa単位)
-      press_data = 3361.190f * voltage - 1335.857f;
-      press_valid = true;
-    }
-    else
-    {
-      printf("MCP3425エラー: データ変換中\r\n");
-    }
-  }
-
-  // 両方のデータが揃った場合にバッファに保存
-  if (temp_valid && press_valid && data_buffer_index < DATA_BUFFER_SIZE)
-  {
-    data_buffer[data_buffer_index] = (SensorData_t){
-        .timestamp = HAL_GetTick() % 1000,
-        .temp_data = temp_data,
-        .press_data = press_data,
+    // データ保存
+    data_buffer = (SensorData_t){
+        .temp_data = temperature,
+        .press_data = pressure,
         .is_nos_open = solenoid_state.solenoid_operation_active};
 
-    data_buffer_index++;
+    new_sensor_data_available = true;
+  }
+}
 
-    // データをリセット
-    temp_valid = false;
-    press_valid = false;
+// printf関数をUART経由で出力するためのリダイレクト
+int _write(int file, char *ptr, int len)
+{
+  HAL_UART_Transmit(&huart5, (uint8_t *)ptr, len, HAL_MAX_DELAY);
+  return len;
+}
 
-    if (data_buffer_index >= DATA_BUFFER_SIZE)
+/**
+ * @brief ユーザーシステム初期化
+ */
+void system_test(void)
+{
+  // MCP3425との通信テスト（エラーは無視）
+  uint8_t test_data[3];
+  HAL_I2C_Master_Receive(&hi2c1, (0x68 << 1), test_data, 3, 100);
+  HAL_Delay(50); // 追加安定化時間
+
+  printf("I2C communication initialized\r\n");
+
+  FRESULT mount_result = f_mount(&fs, "", 1);
+  if (mount_result != FR_OK)
+  {
+    printf("SDカード初期マウント失敗: FRESULT=%d\r\n", mount_result);
+
+    // フォーマットを試行
+    BYTE work[_MAX_SS];
+    FRESULT format_result = f_mkfs("", FM_FAT32, 0, work, sizeof(work));
+
+    if (format_result == FR_OK)
     {
-      save_data_flag = true;
+      printf("SDカードフォーマット成功\r\n");
+      if (mount_result == FR_OK)
+      {
+        printf("SDカード再マウント成功\r\n");
+      }
+      else
+      {
+        printf("SDカード再マウント失敗: FRESULT=%d\r\n", mount_result);
+      }
     }
+    else
+    {
+      printf("SDカードフォーマット失敗: FRESULT=%d\r\n", format_result);
+    }
+  }
+  else
+  {
+    printf("SDカードマウント成功\r\n");
+  }
+
+  // SDカードの基本動作テスト
+  FRESULT test_result = f_open(&fil, "test.txt", FA_CREATE_ALWAYS | FA_WRITE);
+  if (test_result == FR_OK)
+  {
+    char buffer[64]; // ローカルバッファ
+    sprintf(buffer, "SDカードテスト成功\r\n");
+    f_write(&fil, buffer, strlen(buffer), &bw);
+    f_close(&fil);
   }
 }
 /* USER CODE END 4 */

@@ -103,7 +103,6 @@ HAL_StatusTypeDef MCP3425_Read_Pressure_DMA(I2C_HandleTypeDef *hi2c, uint8_t *bu
 	
 	if (i2c_state != HAL_I2C_STATE_READY)
 	{
-		printf("MCP3425 DMA: I2C not ready (state: %d)\r\n", i2c_state);
 		return HAL_BUSY;
 	}
 	// DMAハンドルの状態確認
@@ -113,13 +112,11 @@ HAL_StatusTypeDef MCP3425_Read_Pressure_DMA(I2C_HandleTypeDef *hi2c, uint8_t *bu
 		
 		if (dma_state != HAL_DMA_STATE_READY)
 		{
-			printf("MCP3425 DMA: DMA not ready\r\n");
-			HAL_DMA_Abort(hi2c->hdmarx);
+			HAL_DMA_Abort_IT(hi2c->hdmarx);
 		}
 	}
 	else
 	{
-		printf("MCP3425 DMA: DMA handle is NULL\r\n");
 		return HAL_ERROR;
 	}
 

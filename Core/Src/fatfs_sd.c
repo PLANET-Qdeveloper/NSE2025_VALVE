@@ -17,7 +17,6 @@ extern volatile uint16_t Timer1, Timer2; /* 1ms Timer Counter for SD card operat
 static volatile DSTATUS Stat = STA_NOINIT;  /* ディスク状態フラグ */
 static uint8_t CardType;                    /* SDタイプ 0:MMC, 1:SDC, 2:Block addressing */
 static uint8_t PowerFlag = 0;               /* 電源状態フラグ */
-static uint32_t next_valve_file_number = 1; /* 次に使用するVALVEファイル番号 */
 
 /* SPI チップセレクト */
 static void SELECT(void)
@@ -659,85 +658,4 @@ DRESULT SD_disk_ioctl(BYTE drv, BYTE ctrl, void *buff)
   return res;
 }
 
-/* Vファイル番号を初期化（起動時に一度だけ実行） */
-void SD_init_valve_file_number(void)
-{
-  DIR dir;
-  FILINFO fno;
-  FRESULT res;
-  uint32_t max_num = 0;
-  uint32_t current_num;
 
-  /* ルートディレクトリを開く */
-  res = f_opendir(&dir, "");
-  if (res == FR_OK)
-  {
-    /* 既存のV_x.csvファイルを探して最大番号を取得 */
-    for (;;)
-    {
-      res = f_readdir(&dir, &fno);
-      if (res != FR_OK || fno.fname[0] == 0)
-        break; /* ディレクトリの終端またはエラー */
-
-      /* V_x.csvファイルかチェック */
-      if ((fno.fattrib & AM_DIR) == 0) /* ディレクトリではない */
-      {
-        char *name = fno.fname;
-        /* ファイル名がV_で始まり、.csvで終わるかチェック */
-        if (strncmp(name, "V_", 2) == 0)
-        {
-          char *dot = strrchr(name, '.');
-          if (dot != NULL && strcmp(dot, ".csv") == 0)
-          {
-            /* 番号部分を抽出 */
-            char *num_start = name + 2; /* "V_"の後 */
-            char *num_end = dot;
-            char num_str[16];
-
-            /* 番号部分をコピー */
-            size_t num_len = num_end - num_start;
-            if (num_len > 0 && num_len < sizeof(num_str))
-            {
-              strncpy(num_str, num_start, num_len);
-              num_str[num_len] = '\0';
-
-              /* 数値に変換 */
-              current_num = (uint32_t)atoi(num_str);
-              if (current_num > max_num)
-              {
-                max_num = current_num;
-              }
-            }
-          }
-        }
-      }
-    }
-    f_closedir(&dir);
-  }
-
-  /* 次の番号を設定 */
-  next_valve_file_number = max_num + 1;
-
-  printf("Vファイル番号初期化完了: 次のファイル番号=%lu\r\n", (unsigned long)next_valve_file_number);
-}
-
-/* Vファイル名を連番で生成（8.3形式対応） */
-void SD_get_valve_filename(char *filename, size_t max_len)
-{
-  /* パラメータ検証 */
-  if (filename == NULL || max_len < 13)
-  {
-    if (filename != NULL && max_len > 0)
-    {
-      filename[0] = '\0'; /* エラー時は空文字列 */
-    }
-    return;
-  }
-
-  /* 8.3形式に適合するファイル名を生成 */
-  /* 形式: V_x.csv（xは1から始まる連番） */
-  snprintf(filename, max_len, "V_%lu.csv", (unsigned long)next_valve_file_number);
-
-  /* 次回のために番号をインクリメント */
-  next_valve_file_number++;
-}

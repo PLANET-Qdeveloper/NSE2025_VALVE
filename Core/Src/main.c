@@ -148,7 +148,7 @@ int main(void)
   MX_USART1_UART_Init();
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
-  system_test();
+  //system_test();
   // タイマー割り込み開始
   HAL_TIM_Base_Start_IT(&htim2);
   /* USER CODE END 2 */
@@ -189,41 +189,41 @@ int main(void)
         servo_state.valve_operation_start_time = 0;
       }
     }
-
-    if (read_sensor_flag)
-    {
-      read_sensor_flag = false;
-
-      if (data_buffer_index < MAX_DATA_POINTS)
-      {
-        float temperature = MAX31855_Read_Temp(&hspi2);
-        float pressure = MCP3425_Read_Pressure(&hi2c1);
-
-        data_buffer = (SensorData_t){
-            .temp_data = temperature,
-            .press_data = pressure,
-            .is_nos_open = solenoid_state.solenoid_operation_active};
-
-        data_buffer_index++;
-
-        // バッファ満杯時はSD保存フラグを立てる
-        if (data_buffer_index >= MAX_DATA_POINTS)
+    /*
+        if (read_sensor_flag)
         {
-          save_data_flag = true;
+          read_sensor_flag = false;
+
+          if (data_buffer_index < MAX_DATA_POINTS)
+          {
+            float temperature = MAX31855_Read_Temp(&hspi2);
+            float pressure = MCP3425_Read_Pressure(&hi2c1);
+
+            data_buffer = (SensorData_t){
+                .temp_data = temperature,
+                .press_data = pressure,
+                .is_nos_open = solenoid_state.solenoid_operation_active};
+
+            data_buffer_index++;
+
+            // バッファ満杯時はSD保存フラグを立てる
+            if (data_buffer_index >= MAX_DATA_POINTS)
+            {
+              save_data_flag = true;
+            }
+          }
         }
-      }
-    }
 
-    // SD保存処理（非同期実行）
-    if (save_data_flag)
-    {
-      save_data_flag = false;
-      __disable_irq();
-      data_buffer_index = 0;
-      __enable_irq();
-      sd_save_data(&data_buffer);
-    }
-
+        // SD保存処理（非同期実行）
+        if (save_data_flag)
+        {
+          save_data_flag = false;
+          __disable_irq();
+          data_buffer_index = 0;
+          __enable_irq();
+          sd_save_data(&data_buffer);
+        }
+    */
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

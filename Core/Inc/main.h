@@ -66,7 +66,7 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
-    void system_init(void);
+    void system_test(void);
     int _write(int file, char *ptr, int len); /* printf redirect function */
 /* USER CODE END EFP */
 

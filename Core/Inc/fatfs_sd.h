@@ -93,7 +93,6 @@ void SD_get_valve_filename(char *filename, size_t max_len);
 #define SD_CMD_RETRY_COUNT 10
 
 /* SDカード管理関数 */
-bool sd_save_data(const SensorData_t *data_buffer, uint32_t data_count);
 bool sd_check_status(void);
 void SD_init_valve_file_number(void);
 

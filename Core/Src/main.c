@@ -31,6 +31,7 @@
 #include "fatfs_sd.h"
 #include "MAX31855.h"
 #include "MCP3425.h"
+#include "sdcard.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -78,12 +79,11 @@ extern volatile uint8_t FatFsCnt; /* FatFs counter for SD card operations (defin
 
 // センサーデータ管理変数
 #define MAX_DATA_POINTS 10
-static SensorData_t data_buffer[1024];
-static SensorData_t temp_buffer[1024];
+static SensorData_t data_buffer;
 static volatile uint32_t data_buffer_index = 0;
 static volatile bool save_data_flag = false;
 static volatile bool read_sensor_flag = false;
-
+bool servo_init_flag = false;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -105,84 +105,8 @@ void system_init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-// printf関数をUART経由で出力するためのリダイレクト
-int _write(int file, char *ptr, int len)
-{
-  (void)file; // 未使用パラメータの警告を抑制
-  HAL_UART_Transmit(&huart5, (uint8_t *)ptr, len, HAL_MAX_DELAY);
-  return len;
-}
-
-/**
- * @brief ユーザーシステム初期化
- */
-void system_init(void)
-{
-  servo_init(&servo_state);
-  solenoid_init(&solenoid_state);
-
-  // 状態を明示的にリセット
-  servo_state.valve_operation_active = false;
-  servo_state.valve_operation_start_time = 0;
-  solenoid_state.solenoid_operation_active = false;
-  solenoid_state.solenoid_operation_start_time = 0;
-
-  // UART1の受信割り込み開始
-  HAL_UART_Receive_IT(&huart1, &cmd, 1);
-  MCP3425_Init(&hi2c1); // MCP3425の初期化
-  // SDカードファイルシステムの初期化
-  f_mount(&fs, "", 1);
-
-  // Vファイル番号の初期化（既存ファイルをスキャン）
-  SD_init_valve_file_number();
-
-#ifdef ENABLE_SD_FORMAT
-  FRESULT mount_result = f_mount(&fs, "", 1);
-  if (mount_result != FR_OK)
-  {
-    printf("SDカード初期マウント失敗: FRESULT=%d\r\n", mount_result);
-
-    // フォーマットを試行
-    BYTE work[_MAX_SS];
-    FRESULT format_result = f_mkfs("", FM_FAT32, 0, work, sizeof(work));
-
-    if (format_result == FR_OK)
-    {
-      printf("SDカードフォーマット成功\r\n");
-      mount_result = f_mount(&fs, "", 1);
-      if (mount_result == FR_OK)
-      {
-        printf("SDカード再マウント成功\r\n");
-      }
-      else
-      {
-        printf("SDカード再マウント失敗: FRESULT=%d\r\n", mount_result);
-      }
-    }
-    else
-    {
-      printf("SDカードフォーマット失敗: FRESULT=%d\r\n", format_result);
-    }
-  }
-  else
-  {
-    printf("SDカードマウント成功\r\n");
-  }
-#endif
 
 
-#ifdef ENABLE_SD_FORMAT
-  // SDカードの基本動作テスト
-  FRESULT test_result = f_open(&fil, "test.txt", FA_CREATE_ALWAYS | FA_WRITE);
-  if (test_result == FR_OK)
-  {
-    char buffer[64]; // ローカルバッファ
-    sprintf(buffer, "SDカードテスト成功\r\n");
-    f_write(&fil, buffer, strlen(buffer), &bw);
-    f_close(&fil);
-  }
-#endif
-}
 /* USER CODE END 0 */
 
 /**
@@ -224,7 +148,7 @@ int main(void)
   MX_USART1_UART_Init();
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
-  system_init();
+  system_test();
   // タイマー割り込み開始
   HAL_TIM_Base_Start_IT(&htim2);
   /* USER CODE END 2 */
@@ -260,31 +184,25 @@ int main(void)
       }
       else if (current_time - servo_state.valve_operation_start_time >= 30000)
       {
-        // サーボ操作が30秒を超えた場合、サーボを閉じる
         servo_close();
         servo_state.valve_operation_active = false;
         servo_state.valve_operation_start_time = 0;
       }
     }
 
-    // センサーデータ読み取りとバッファ保存（メインループで実行）
     if (read_sensor_flag)
     {
       read_sensor_flag = false;
 
       if (data_buffer_index < MAX_DATA_POINTS)
       {
-        // センサーデータ読み取り
-        float temp_data = MAX31855_Read_Temp(&hspi2);
-        float press_data = MCP3425_Read_Pressure(&hi2c1);
+        float temperature = MAX31855_Read_Temp(&hspi2);
+        float pressure = MCP3425_Read_Pressure(&hi2c1);
 
-        // バッファに保存
-        data_buffer[data_buffer_index] = (SensorData_t){
-            .timestamp = HAL_GetTick(),
-            .temp_data = temp_data,
-            .press_data = press_data,
-            .is_nos_open = solenoid_state.solenoid_operation_active // NOS開放状態フラグを保存
-        };
+        data_buffer = (SensorData_t){
+            .temp_data = temperature,
+            .press_data = pressure,
+            .is_nos_open = solenoid_state.solenoid_operation_active};
 
         data_buffer_index++;
 
@@ -301,11 +219,9 @@ int main(void)
     {
       save_data_flag = false;
       __disable_irq();
-      uint32_t save_count = data_buffer_index;
-      memcpy(temp_buffer, data_buffer, save_count * sizeof(SensorData_t));
       data_buffer_index = 0;
       __enable_irq();
-      sd_save_data(temp_buffer, save_count);
+      sd_save_data(&data_buffer);
     }
 
     /* USER CODE END WHILE */
@@ -725,6 +641,10 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     {
       solenoid_state.solenoid_operation_active = true;
     }
+    else if (cmd == 'R')
+    {
+      servo_init_flag = true;
+    }
   }
   HAL_UART_Receive_IT(&huart1, &cmd, 1);
 }
@@ -740,6 +660,65 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     read_sensor_flag = true;
   }
 }
+
+void system_test(void)
+{
+  // MCP3425との通信テスト（エラーは無視）
+  uint8_t test_data[3];
+  HAL_I2C_Master_Receive(&hi2c1, (0x68 << 1), test_data, 3, 100);
+  HAL_Delay(50); // 追加安定化時間
+
+  printf("I2C communication initialized\r\n");
+
+  FRESULT mount_result = f_mount(&fs, "", 1);
+  if (mount_result != FR_OK)
+  {
+    printf("SDカード初期マウント失敗: FRESULT=%d\r\n", mount_result);
+
+    // フォーマットを試行
+    BYTE work[_MAX_SS];
+    FRESULT format_result = f_mkfs("", FM_FAT32, 0, work, sizeof(work));
+
+    if (format_result == FR_OK)
+    {
+      printf("SDカードフォーマット成功\r\n");
+      if (mount_result == FR_OK)
+      {
+        printf("SDカード再マウント成功\r\n");
+      }
+      else
+      {
+        printf("SDカード再マウント失敗: FRESULT=%d\r\n", mount_result);
+      }
+    }
+    else
+    {
+      printf("SDカードフォーマット失敗: FRESULT=%d\r\n", format_result);
+    }
+  }
+  else
+  {
+    printf("SDカードマウント成功\r\n");
+  }
+
+  // SDカードの基本動作テスト
+  FRESULT test_result = f_open(&fil, "test.txt", FA_CREATE_ALWAYS | FA_WRITE);
+  if (test_result == FR_OK)
+  {
+    char buffer[64]; // ローカルバッファ
+    sprintf(buffer, "SDカードテスト成功\r\n");
+    f_write(&fil, buffer, strlen(buffer), &bw);
+    f_close(&fil);
+  }
+}
+
+int _write(int file, char *ptr, int len)
+{
+  (void)file;
+  HAL_UART_Transmit(&huart5, (uint8_t *)ptr, len, HAL_MAX_DELAY);
+  return len;
+}
+
 /* USER CODE END 4 */
 
 /**

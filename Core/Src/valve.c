@@ -65,10 +65,10 @@ static uint32_t compute_pulse_us_from_angle(uint16_t angle)
 
   // 線形補間でパルス幅を計算
   // 0度 → SERVO_MIN_PULSE_US、SERVO_MAX_ANGLE度 → SERVO_MAX_PULSE_US
-//   uint32_t pulse_us = SERVO_MIN_PULSE_US +
-//                       ((uint32_t)angle * (SERVO_MAX_PULSE_US - SERVO_MIN_PULSE_US)) / SERVO_MAX_ANGLE;
+  uint32_t pulse_us = SERVO_MIN_PULSE_US +
+                      ((uint32_t)angle * (SERVO_MAX_PULSE_US - SERVO_MIN_PULSE_US)) / SERVO_MAX_ANGLE;
 
-//   return pulse_us;
+  return pulse_us;
 
 }
 

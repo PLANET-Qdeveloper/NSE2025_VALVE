@@ -85,7 +85,7 @@ static SensorData_t data_buffer;
 static volatile uint32_t data_buffer_index = 0;
 static volatile bool save_data_flag = false;
 static volatile bool read_sensor_flag = false;
-bool servo_init_flag_pre = false; // ソレノイド初期化フラグ
+bool servo_init_flag_pre = false;
 bool servo_init_flag = false;
 /* USER CODE END PV */
 
@@ -103,7 +103,7 @@ static void MX_USART1_UART_Init(void);
 static void MX_TIM2_Init(void);
 /* USER CODE BEGIN PFP */
 int _write(int file, char *ptr, int len);
-void system_init(void);
+void system_test(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/

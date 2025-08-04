@@ -150,7 +150,15 @@ int main(void)
   /* USER CODE BEGIN 2 */
   //system_test();
   // タイマー割り込み開始
+  
+  solenoid_close();
+
+  servo_state.valve_operation_active = false;
+  servo_state.valve_operation_start_time = 0;
+  solenoid_state.solenoid_operation_active = false;
+  solenoid_state.solenoid_operation_start_time = 0;
   HAL_TIM_Base_Start_IT(&htim2);
+  HAL_UART_Receive_IT(&huart1, &cmd, 1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -158,6 +166,10 @@ int main(void)
   while (1)
   {
     uint32_t current_time = HAL_GetTick();
+    if (servo_init_flag == true)
+    {
+      servo_init();
+    }
     if (solenoid_state.solenoid_operation_active)
     {
       // ソレノイド操作がアクティブな場合、開始時間が設定されていないならば現在時刻を設定

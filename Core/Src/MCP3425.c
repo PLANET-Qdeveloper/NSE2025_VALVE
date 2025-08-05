@@ -39,7 +39,7 @@
 void MCP3425_Init(I2C_HandleTypeDef *hi2c)
 {
 	uint8_t config = MCP3425_DEFAULT_CONFIG;
-	uint8_t mcp3425_addr = MCP3425_I2C_ADDR << 1;
+	uint16_t mcp3425_addr = MCP3425_I2C_ADDR << 1;
 	HAL_I2C_Master_Transmit(hi2c, mcp3425_addr, &config, 1, 10);
 }
 
@@ -54,17 +54,17 @@ float MCP3425_Read_Pressure(I2C_HandleTypeDef *hi2c)
 	int16_t adc_value = 0;
 
 	uint8_t mcp3425_addr = MCP3425_I2C_ADDR << 1; // HAL用に左シフト
-
-	// データを読み取り（データ2バイト + 設定1バイト）
-	if (HAL_I2C_Master_Receive(hi2c, mcp3425_addr, data, 3, 10) != HAL_OK)
+	uint8_t status = HAL_I2C_Master_Receive(hi2c, mcp3425_addr, data, 3, 10);
+	if (status != HAL_OK)
 	{
+		printf("MCP3425 Read Error\r\n");
 		return -999.0f;
 	}
 
 	// データレディビットをチェック（設定レジスタの最上位ビット）
 	if (data[2] & MCP3425_RDY_BIT)
 	{
-		return -999.0f; // まだ変換中
+		return -999.0f;
 	}
 
 	// 12ビットデータを組み立て（ビッグエンディアン）

@@ -21,6 +21,7 @@
 #include "sdcard.h"
 #include "types.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 /* Private define ------------------------------------------------------------*/
@@ -44,12 +45,11 @@ bool sd_save_data(SensorData_t *data_buffer)
     static bool file_opened = false;
     static char current_filename[16] = {0};
     static uint32_t save_count = 1;
-    static char csv_buffer[2560] = {0};
+    static char csv_buffer[4096] = {0};
+    static size_t buffer_pos = 0;
     UINT bw;
     FRESULT res;
-    char csv_line[128];
-
-    // SDカード状態チェック
+    char csv_line[64];
     if (!sd_check_status())
     {
         return false;
@@ -60,7 +60,6 @@ bool sd_save_data(SensorData_t *data_buffer)
     {
         snprintf(current_filename, sizeof(current_filename), "%lu.csv", (unsigned long)next_file_number);
 
-        /* 次回のために番号をインクリメント */
         next_file_number++;
 
         res = f_open(&fil, current_filename, FA_CREATE_ALWAYS | FA_WRITE);
@@ -71,11 +70,12 @@ bool sd_save_data(SensorData_t *data_buffer)
         file_opened = true;
         save_count = 1;
         csv_buffer[0] = '\0'; // バッファをクリア
+        buffer_pos = 0;
 
         // ヘッダー書き込み
-        const char *header = "時刻,温度(°C),圧力(Pa),NOS開放\r\n";
-        res = f_write(&fil, header, strlen(header), &bw);
-        if (res != FR_OK || bw != strlen(header))
+        snprintf(csv_line, sizeof(csv_line), "時刻,温度(°C),圧力(Pa),SERVO開放,NOS開放\r\n");
+        res = f_write(&fil, csv_line, strlen(csv_line), &bw);
+        if (res != FR_OK || bw != strlen(csv_line))
         {
             f_close(&fil);
             f_unlink(current_filename);
@@ -84,30 +84,52 @@ bool sd_save_data(SensorData_t *data_buffer)
         }
     }
 
-    snprintf(csv_line, sizeof(csv_line), "%lu,%.2f,%.2f,%d\r\n",
-             HAL_GetTick() / 1000,
-             data_buffer->temp_data,
-             data_buffer->press_data,
-             data_buffer->is_nos_open);
+    int written = snprintf(csv_line, sizeof(csv_line), "%lu,%.2f,%.2f,%d,%d\r\n",
+                           (unsigned long)(HAL_GetTick() / 1000),
+                           data_buffer->temp_data,
+                           data_buffer->press_data,
+                           data_buffer->is_servo_open,
+                           data_buffer->is_nos_open);
 
-    strcat(csv_buffer, csv_line);
+    // バッファオーバーフローをチェック
+    if (written > 0 && (buffer_pos + written) < sizeof(csv_buffer))
+    {
+        memcpy(csv_buffer + buffer_pos, csv_line, written);
+        buffer_pos += written;
+    }
+    else
+    {
+        res = f_write(&fil, csv_buffer, buffer_pos, &bw);
+        if (res != FR_OK || bw != buffer_pos)
+        {
+            f_close(&fil);
+            f_unlink(current_filename);
+            file_opened = false;
+            return false;
+        }
+        buffer_pos = 0;
+        if (written > 0 && written < sizeof(csv_buffer))
+        {
+            memcpy(csv_buffer, csv_line, written);
+            buffer_pos = written;
+        }
+    }
     save_count++;
 
-    // 20個たまったら書き込み
     if (save_count % 20 == 0)
     {
-        res = f_write(&fil, csv_buffer, strlen(csv_buffer), &bw);
-        if (res != FR_OK || bw != strlen(csv_buffer))
+        res = f_write(&fil, csv_buffer, buffer_pos, &bw);
+        if (res != FR_OK || bw != buffer_pos)
         {
             f_close(&fil);
             f_unlink(current_filename);
             file_opened = false;
             return false;
         }
-        csv_buffer[0] = '\0'; // バッファをクリア
+        f_sync(&fil);
+        buffer_pos = 0;
     }
 
-    // 10000個のデータが書き込まれたらファイルを閉じる
     if (save_count % 10000 == 0)
     {
         f_sync(&fil);

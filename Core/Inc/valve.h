@@ -36,8 +36,6 @@ extern "C"
     /* ServoControl_t moved to app_types.h for better organization */
 
 /* Exported constants --------------------------------------------------------*/
-// バルブ動作時間
-#define SERVO_OPEN_TIME_MS 30000
 
     /* Exported macro ------------------------------------------------------------*/
 

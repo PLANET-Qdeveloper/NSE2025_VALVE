@@ -30,7 +30,6 @@ extern "C"
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
 #include "types.h"
-#include <stdbool.h> // bool型のサポート
 
     /* Exported types ------------------------------------------------------------*/
     /* ServoControl_t moved to app_types.h for better organization */
@@ -42,6 +41,8 @@ extern "C"
     /* Exported functions prototypes ---------------------------------------------*/
 
     void servo_init();
+
+    void servo_deinit();
 
     void servo_open();
     void servo_close();

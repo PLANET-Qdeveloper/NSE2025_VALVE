@@ -54,11 +54,11 @@ static uint32_t compute_compare_from_us(uint32_t pulse_us);
  */
 static uint32_t compute_pulse_us_from_angle(uint16_t angle)
 {
-  if(angle == SERVO_CLOSE_ANGLE)
+  if (angle == SERVO_CLOSE_ANGLE)
   {
     return SERVO_MIN_PULSE_US; // 0度は最小パルス幅
   }
-  else if(angle >= SERVO_MAX_ANGLE)
+  else if (angle >= SERVO_MAX_ANGLE)
   {
     return SERVO_MAX_PULSE_US; // 最大角度は最大パルス幅
   }
@@ -69,7 +69,6 @@ static uint32_t compute_pulse_us_from_angle(uint16_t angle)
                       ((uint32_t)angle * (SERVO_MAX_PULSE_US - SERVO_MIN_PULSE_US)) / SERVO_MAX_ANGLE;
 
   return pulse_us;
-
 }
 
 /**
@@ -81,7 +80,7 @@ static uint32_t compute_compare_from_us(uint32_t pulse_us)
 {
   uint32_t compare_value = ((uint32_t)pulse_us * 8) / 10;
 
-// クランプ処理 (500us = 400, 2500us = 2000)
+  // クランプ処理 (500us = 400, 2500us = 2000)
 
   if (compare_value < COMPARE_MIN)
   {
@@ -105,6 +104,16 @@ void servo_init(void)
   __HAL_TIM_ENABLE(&htim3);
   HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
   servo_close();
+}
+
+/**
+ * @brief  サーボモーターのデイニット
+ * @retval None
+ */
+void servo_deinit(void)
+{
+  HAL_TIM_PWM_Stop(&htim3, TIM_CHANNEL_1);
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_SET);
 }
 
 /**

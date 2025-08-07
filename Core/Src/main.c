@@ -171,7 +171,7 @@ int main(void)
       servo_mode_pre = servo_mode;
     }
 
-    if (solenoid_state.solenoid_operation_active && !solenoid_open_flag_pre)
+    if (solenoid_state.solenoid_operation_active)
     {
       if (solenoid_state.solenoid_operation_start_time == 0)
       {
@@ -185,7 +185,6 @@ int main(void)
         solenoid_state.solenoid_operation_active = false;
         solenoid_state.solenoid_operation_start_time = 0;
       }
-      solenoid_open_flag_pre = true;
     }
 
 

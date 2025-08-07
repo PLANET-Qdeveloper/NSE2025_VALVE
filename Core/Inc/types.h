@@ -37,16 +37,9 @@ extern "C"
         uint32_t timestamp;
         float temp_data;  // 処理済み温度（摂氏）
         float press_data; // 処理済み圧力（Pa）
+        bool is_servo_open; // サーボ開放状態フラグ
+        bool is_nos_open; // NOS開放状態フラグ
     } SensorData_t;
-
-    /**
-     * @brief 通信データ構造体
-     */
-    typedef struct
-    {
-        int16_t temperature;
-        uint16_t pressure;
-    } CommData_t;
 
     /**
      * @brief バルブ制御状態管理構造体

@@ -30,27 +30,25 @@ extern "C"
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
 #include "types.h"
-#include <stdbool.h> // bool型のサポート
 
     /* Exported types ------------------------------------------------------------*/
     /* ServoControl_t moved to app_types.h for better organization */
 
 /* Exported constants --------------------------------------------------------*/
-// バルブ動作時間
-#define SERVO_OPEN_TIME_MS 30000 // バルブ開放時間（30秒）
 
     /* Exported macro ------------------------------------------------------------*/
 
     /* Exported functions prototypes ---------------------------------------------*/
 
-    void servo_init(ServoControl_t *servo_state);
-    void solenoid_init(SolenoidControl_t *solenoid_state);
+    void servo_init();
 
-    void servo_open(ServoControl_t *servo_state);
-    void servo_close(ServoControl_t *servo_state);
+    void servo_deinit();
 
-    void solenoid_open(SolenoidControl_t *solenoid_state);
-    void solenoid_close(SolenoidControl_t *solenoid_state);
+    void servo_open();
+    void servo_close();
+
+    void solenoid_open();
+    void solenoid_close();
 
 #ifdef __cplusplus
 }

@@ -46,7 +46,6 @@ DSTATUS SD_disk_status(BYTE pdrv);
 DRESULT SD_disk_read(BYTE pdrv, BYTE *buff, DWORD sector, UINT count);
 DRESULT SD_disk_write(BYTE pdrv, const BYTE *buff, DWORD sector, UINT count);
 DRESULT SD_disk_ioctl(BYTE pdrv, BYTE cmd, void *buff);
-void SD_get_datetime_filename(char *filename, size_t max_len, RTC_HandleTypeDef *hrtc);
 
 #define SPI_TIMEOUT 1000
 
@@ -92,9 +91,6 @@ void SD_get_datetime_filename(char *filename, size_t max_len, RTC_HandleTypeDef 
 #define SD_MAX_RETRY_COUNT 64
 #define SD_CMD_RETRY_COUNT 10
 
-/* SDカード管理関数 */
-bool sd_save_data(const SensorData_t *data_buffer, uint32_t data_count, RTC_HandleTypeDef *hrtc);
-bool sd_check_status(void);
 
 #endif
 

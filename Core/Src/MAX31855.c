@@ -18,20 +18,19 @@
 float MAX31855_Read_Temp(SPI_HandleTypeDef *hspi)
 {
     uint8_t rx[4] = {0};
-    HAL_StatusTypeDef status;
 
     // CS LOW to start communication
     HAL_GPIO_WritePin(MAX31855_CS_PORT, MAX31855_CS_PIN, GPIO_PIN_RESET);
 
     // SPI communication with 4 bytes (32-bit data) - receive only mode
-    status = HAL_SPI_Receive(hspi, rx, 4, 100);
+    HAL_StatusTypeDef status = HAL_SPI_Receive(hspi, rx, 4, 10);
     // CS HIGH to end communication
     HAL_GPIO_WritePin(MAX31855_CS_PORT, MAX31855_CS_PIN, GPIO_PIN_SET);
 
     // Check SPI communication status
     if (status != HAL_OK)
     {
-        return -999.0f; // SPI communication error
+        return -999.0f;
     }
 
     // 32ビットデータを組み立て

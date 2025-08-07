@@ -29,10 +29,11 @@
 // サーボ角度定義
 #define SERVO_MIN_PULSE_US 500  // 最小パルス幅（マイクロ秒）- 0度位置
 #define SERVO_MAX_PULSE_US 2500 // 最大パルス幅（マイクロ秒）- 270度位置
-#define SERVO_MIN_ANGLE 0       // 最小角度（度）
 #define SERVO_MAX_ANGLE 270     // 最大角度（度）
 #define SERVO_OPEN_ANGLE 245    // バルブ開放角度（度）
 #define SERVO_CLOSE_ANGLE 0     // バルブ閉鎖角度（度）
+#define COMPARE_MIN 400
+#define COMPARE_MAX 2000
 
 /* Private macro -------------------------------------------------------------*/
 
@@ -53,10 +54,13 @@ static uint32_t compute_compare_from_us(uint32_t pulse_us);
  */
 static uint32_t compute_pulse_us_from_angle(uint16_t angle)
 {
-  // 角度の範囲チェック
-  if (angle > SERVO_MAX_ANGLE)
+  if (angle == SERVO_CLOSE_ANGLE)
   {
-    angle = SERVO_MAX_ANGLE;
+    return SERVO_MIN_PULSE_US; // 0度は最小パルス幅
+  }
+  else if (angle >= SERVO_MAX_ANGLE)
+  {
+    return SERVO_MAX_PULSE_US; // 最大角度は最大パルス幅
   }
 
   // 線形補間でパルス幅を計算
@@ -74,13 +78,10 @@ static uint32_t compute_pulse_us_from_angle(uint16_t angle)
  */
 static uint32_t compute_compare_from_us(uint32_t pulse_us)
 {
-  // 動作していた計算方法に戻す
-  // Compare_Value = pulse_us * 8 / 10 = pulse_us * 0.8
   uint32_t compare_value = ((uint32_t)pulse_us * 8) / 10;
 
-// クランプ処理 (500us = 400, 2500us = 2000)
-#define COMPARE_MIN 400
-#define COMPARE_MAX 2000
+  // クランプ処理 (500us = 400, 2500us = 2000)
+
   if (compare_value < COMPARE_MIN)
   {
     compare_value = COMPARE_MIN;
@@ -97,55 +98,55 @@ static uint32_t compute_compare_from_us(uint32_t pulse_us)
  * @brief  サーボモーターの初期化
  * @retval None
  */
-void servo_init(ServoControl_t *servo_state)
+void servo_init(void)
 {
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_RESET);
   __HAL_TIM_ENABLE(&htim3);
   HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
-  servo_close(servo_state);
+  servo_close();
 }
 
-void solenoid_init(SolenoidControl_t *solenoid_state)
+/**
+ * @brief  サーボモーターのデイニット
+ * @retval None
+ */
+void servo_deinit(void)
 {
-  solenoid_close(solenoid_state);
+  HAL_TIM_PWM_Stop(&htim3, TIM_CHANNEL_1);
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_SET);
 }
 
 /**
  * @brief  バルブを開く
  * @retval None
  */
-void servo_open(ServoControl_t *servo_state)
+void servo_open()
 {
   // 角度からパルス幅を計算
   uint32_t pulse_us = compute_pulse_us_from_angle(SERVO_OPEN_ANGLE);
   uint32_t compare_value = compute_compare_from_us(pulse_us);
 
   __HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_1, compare_value);
-  servo_state->valve_operation_active = true;
 }
 
 /**
  * @brief  バルブを閉じる
  * @retval None
  */
-void servo_close(ServoControl_t *servo_state)
+void servo_close()
 {
   uint32_t pulse_us = compute_pulse_us_from_angle(SERVO_CLOSE_ANGLE);
   uint32_t compare_value = compute_compare_from_us(pulse_us);
 
   __HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_1, compare_value);
-  servo_state->valve_operation_active = false;
-  servo_state->valve_operation_start_time = 0;
 }
 
-void solenoid_open(SolenoidControl_t *solenoid_state)
+void solenoid_open()
 {
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, GPIO_PIN_RESET); // NOS電磁弁OPEN
-  solenoid_state->solenoid_operation_active = true;
 }
 
-void solenoid_close(SolenoidControl_t *solenoid_state)
+void solenoid_close()
 {
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, GPIO_PIN_SET); // NOS電磁弁CLOSE
-  solenoid_state->solenoid_operation_active = false;
-  solenoid_state->solenoid_operation_start_time = 0;
 }

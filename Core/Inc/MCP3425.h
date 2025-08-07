@@ -29,35 +29,35 @@ extern "C"
 #include "stm32f4xx_hal.h"
 
 /* Exported defines ----------------------------------------------------------*/
-#define MCP3425_OK 0
-#define MCP3425_ERROR_OC 1
-#define MCP3425_ERROR_SCG 2
-#define MCP3425_ERROR_SCV 3
-#define MCP3425_ERROR_COMM 4
-
 #define MCP3425_I2C_ADDR 0x68		// MCP3425のI2Cアドレス
-#define MCP3425_LSB_SIZE 0.0000625f // 16-bit, PGA = 1 の場合
+#define MCP3425_LSB_SIZE 0.001f // 12-bit, PGA = 1 の場合
 #define MCP3425_FULL_SCALE 2.048f	// フルスケール電圧
 
-// MCP3425設定レジスタビット定義
-#define MCP3425_RDY_BIT     0x80    // Ready bit (0: 変換中, 1: 変換完了)
-#define MCP3425_CHANNEL_1   0x00    // チャンネル1選択
-#define MCP3425_CHANNEL_2   0x20    // チャンネル2選択
-#define MCP3425_CONTINUOUS  0x10    // 連続変換モード
-#define MCP3425_ONE_SHOT    0x00    // 単発変換モード
-#define MCP3425_16_BIT      0x08    // 16bit分解能
-#define MCP3425_14_BIT      0x04    // 14bit分解能
-#define MCP3425_12_BIT      0x00    // 12bit分解能
-#define MCP3425_PGA_1       0x00    // PGA = 1
-#define MCP3425_PGA_2       0x01    // PGA = 2
-#define MCP3425_PGA_4       0x02    // PGA = 4
-#define MCP3425_PGA_8       0x03    // PGA = 8
+// 設定レジスタビット定義
+#define MCP3425_RDY_BIT (1 << 7) // データレディフラグ
+#define MCP3425_OC_BIT (1 << 4)	 // 変換モードビット (1=連続変換, 0=ワンショット)
+#define MCP3425_S1_BIT (1 << 3)	 // サンプルレート選択ビット1
+#define MCP3425_S0_BIT (1 << 2)	 // サンプルレート選択ビット0
+#define MCP3425_G1_BIT (1 << 1)	 // PGAゲイン選択ビット1
+#define MCP3425_G0_BIT (1 << 0)	 // PGAゲイン選択ビット0
 
-// デフォルト設定: 16bit, PGA=1, 単発変換, チャンネル1
-#define MCP3425_CONFIG_DEFAULT (MCP3425_RDY_BIT | MCP3425_CHANNEL_1 | MCP3425_ONE_SHOT | MCP3425_16_BIT | MCP3425_PGA_1)
+// サンプルレート設定 (S1-S0ビット)
+#define MCP3425_SAMPLE_RATE_240SPS 0x00	 // 00 = 240 SPS (12ビット)
+#define MCP3425_SAMPLE_RATE_60SPS 0x04	 // 01 = 60 SPS (14ビット)
+#define MCP3425_SAMPLE_RATE_15SPS 0x08	 // 10 = 15 SPS (16ビット)
 
-	/* Exported functions prototypes ---------------------------------------------*/
-	float MCP3425_Read_Pressure(I2C_HandleTypeDef *hi2c);
+// PGAゲイン設定 (G1-G0ビット)
+#define MCP3425_GAIN_1X 0x00 // 00 = x1
+#define MCP3425_GAIN_2X 0x01 // 01 = x2
+#define MCP3425_GAIN_4X 0x02 // 10 = x4
+#define MCP3425_GAIN_8X 0x03 // 11 = x8
+
+// デフォルト設定（12ビット、連続変換モード、ゲイン1倍）
+#define MCP3425_DEFAULT_CONFIG (MCP3425_OC_BIT | MCP3425_SAMPLE_RATE_240SPS | MCP3425_GAIN_1X)
+
+/* Exported functions prototypes ---------------------------------------------*/
+void MCP3425_Init(I2C_HandleTypeDef *hi2c);
+float MCP3425_Read_Pressure(I2C_HandleTypeDef *hi2c);
 
 #ifdef __cplusplus
 }

@@ -6,8 +6,7 @@
   "C_Cpp.intelliSenseEngine": "default",
   "clangd.enable": false,
   "files.associations": {
-    "main.h": "c",
-    "stdbool.h": "c"
+    "main.h": "c"
   },
   "cmake.configureSettings": {
     "CMAKE_BUILD_TYPE": "Debug"
@@ -16,6 +15,11 @@
   "cmake.configurePreset": "Debug",
   "cmake.showBuildPreset": true,
   "cmake.showConfigurePreset": true,
-  "cortex-debug.armToolchainPath": "/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin",
-  "cortex-debug.gdbPath": "/opt/ST/STM32CubeCLT_1.18.0/GNU-tools-for-STM32/bin/arm-none-eabi-gdb"
+  "cmake.cmakePath": "cube-cmake",
+  "cmake.configureArgs": ["-DCMAKE_COMMAND=cube-cmake"],
+  "stm32cube-ide-clangd.path": "cube",
+  "stm32cube-ide-clangd.arguments": [
+    "starm-clangd",
+    "--query-driver=${env:CUBE_BUNDLE_PATH}/gnu-tools-for-stm32/13.3.1+st.8/bin/arm-none-eabi-gcc"
+  ]
 }

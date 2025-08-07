@@ -14,9 +14,9 @@
 extern SPI_HandleTypeDef hspi1;
 extern volatile uint16_t Timer1, Timer2; /* 1ms Timer Counter for SD card operations */
 
-static volatile DSTATUS Stat = STA_NOINIT; /* ディスク状態フラグ */
-static uint8_t CardType;                   /* SDタイプ 0:MMC, 1:SDC, 2:Block addressing */
-static uint8_t PowerFlag = 0;              /* 電源状態フラグ */
+static volatile DSTATUS Stat = STA_NOINIT;  /* ディスク状態フラグ */
+static uint8_t CardType;                    /* SDタイプ 0:MMC, 1:SDC, 2:Block addressing */
+static uint8_t PowerFlag = 0;               /* 電源状態フラグ */
 
 /* SPI チップセレクト */
 static void SELECT(void)
@@ -658,36 +658,4 @@ DRESULT SD_disk_ioctl(BYTE drv, BYTE ctrl, void *buff)
   return res;
 }
 
-/* 日時を含むファイル名を生成（8.3形式対応） */
-void SD_get_datetime_filename(char *filename, size_t max_len, RTC_HandleTypeDef *hrtc)
-{
-  RTC_TimeTypeDef time;
-  RTC_DateTypeDef date;
 
-  /* パラメータ検証 */
-  if (filename == NULL || max_len < 13 || hrtc == NULL) // "ddhhmmss.csv" = 12文字 + 終端文字
-  {
-    if (filename != NULL && max_len > 0)
-    {
-      filename[0] = '\0'; /* エラー時は空文字列 */
-    }
-    return;
-  }
-
-  /* RTCから現在の日時を取得 */
-  if (HAL_RTC_GetTime(hrtc, &time, RTC_FORMAT_BIN) != HAL_OK ||
-      HAL_RTC_GetDate(hrtc, &date, RTC_FORMAT_BIN) != HAL_OK)
-  {
-    /* RTC読み取りエラー時はデフォルト名を生成（8.3形式） */
-    snprintf(filename, max_len, "error.csv");
-    return;
-  }
-
-  /* 8.3形式に適合するファイル名を生成 */
-  /* 形式: MMDDHHMM.csv（MM=月、DD=日、HH=時、MM=分） */
-  snprintf(filename, max_len, "%02d%02d%02d%02d.csv",
-           date.Month,     /* 月 */
-           date.Date,     /* 日 */
-           time.Hours,    /* 時 */
-           time.Minutes); /* 分 */
-}

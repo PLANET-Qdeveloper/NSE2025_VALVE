@@ -57,7 +57,7 @@ float MCP3425_Read_Pressure(I2C_HandleTypeDef *hi2c)
 	uint8_t status = HAL_I2C_Master_Receive(hi2c, mcp3425_addr, data, 3, 10);
 	if (status != HAL_OK)
 	{
-		printf("MCP3425 Read Error\r\n");
+		// printf("MCP3425 Read Error\r\n");
 		return -999.0f;
 	}
 

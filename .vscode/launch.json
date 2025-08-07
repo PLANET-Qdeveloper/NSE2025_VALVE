@@ -13,7 +13,7 @@
       "cwd": "${workspaceFolder}",
       "executable": "${command:cmake.launchTargetPath}",
       "preLaunchTask": "cmake: build",
-      "serverArgs": ["-m", "0"]
+      "serverArgs": ["-m", "0"],
     }
   ]
 }
